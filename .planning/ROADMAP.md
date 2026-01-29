@@ -16,6 +16,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 2: Components** - Component layer references updated
 - [x] **Phase 3: Infrastructure** - Build config and deployment ready
 - [x] **Phase 4: Content & Polish** - Content cleaned, final validation complete
+- [ ] **Phase 5: Personal Brand Cleanup** - Fix author name, avatar, and favicon
 
 ## Phase Details
 
@@ -82,10 +83,25 @@ Plans:
 - [x] 04-03-PLAN.md — Clean identity leaks in source files, rewrite README
 - [x] 04-04-PLAN.md — Create Obsidian blog post template
 
+### Phase 5: Personal Brand Cleanup
+**Goal**: Fix author name context (Justin Carlson vs justcarlson), replace avatar, fix favicon
+**Depends on**: Phase 4 (cleanup builds on completed content work)
+**Requirements**: VIS-03 (avatar), plus new branding requirements
+**Success Criteria** (what must be TRUE):
+  1. Author displays as "Justin Carlson" (person) in appropriate contexts (LinkedIn, GitHub links)
+  2. Brand displays as "justcarlson" in domain/username contexts (site title, URLs)
+  3. Homepage profile image uses Gravatar (gravatar.com/justcarlson)
+  4. Favicon.ico replaced with JC monogram (browser tabs show correct icon)
+**Plans:** 2 plans
+
+Plans:
+- [ ] 05-01-PLAN.md — Add authorFullName config, update social links and Gravatar
+- [ ] 05-02-PLAN.md — Regenerate favicon.ico from JC monogram SVG
+
 ## Progress
 
 **Execution Order:**
-Phases execute in numeric order: 1 -> 2 -> 3 -> 4
+Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
@@ -93,6 +109,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 | 2. Components | 2/2 | Complete ✓ | 2026-01-29 |
 | 3. Infrastructure | 3/3 | Complete ✓ | 2026-01-29 |
 | 4. Content & Polish | 4/4 | Complete ✓ | 2026-01-29 |
+| 5. Personal Brand Cleanup | 0/? | Not started | - |
 
 ---
 *Roadmap created: 2026-01-28*
