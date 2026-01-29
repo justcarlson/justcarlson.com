@@ -9,17 +9,17 @@ Requirements for initial rebrand. Each maps to roadmap phases.
 
 ### Configuration
 
-- [ ] **CFG-01**: Update `src/consts.ts` with author (Just Carlson), URL (justcarlson.com), description
-- [ ] **CFG-02**: Update `src/consts.ts` edit post URL to point to justcarlson repo
-- [ ] **CFG-03**: Update `src/constants.ts` social links (GitHub: justcarlson, LinkedIn: justincarlson0)
-- [ ] **CFG-04**: Update newsletter form to remove Peter's Buttondown reference (keep component, make configurable)
+- [x] **CFG-01**: Update `src/consts.ts` with author (Just Carlson), URL (justcarlson.com), description
+- [x] **CFG-02**: Update `src/consts.ts` edit post URL to point to justcarlson repo
+- [x] **CFG-03**: Update `src/constants.ts` social links (GitHub: justcarlson, LinkedIn: justincarlson0)
+- [x] **CFG-04**: Update newsletter form to remove Peter's Buttondown reference (keep component, make configurable)
 
 ### Visual Identity
 
-- [ ] **VIS-01**: Apply Leaf Blue light theme colors (`--background: #f2f5ec`, `--accent: #1158d1`)
-- [ ] **VIS-02**: Apply AstroPaper v4 dark theme colors (`--background: #000123`, `--accent: #617bff`)
-- [ ] **VIS-03**: Replace avatar with GitHub profile image (justcarlson)
-- [ ] **VIS-04**: Implement favicon from `~/Downloads/favicon.svg` using manual generation with Sharp
+- [x] **VIS-01**: Apply Leaf Blue light theme colors (`--background: #f2f5ec`, `--accent: #1158d1`)
+- [x] **VIS-02**: Apply AstroPaper v4 dark theme colors (`--background: #000123`, `--accent: #617bff`)
+- [ ] **VIS-03**: Replace avatar with GitHub profile image (justcarlson) *(deferred - avatar in content, not config)*
+- [x] **VIS-04**: Implement favicon from `~/Downloads/favicon.svg` using manual generation with Sharp
 
 ### Content
 
@@ -77,14 +77,14 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| CFG-01 | Phase 1 | Pending |
-| CFG-02 | Phase 1 | Pending |
-| CFG-03 | Phase 1 | Pending |
-| CFG-04 | Phase 1 | Pending |
-| VIS-01 | Phase 1 | Pending |
-| VIS-02 | Phase 1 | Pending |
-| VIS-03 | Phase 1 | Pending |
-| VIS-04 | Phase 1 | Pending |
+| CFG-01 | Phase 1 | Complete |
+| CFG-02 | Phase 1 | Complete |
+| CFG-03 | Phase 1 | Complete |
+| CFG-04 | Phase 1 | Complete |
+| VIS-01 | Phase 1 | Complete |
+| VIS-02 | Phase 1 | Complete |
+| VIS-03 | Phase 4 | Pending *(deferred - avatar in content)* |
+| VIS-04 | Phase 1 | Complete |
 | CNT-01 | Phase 4 | Pending |
 | CNT-02 | Phase 4 | Pending |
 | CNT-03 | Phase 4 | Pending |
