@@ -33,11 +33,11 @@ interface Site {
 // Site configuration
 export const SITE: Site = {
   website: "https://justcarlson.com/",
-  author: "justcarlson",
+  author: "Justin Carlson",
   authorFullName: "Justin Carlson",
   profile: "https://justcarlson.com/about",
   desc: "Writing about things I find interesting.",
-  title: "justcarlson",
+  title: "Justin Carlson",
   ogImage: "og.png",
   lightAndDarkMode: true,
   postPerIndex: 10,
