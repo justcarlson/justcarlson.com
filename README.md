@@ -1,56 +1,58 @@
-# Peter Steinberger's Personal Website
+# justcarlson.com
 
-This is the source code for my personal website, built with [Astro](https://astro.build) and deployed on [Vercel](https://vercel.com).
+My personal website and blog, built with [Astro](https://astro.build) and deployed on [Vercel](https://vercel.com).
 
-## About
+## Overview
 
-I'm Peter Steinberger, an iOS developer, entrepreneur, and open source contributor. This website hosts my personal blog and information about my work.
+This site is a personal space for writing about software development, technology, and whatever else catches my interest.
 
-## Project Structure
+## Setup
 
-```text
-├── public/               # Static assets (images, fonts, favicon)
-│   ├── assets/          # Images for blog posts
-│   └── fonts/           # Web fonts
-├── src/
-│   ├── assets/          # Icons and images used in components
-│   ├── components/      # Reusable UI components
-│   │   └── ui/          # React components
-│   ├── content/         # Content collections
-│   │   └── blog/        # Blog posts in Markdown format (organized by year)
-│   ├── layouts/         # Page layouts and templates
-│   ├── pages/           # Routes and pages
-│   ├── styles/          # Global styles and CSS
-│   └── utils/           # Utility functions
-├── astro.config.mjs     # Astro configuration
-├── vercel.json          # Vercel deployment and CSP configuration
-├── package.json         # Project dependencies and scripts
-├── tailwind.config.mjs  # Tailwind CSS configuration
-└── LICENSE              # Dual license (CC BY 4.0 + MIT)
+```bash
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
 ```
 
-## Commands
+The dev server runs at `localhost:4321`.
 
-| Command                | Action                                      |
-| :--------------------- | :------------------------------------------ |
-| `npm install`          | Installs dependencies                       |
-| `npm run dev`          | Starts local dev server at `localhost:4321` |
-| `npm run build`        | Build the production site to `./dist/`      |
-| `npm run preview`      | Preview the build locally, before deploying |
+## Development
+
+| Command | Action |
+|---------|--------|
+| `npm run dev` | Start local dev server |
+| `npm run build` | Build for production |
+| `npm run preview` | Preview production build locally |
+
+### Adding Blog Posts
+
+Blog posts live in `src/content/blog/` organized by year. Create a new markdown file with frontmatter:
+
+```markdown
+---
+title: "Post Title"
+pubDatetime: 2026-01-29T12:00:00.000+00:00
+description: "Brief description"
+tags: ["tag1", "tag2"]
+draft: false
+---
+
+Your content here.
+```
 
 ## Deployment
 
-This site is set up for easy deployment on Vercel. Just connect your GitHub repository to Vercel, and it will automatically build and deploy the site when changes are pushed.
+Deployed automatically on Vercel when changes are pushed to main.
+
+## Credits
+
+Built on the excellent [AstroPaper theme](https://github.com/satnaing/astro-paper) by [Sat Naing](https://github.com/satnaing).
+
+Forked from [steipete.me](https://github.com/steipete/steipete.me) with gratitude for the thoughtful customizations.
 
 ## License
 
-This repository uses dual licensing:
-
-- **Documentation & Blog Posts**: Licensed under [CC BY 4.0](http://creativecommons.org/licenses/by/4.0/)
-- **Code & Code Snippets**: Licensed under the [MIT License](LICENSE)
-
-See the [LICENSE](LICENSE) file for full details.
-
-## Special Thanks
-
-Special thanks to [Sat Naing](https://github.com/satnaing) for creating the excellent [AstroPaper theme](https://astro-paper.pages.dev/) that served as the foundation for this website. Their thoughtful design and clean architecture made it a joy to build upon.
+- **Blog content**: [CC BY 4.0](http://creativecommons.org/licenses/by/4.0/)
+- **Code**: [MIT License](LICENSE)
