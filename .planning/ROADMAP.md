@@ -13,7 +13,7 @@ Transform a forked Astro blog (steipete.me) into a clean personal space for Just
 Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Foundation** - Configuration and visual assets updated
-- [ ] **Phase 2: Components** - Component layer references updated
+- [x] **Phase 2: Components** - Component layer references updated
 - [ ] **Phase 3: Infrastructure** - Build config and deployment ready
 - [ ] **Phase 4: Content & Polish** - Content cleaned, final validation complete
 
@@ -46,8 +46,8 @@ Plans:
 **Plans:** 2 plans
 
 Plans:
-- [ ] 02-01-PLAN.md — Update StructuredData.astro to use config values for SEO
-- [ ] 02-02-PLAN.md — Update Sidebar and Footer with config-driven identity
+- [x] 02-01-PLAN.md — Update StructuredData.astro to use config values for SEO
+- [x] 02-02-PLAN.md — Update Sidebar and Footer with config-driven identity
 
 ### Phase 3: Infrastructure
 **Goal**: Build configuration and deployment ready for production
@@ -85,7 +85,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation | 2/2 | Complete ✓ | 2026-01-29 |
-| 2. Components | 0/2 | Planned | - |
+| 2. Components | 2/2 | Complete ✓ | 2026-01-29 |
 | 3. Infrastructure | 0/TBD | Not started | - |
 | 4. Content & Polish | 0/TBD | Not started | - |
 
