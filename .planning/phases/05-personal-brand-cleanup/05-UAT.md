@@ -1,5 +1,5 @@
 ---
-status: diagnosed
+status: fixed
 phase: 05-personal-brand-cleanup
 source: [05-01-SUMMARY.md, 05-02-SUMMARY.md, 05-03-SUMMARY.md]
 started: 2026-01-29T23:00:00Z
@@ -26,9 +26,8 @@ result: pass
 
 ### 4. Sidebar Avatar Loads from Gravatar
 expected: Homepage sidebar shows profile image loaded from Gravatar (gravatar.com). Should display an actual avatar photo or identicon geometric pattern if no Gravatar set.
-result: issue
-reported: "no"
-severity: major
+result: pass
+fix: "05-04-PLAN.md - updated index.astro to use Gravatar URL"
 
 ### 5. Blog Post Byline Shows Person Name
 expected: On blog post page (e.g., /posts/hello-world/), author byline shows "Justin Carlson" (person name), not "justcarlson" (brand name).
@@ -37,24 +36,11 @@ result: pass
 ## Summary
 
 total: 5
-passed: 4
-issues: 1
+passed: 5
+issues: 0
 pending: 0
 skipped: 0
 
 ## Gaps
 
-- truth: "Homepage sidebar shows profile image loaded from Gravatar"
-  status: failed
-  reason: "User reported: no"
-  severity: major
-  test: 4
-  root_cause: "Homepage index.astro uses hardcoded /apple-touch-icon.png for avatar instead of Gravatar URL. The Gravatar URL was added to Sidebar.astro but that component is not used on the homepage."
-  artifacts:
-    - path: "src/pages/index.astro"
-      issue: "Line 33: uses /apple-touch-icon.png instead of Gravatar"
-    - path: "src/components/Sidebar.astro"
-      issue: "Has correct Gravatar URL but component not used on homepage"
-  missing:
-    - "Update index.astro hero image to use Gravatar URL"
-  debug_session: "inline diagnosis"
+None - all gaps closed by 05-04-PLAN.md

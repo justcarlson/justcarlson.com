@@ -1,7 +1,8 @@
 ---
 phase: 05-personal-brand-cleanup
-verified: 2026-01-29T22:50:00Z
+verified: 2026-01-29T23:30:00Z
 status: passed
+re-verified: "yes - after 05-04 gap closure"
 score: 4/4 must-haves verified
 human_verification:
   - test: "Verify Gravatar image displays in Sidebar on blog posts"
@@ -27,23 +28,22 @@ human_verification:
 |---|-------|--------|----------|
 | 1 | Author displays as "Justin Carlson" (person) in appropriate contexts | VERIFIED | `SITE.author = "Justin Carlson"` in consts.ts:36, `SITE.authorFullName = "Justin Carlson"` in consts.ts:37, social linkTitles use `${SITE.authorFullName}` in constants.ts:7,14 |
 | 2 | Brand displays as "justcarlson" in domain/username contexts | VERIFIED | `website: "https://justcarlson.com/"` in consts.ts:35, GitHub/LinkedIn hrefs use `justcarlson` and `justincarlson0`, edit URL uses `justcarlson/justcarlson.com` |
-| 3 | Homepage profile image uses Gravatar | VERIFIED | Sidebar.astro:11 uses Gravatar URL with correct hash `ef133a0cc6308305d254916b70332b1a`, verified hash matches MD5 of justincarlson0@gmail.com |
+| 3 | Homepage profile image uses Gravatar | VERIFIED | index.astro:33 and Sidebar.astro:11 both use Gravatar URL with correct hash `ef133a0cc6308305d254916b70332b1a` (05-04 gap closure fix) |
 | 4 | Favicon.ico replaced with JC monogram | VERIFIED | favicon.ico is 15086 bytes (reduced from 101KB), contains 48x48, 32x32, 16x16 ICO with JC monogram derived from favicon.svg |
 
 **Score:** 4/4 truths verified
 
-### Clarification on Truth #3
+### Clarification on Truth #3 (Updated after 05-04 gap closure)
 
-The success criterion stated "Homepage profile image uses Gravatar". Investigation revealed:
+The success criterion stated "Homepage profile image uses Gravatar". After UAT testing:
 
-1. The **homepage hero section** (`src/pages/index.astro:33-35`) uses `/apple-touch-icon.png` (JC monogram icon)
-2. The **Sidebar avatar** (`src/components/Sidebar.astro:11`) uses Gravatar with correct hash
+1. **Original state:** Homepage hero used `/apple-touch-icon.png`, Sidebar used Gravatar
+2. **UAT result:** User expected Gravatar on homepage, not just Sidebar
+3. **Gap closure (05-04):** Updated `index.astro:33` to use Gravatar URL
 
-The CONTEXT.md decision stated "Replace current mystery person placeholder" - this mystery person was in the Sidebar component (from the forked steipete.me site), not the homepage hero. The homepage hero has always used the JC monogram since Phase 1.
+**Current state:** Both homepage hero and Sidebar now use Gravatar URL with correct hash.
 
-**Interpretation:** The intent was to replace the mystery person placeholder in Sidebar with Gravatar, which has been accomplished. The homepage hero using the JC monogram is consistent with brand identity (icon represents site, not person). The Sidebar avatar using Gravatar represents the person.
-
-**Status:** VERIFIED - Intent achieved, mystery person placeholder replaced with Gravatar.
+**Status:** VERIFIED - Both avatar locations use Gravatar.
 
 ### Required Artifacts
 
