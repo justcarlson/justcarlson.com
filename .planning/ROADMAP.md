@@ -16,7 +16,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 - [x] **Phase 2: Components** - Component layer references updated
 - [x] **Phase 3: Infrastructure** - Build config and deployment ready
 - [x] **Phase 4: Content & Polish** - Content cleaned, final validation complete
-- [ ] **Phase 5: Personal Brand Cleanup** - Fix author name, avatar, and favicon
+- [x] **Phase 5: Personal Brand Cleanup** - Fix author name, avatar, and favicon
 
 ## Phase Details
 
@@ -97,7 +97,7 @@ Plans:
 Plans:
 - [x] 05-01-PLAN.md — Add authorFullName config, update social links and Gravatar
 - [x] 05-02-PLAN.md — Regenerate favicon.ico from JC monogram SVG
-- [ ] 05-03-PLAN.md — Fix config values to match CONTEXT.md decisions (gap closure)
+- [x] 05-03-PLAN.md — Fix config values to match CONTEXT.md decisions (gap closure)
 
 ## Progress
 
@@ -110,7 +110,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 | 2. Components | 2/2 | Complete ✓ | 2026-01-29 |
 | 3. Infrastructure | 3/3 | Complete ✓ | 2026-01-29 |
 | 4. Content & Polish | 4/4 | Complete ✓ | 2026-01-29 |
-| 5. Personal Brand Cleanup | 2/3 | In progress | - |
+| 5. Personal Brand Cleanup | 3/3 | Complete ✓ | 2026-01-29 |
 
 ---
 *Roadmap created: 2026-01-28*
