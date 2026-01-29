@@ -1,9 +1,9 @@
 ---
-status: complete
+status: diagnosed
 phase: 05-personal-brand-cleanup
 source: [05-01-SUMMARY.md, 05-02-SUMMARY.md, 05-03-SUMMARY.md]
 started: 2026-01-29T23:00:00Z
-updated: 2026-01-29T23:10:00Z
+updated: 2026-01-29T23:15:00Z
 ---
 
 ## Current Test
@@ -49,7 +49,12 @@ skipped: 0
   reason: "User reported: no"
   severity: major
   test: 4
-  root_cause: ""
-  artifacts: []
-  missing: []
-  debug_session: ""
+  root_cause: "Homepage index.astro uses hardcoded /apple-touch-icon.png for avatar instead of Gravatar URL. The Gravatar URL was added to Sidebar.astro but that component is not used on the homepage."
+  artifacts:
+    - path: "src/pages/index.astro"
+      issue: "Line 33: uses /apple-touch-icon.png instead of Gravatar"
+    - path: "src/components/Sidebar.astro"
+      issue: "Has correct Gravatar URL but component not used on homepage"
+  missing:
+    - "Update index.astro hero image to use Gravatar URL"
+  debug_session: "inline diagnosis"
