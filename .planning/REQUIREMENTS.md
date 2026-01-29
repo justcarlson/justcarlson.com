@@ -30,10 +30,10 @@ Requirements for initial rebrand. Each maps to roadmap phases.
 
 ### Infrastructure
 
-- [ ] **INF-01**: Update `vercel.json` redirects (remove steipete.me references)
-- [ ] **INF-02**: Update `vercel.json` CSP headers (update domain references)
-- [ ] **INF-03**: Update PWA manifest in `astro.config.mjs`
-- [ ] **INF-04**: Fix hardcoded URLs in `src/components/StructuredData.astro`
+- [x] **INF-01**: Update `vercel.json` redirects (remove steipete.me references)
+- [x] **INF-02**: Update `vercel.json` CSP headers (update domain references)
+- [x] **INF-03**: Update PWA manifest in `astro.config.mjs`
+- [x] **INF-04**: Fix hardcoded URLs in `src/components/StructuredData.astro`
 
 ### Cleanup
 
@@ -89,10 +89,10 @@ Which phases cover which requirements. Updated during roadmap creation.
 | CNT-02 | Phase 4 | Pending |
 | CNT-03 | Phase 4 | Pending |
 | CNT-04 | Phase 4 | Pending |
-| INF-01 | Phase 3 | Pending |
-| INF-02 | Phase 3 | Pending |
-| INF-03 | Phase 3 | Pending |
-| INF-04 | Phase 3 | Pending |
+| INF-01 | Phase 3 | Complete |
+| INF-02 | Phase 3 | Complete |
+| INF-03 | Phase 3 | Complete |
+| INF-04 | Phase 3 | Complete |
 | CLN-01 | Phase 4 | Pending |
 | CLN-02 | Phase 4 | Pending |
 | CLN-03 | Phase 4 | Pending |

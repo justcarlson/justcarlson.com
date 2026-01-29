@@ -14,7 +14,7 @@ Decimal phases appear between their surrounding integers in numeric order.
 
 - [x] **Phase 1: Foundation** - Configuration and visual assets updated
 - [x] **Phase 2: Components** - Component layer references updated
-- [ ] **Phase 3: Infrastructure** - Build config and deployment ready
+- [x] **Phase 3: Infrastructure** - Build config and deployment ready
 - [ ] **Phase 4: Content & Polish** - Content cleaned, final validation complete
 
 ## Phase Details
@@ -61,9 +61,9 @@ Plans:
 **Plans:** 3 plans
 
 Plans:
-- [ ] 03-01-PLAN.md — Update PWA manifest branding and generate icon sizes
-- [ ] 03-02-PLAN.md — Clean up Vercel redirects and CSP headers
-- [ ] 03-03-PLAN.md — Add build validation and fix 404 page
+- [x] 03-01-PLAN.md — Update PWA manifest branding and generate icon sizes
+- [x] 03-02-PLAN.md — Clean up Vercel redirects and CSP headers
+- [x] 03-03-PLAN.md — Add build validation and fix 404 page
 
 ### Phase 4: Content & Polish
 **Goal**: Content cleaned, tooling configured, final validation complete
@@ -88,7 +88,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 |-------|----------------|--------|-----------|
 | 1. Foundation | 2/2 | Complete ✓ | 2026-01-29 |
 | 2. Components | 2/2 | Complete ✓ | 2026-01-29 |
-| 3. Infrastructure | 0/3 | Not started | - |
+| 3. Infrastructure | 3/3 | Complete ✓ | 2026-01-29 |
 | 4. Content & Polish | 0/TBD | Not started | - |
 
 ---
