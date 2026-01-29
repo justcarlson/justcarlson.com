@@ -77,32 +77,32 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| CFG-01 | TBD | Pending |
-| CFG-02 | TBD | Pending |
-| CFG-03 | TBD | Pending |
-| CFG-04 | TBD | Pending |
-| VIS-01 | TBD | Pending |
-| VIS-02 | TBD | Pending |
-| VIS-03 | TBD | Pending |
-| VIS-04 | TBD | Pending |
-| CNT-01 | TBD | Pending |
-| CNT-02 | TBD | Pending |
-| CNT-03 | TBD | Pending |
-| CNT-04 | TBD | Pending |
-| INF-01 | TBD | Pending |
-| INF-02 | TBD | Pending |
-| INF-03 | TBD | Pending |
-| INF-04 | TBD | Pending |
-| CLN-01 | TBD | Pending |
-| CLN-02 | TBD | Pending |
-| CLN-03 | TBD | Pending |
-| TLG-01 | TBD | Pending |
+| CFG-01 | Phase 1 | Pending |
+| CFG-02 | Phase 1 | Pending |
+| CFG-03 | Phase 1 | Pending |
+| CFG-04 | Phase 1 | Pending |
+| VIS-01 | Phase 1 | Pending |
+| VIS-02 | Phase 1 | Pending |
+| VIS-03 | Phase 1 | Pending |
+| VIS-04 | Phase 1 | Pending |
+| CNT-01 | Phase 4 | Pending |
+| CNT-02 | Phase 4 | Pending |
+| CNT-03 | Phase 4 | Pending |
+| CNT-04 | Phase 4 | Pending |
+| INF-01 | Phase 3 | Pending |
+| INF-02 | Phase 3 | Pending |
+| INF-03 | Phase 3 | Pending |
+| INF-04 | Phase 3 | Pending |
+| CLN-01 | Phase 4 | Pending |
+| CLN-02 | Phase 4 | Pending |
+| CLN-03 | Phase 4 | Pending |
+| TLG-01 | Phase 4 | Pending |
 
 **Coverage:**
 - v1 requirements: 20 total
-- Mapped to phases: 0
-- Unmapped: 20 ⚠️
+- Mapped to phases: 20
+- Unmapped: 0 ✓
 
 ---
 *Requirements defined: 2025-01-28*
-*Last updated: 2025-01-28 after initial definition*
+*Last updated: 2026-01-28 after roadmap creation*
