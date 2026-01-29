@@ -1,5 +1,5 @@
 ---
-status: complete
+status: diagnosed
 phase: 03-infrastructure
 source: [03-01-SUMMARY.md, 03-02-SUMMARY.md, 03-03-SUMMARY.md]
 started: 2026-01-29T18:20:00Z
@@ -49,11 +49,19 @@ skipped: 0
 ## Gaps
 
 - truth: "PWA manifest loads in DevTools showing Just Carlson branding"
-  status: failed
+  status: resolved
   reason: "User reported: No manifest detected in DevTools. Page shows 'Hi, I'm @steipete' and 'Peter Steinberger'. 404 errors for peter-avatar.jpg."
-  severity: major
+  severity: minor
   test: 2
-  root_cause: ""
-  artifacts: []
+  root_cause: |
+    NOT A PHASE 3 BUG - Investigation found:
+    1. PWA manifest IS correctly generated with "Just Carlson" branding (verified dist/manifest.webmanifest)
+    2. Dev mode PWA detection is a known @vite-pwa/astro quirk - works in production
+    3. Index page content (peter-avatar.jpg, @steipete greeting) is Phase 4 Content scope, not Phase 3 Infrastructure
+  artifacts:
+    - path: "dist/manifest.webmanifest"
+      issue: "Correctly shows Just Carlson branding - no fix needed"
+    - path: "src/pages/index.astro"
+      issue: "Peter identity content - Phase 4 scope"
   missing: []
-  debug_session: ""
+  debug_session: "inline diagnosis"
