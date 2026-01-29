@@ -43,10 +43,11 @@ Plans:
   2. Footer GitHub link points to justcarlson/justcarlson.com repository
   3. Newsletter form has Peter's Buttondown reference removed (configurable or removed)
   4. No hardcoded steipete.me URLs in component files
-**Plans**: TBD
+**Plans:** 2 plans
 
 Plans:
-- [ ] TBD (to be planned)
+- [ ] 02-01-PLAN.md — Update StructuredData.astro to use config values for SEO
+- [ ] 02-02-PLAN.md — Update Sidebar and Footer with config-driven identity
 
 ### Phase 3: Infrastructure
 **Goal**: Build configuration and deployment ready for production
@@ -84,7 +85,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation | 2/2 | Complete ✓ | 2026-01-29 |
-| 2. Components | 0/TBD | Not started | - |
+| 2. Components | 0/2 | Planned | - |
 | 3. Infrastructure | 0/TBD | Not started | - |
 | 4. Content & Polish | 0/TBD | Not started | - |
 
