@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <style>
+    rect { fill: #f2f5ec; }
+    text { fill: #1158d1; }
+    @media (prefers-color-scheme: dark) {
+      rect { fill: #000123; }
+      text { fill: #617bff; }
+    }
+  </style>
+  <rect width="512" height="512"/>
+  <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="system-ui, -apple-system, sans-serif" font-weight="bold" font-size="280">JC</text>
+</svg>
