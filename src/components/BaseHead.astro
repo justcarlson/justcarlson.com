@@ -29,17 +29,18 @@ const criticalCSS = getPageCriticalCSS(Astro.url.pathname);
 <meta name="author" content={SITE.author} />
 
 <!-- Favicon -->
+<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-<link rel="apple-touch-icon" href="/peter-avatar.jpg" />
+<link rel="apple-touch-icon" href="/apple-touch-icon.png" />
 <link rel="manifest" href="/manifest.webmanifest" />
 
 <!-- PWA Meta Tags -->
 <meta name="mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="default" />
-<meta name="apple-mobile-web-app-title" content="steipete" />
-<meta name="application-name" content="Peter Steinberger" />
-<meta name="msapplication-TileColor" content="#006cac" />
+<meta name="apple-mobile-web-app-title" content="Just Carlson" />
+<meta name="application-name" content="Just Carlson" />
+<meta name="msapplication-TileColor" content="#1158d1" />
 
 <!-- Primary Meta Tags -->
 <title>{fullTitle}</title>
@@ -49,12 +50,12 @@ const criticalCSS = getPageCriticalCSS(Astro.url.pathname);
 <!-- Theme Color -->
 <meta
   name="theme-color"
-  content="#006cac"
+  content="#1158d1"
   media="(prefers-color-scheme: light)"
 />
 <meta
   name="theme-color"
-  content="#ff6b01"
+  content="#617bff"
   media="(prefers-color-scheme: dark)"
 />
 
@@ -68,8 +69,6 @@ const criticalCSS = getPageCriticalCSS(Astro.url.pathname);
 
 <!-- Twitter -->
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:site" content="@steipete" />
-<meta name="twitter:creator" content="@steipete" />
 <meta name="twitter:title" content={fullTitle} />
 <meta name="twitter:description" content={description} />
 <meta name="twitter:image" content={new URL(image, Astro.site)} />
