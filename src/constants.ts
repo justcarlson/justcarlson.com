@@ -3,37 +3,16 @@ import { SITE } from "./consts";
 export const SOCIALS = [
   {
     name: "Github",
-    href: "https://github.com/steipete",
-    linkTitle: ` ${SITE.title} on Github`,
+    href: "https://github.com/justcarlson",
+    linkTitle: `${SITE.title} on Github`,
     icon: "github",
     active: true,
   },
   {
-    name: "X",
-    href: "https://x.com/steipete",
-    linkTitle: `${SITE.title} on X`,
-    icon: "twitter",
-    active: true,
-  },
-  {
-    name: "BlueSky",
-    href: "https://bsky.app/profile/steipete.me",
-    linkTitle: `${SITE.title} on BlueSky`,
-    icon: "bluesky",
-    active: true,
-  },
-  {
     name: "LinkedIn",
-    href: "https://www.linkedin.com/in/steipete/",
+    href: "https://www.linkedin.com/in/justincarlson0/",
     linkTitle: `${SITE.title} on LinkedIn`,
     icon: "linkedin",
-    active: true,
-  },
-  {
-    name: "Mail",
-    href: "mailto:peter@steipete.me",
-    linkTitle: `Send an email to ${SITE.title}`,
-    icon: "mail",
     active: true,
   },
 ] as const;
