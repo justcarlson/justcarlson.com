@@ -9,6 +9,7 @@ import remarkCollapse from "remark-collapse";
 import { remarkLazyLoadImages } from "./src/utils/remarkLazyLoadImages.mjs";
 import { SITE } from "./src/config";
 import AstroPWA from "@vite-pwa/astro";
+import buildValidator from "./src/integrations/build-validator.ts";
 
 // https://astro.build/config
 export default defineConfig({
@@ -170,6 +171,7 @@ export default defineConfig({
         directoryAndTrailingSlashHandler: true,
       },
     }),
+    buildValidator(),
   ],
   vite: {
     resolve: {
