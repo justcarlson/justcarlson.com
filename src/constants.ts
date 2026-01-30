@@ -9,6 +9,13 @@ export const SOCIALS = [
     active: true,
   },
   {
+    name: "X",
+    href: "https://x.com/_justcarlson",
+    linkTitle: `${SITE.authorFullName} on X`,
+    icon: "twitter",
+    active: true,
+  },
+  {
     name: "LinkedIn",
     href: "https://www.linkedin.com/in/justincarlson0/",
     linkTitle: `${SITE.authorFullName} on LinkedIn`,
