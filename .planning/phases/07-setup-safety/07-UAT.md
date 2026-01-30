@@ -1,5 +1,5 @@
 ---
-status: complete
+status: diagnosed
 phase: 07-setup-safety
 source: 07-01-SUMMARY.md, 07-02-SUMMARY.md
 started: 2026-01-30T19:30:00Z
@@ -52,32 +52,41 @@ skipped: 0
 
 ## Gaps
 
+**Root cause (all 3 issues):** Session startup timing
+
+Claude Code captures a snapshot of hooks at startup and uses this snapshot throughout the session.
+This session was started BEFORE the hooks were configured in 07-02, so the hooks weren't loaded.
+
+**Resolution:** Restart Claude Code session. No code changes required.
+
 - truth: "Force push via Claude shows BLOCKED message with explanation"
   status: failed
   reason: "User reported: force push went through without being blocked - hook not triggering"
   severity: blocker
   test: 4
-  root_cause: ""
-  artifacts: []
+  root_cause: "Session started before hooks configured - hooks loaded at session start only"
+  artifacts:
+    - path: ".claude/settings.json"
+      issue: "Correct config, but not loaded in current session"
   missing: []
-  debug_session: ""
+  debug_session: "inline diagnosis"
 
 - truth: "Reset --hard via Claude shows BLOCKED message with explanation"
   status: failed
   reason: "User reported: reset --hard went through without being blocked - hook not triggering"
   severity: blocker
   test: 5
-  root_cause: ""
+  root_cause: "Session started before hooks configured - hooks loaded at session start only"
   artifacts: []
   missing: []
-  debug_session: ""
+  debug_session: "inline diagnosis"
 
 - truth: "Checkout . via Claude shows BLOCKED message with explanation"
   status: failed
   reason: "User reported: checkout . went through without being blocked - hook not triggering"
   severity: blocker
   test: 6
-  root_cause: ""
+  root_cause: "Session started before hooks configured - hooks loaded at session start only"
   artifacts: []
   missing: []
-  debug_session: ""
+  debug_session: "inline diagnosis"
