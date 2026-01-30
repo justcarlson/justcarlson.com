@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-01-30)
 ## Current Position
 
 Phase: 7 of 10 (Setup & Safety)
-Plan: 0 of 2 in current phase
-Status: Ready to plan
-Last activity: 2026-01-30 — Roadmap created for v0.2.0 with justfile + hooks architecture
+Plan: 1 of 2 in current phase
+Status: In progress
+Last activity: 2026-01-30 — Completed 07-01-PLAN.md (justfile setup)
 
-Progress: [██████████░░░░░░░░░░] 50% (16/24 plans)
+Progress: [██████████▓░░░░░░░░░] 54% (17/24 plans)
 
 ## Performance Metrics
 
@@ -35,7 +35,11 @@ Progress: [██████████░░░░░░░░░░] 50% (16
 | 05-personal-brand-cleanup | 4 | 4 min | 1 min |
 | 06-about-page-photo | 1 | 1 min | 1 min |
 
-**v0.2.0 Milestone:** Not started (8 plans across 4 phases)
+**v0.2.0 Milestone:** In progress (1/8 plans)
+
+| Phase | Plans | Total | Avg/Plan |
+|-------|-------|-------|----------|
+| 07-setup-safety | 1/2 | 2 min | 2 min |
 
 ## Accumulated Context
 
@@ -46,6 +50,11 @@ All v0.1.0 decisions documented in PROJECT.md Key Decisions table.
 v0.2.0 architecture decision:
 - Three-layer pattern: justfile (deterministic) + hooks (safety) + skills (optional oversight)
 - Justfile is source of truth — all entry points execute same recipes
+
+07-01 decisions:
+- Config stored in .claude/settings.local.json (project-local, gitignored)
+- Vault detection searches home directory to maxdepth 4
+- JSON uses flat structure: {obsidianVaultPath: string}
 
 ### Pending Todos
 
@@ -64,6 +73,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-01-30
-Stopped at: Roadmap created for v0.2.0 with 4 phases (27 requirements mapped)
+Last session: 2026-01-30T19:15:34Z
+Stopped at: Completed 07-01-PLAN.md (justfile setup)
 Resume file: None
