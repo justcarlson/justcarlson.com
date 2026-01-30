@@ -48,7 +48,7 @@ if (type === "BlogPosting") {
     name: SITE.author,
     url: SITE.website,
     image: new URL("/apple-touch-icon.png", SITE.website).href,
-    sameAs: SOCIAL_LINKS.filter(s => s.label !== "RSS").map(s => s.href),
+    sameAs: SOCIAL_LINKS.filter((s) => s.label !== "RSS").map((s) => s.href),
     jobTitle: "Software Engineer",
     description: SITE.desc,
   };
