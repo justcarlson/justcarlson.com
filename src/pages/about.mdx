@@ -5,10 +5,21 @@ description: "[YOUR BRIEF BIO - 1-2 sentences describing what you do]"
 ---
 
 import NewsletterForm from '../components/NewsletterForm.astro';
+import { Image } from 'astro:assets';
+import aboutPhoto from '../assets/images/about-photo.jpg';
 
 <div class="flex flex-col md:flex-row gap-8 items-start">
   <div class="w-full md:w-auto md:flex-shrink-0 md:max-w-[281px]">
-    <img src="/[YOUR-PHOTO-FILENAME].jpg" alt="[YOUR NAME] photo" class="w-full h-auto rounded-lg" />
+    <Image
+      src={aboutPhoto}
+      alt="Justin Carlson"
+      format="webp"
+      quality={80}
+      widths={[320, 640, 800]}
+      sizes="(max-width: 768px) 100vw, 281px"
+      loading="eager"
+      class="w-full h-auto rounded-lg"
+    />
   </div>
   <div class="flex-1 min-w-0">
     <p>[YOUR BACKGROUND - What you do, where you work, your expertise]</p>
