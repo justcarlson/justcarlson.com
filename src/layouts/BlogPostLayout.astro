@@ -21,7 +21,7 @@ const canonicalURL = new URL(canonicalPath, Astro.site).toString();
 ---
 
 <Layout
-  title={title}
+  title={`${title} | ${SITE.title}`}
   description={description}
 	  canonicalURL={canonicalURL}
 	  scrollSmooth={true}
