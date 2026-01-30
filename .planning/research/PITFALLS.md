@@ -1,440 +1,652 @@
-# Blog Rebranding Pitfalls
+# Pitfalls Research: justfile + Hooks Publishing
 
-**Domain:** Blog rebranding from forked repository (steipete.me → justcarlson.com)
-**Researched:** 2026-01-28
-**Confidence:** HIGH (based on codebase analysis + 2026 SEO migration sources)
+**Domain:** Blog publishing workflow (Obsidian to Astro)
+**Researched:** 2026-01-30
+**Confidence:** HIGH (official docs verified)
 
-## Critical Pitfalls
+## justfile Pitfalls
 
-Mistakes that cause broken functionality, SEO damage, or require extensive rework.
+### Critical: Each Recipe Line Runs in a New Shell
 
-### Pitfall 1: Hardcoded Domain References
+**What goes wrong:** Commands that set environment variables or change directories don't persist to subsequent lines.
 
-**What goes wrong:** Domain name "steipete.me" hardcoded in multiple locations instead of using config variables. This causes broken links, incorrect metadata, and mixed branding.
-
-**Why it happens:** Developers hardcode domains for "convenience" or miss obscure locations where the domain appears.
-
-**Consequences:**
-- Broken canonical URLs and redirects
-- Social media cards showing wrong domain
-- CSP headers blocking legitimate requests
-- Mixed branding in user-facing content
-
-**Warning signs:**
-- Direct string literals like `"steipete.me"` in code
-- Hardcoded URLs in OG image templates
-- Domain references in comments/documentation
-
-**Prevention:**
-- Use `SITE.website` from config everywhere
-- Search entire codebase: `grep -r "steipete\.me" --exclude-dir=node_modules`
-- Validate all URLs resolve to new domain after deployment
-
-**Files to audit:**
-- `/src/consts.ts` - Primary site config (SITE.website, author, profile)
-- `/vercel.json` - CSP headers, redirect rules, domain allowlists (lines 62, 142)
-- `/src/utils/og-templates/post.js` - Hardcoded "steipete.me" at line 216
-- `/astro.config.mjs` - PWA manifest, start URLs (lines 102-131)
-- `/src/components/BaseHead.astro` - Meta tags, Twitter handle (lines 40, 71-72)
-
----
-
-### Pitfall 2: Leftover Identity References
-
-**What goes wrong:** Original owner's name, social handles, and personal info scattered throughout codebase. Creates confusion about authorship and ownership.
-
-**Why it happens:** Identity is embedded in 120+ files including all blog posts, config, components, and metadata. Easy to miss non-obvious locations.
-
-**Consequences:**
-- Copyright/licensing confusion (LICENSE file has "Peter Steinberger")
-- SEO penalties for inconsistent authorship signals
-- User confusion about who maintains the site
-- Social media cards showing wrong creator handles
-
-**Warning signs:**
-- 123 files contain "steipete", "steinberger", or "peter" (case-insensitive)
-- Default author in content schema (`content.config.ts` line 11)
-- Social links in consts.ts (GitHub, Twitter, BlueSky handles)
-- License file copyright holder
-- README.md "About" section
-
-**Prevention:**
-- Global search-replace for name/handles (use case-insensitive)
-- Update content schema default author
-- Regenerate all dynamic OG images after author change
-- Replace avatar/profile images in `/public/`
-
-**Files to audit:**
-- `/src/consts.ts` - SITE.author, SOCIAL_LINKS (lines 35, 72-88)
-- `/src/content.config.ts` - Default author in schema (line 11)
-- `/LICENSE` - Copyright holder (line 27)
-- `/README.md` - About section, author description (lines 1-7)
-- `/package.json` - Package name "steipete-astro" (line 2)
-- `/public/peter-avatar.jpg` - Profile image filename
-- `/src/components/BaseHead.astro` - Twitter handle @steipete (lines 71-72)
-- `/public/site.webmanifest` - App name and description (lines 2-4)
-
----
-
-### Pitfall 3: SEO Redirect Configuration Errors
-
-**What goes wrong:** Using 302 (temporary) redirects instead of 301 (permanent), missing redirect mappings, or catch-all redirects to homepage.
-
-**Why it happens:** Developers don't understand SEO implications or rush redirect implementation. Vercel JSON has complex redirect rules that need careful updating.
-
-**Consequences:**
-- Search engines won't transfer link equity/authority
-- Duplicate content penalties
-- Lost organic traffic (20-40% according to migration studies)
-- Broken inbound links from other sites
-- Users hit 404 pages on old URLs
-
-**Warning signs:**
-- Redirects using `"permanent": false`
-- All old URLs redirecting to homepage instead of equivalent pages
-- Domain-specific redirect rules pointing to old domain
-- Missing redirects for renamed/moved content
-
-**Prevention:**
-- Use 301 (permanent) redirects for all URL changes
-- Map old URLs to equivalent new URLs (not homepage)
-- Test all redirects before DNS cutover
-- Implement gradual redirect testing with subset of URLs
-- Monitor 404 errors after migration
-
-**Files to audit:**
-- `/vercel.json` - Redirect rules (lines 8-67)
-  - Line 11-14: steipete.me specific redirect (needs domain update)
-  - Line 59-66: Catch-all domain redirect (needs new domain)
-- `/astro.config.mjs` - Sitemap configuration and URLs
-- Content-Security-Policy headers referencing old domain (vercel.json line 142)
-
-**Sources:**
-- [SEO Migration 2026 Complete Guide](https://www.veloxmedia.com/blog/seo-migration-2026-the-complete-guide)
-- [12 Site Migration Mistakes That Damage SEO](https://embryo.com/blog/12-site-migration-mistakes-that-damage-seo/)
-- [Site Migration SEO Common Mistakes](https://marketinglabs.co.uk/site-migration-seo-common-mistakes/)
-
----
-
-### Pitfall 4: Asset References and Image Paths
-
-**What goes wrong:** Image filenames, asset paths, and CDN URLs contain original owner's identity or reference old domain. Causes broken images and stale cache issues.
-
-**Why it happens:** Assets stored with descriptive names like "peter-avatar.jpg" or "peter-office.jpg". PWA manifests cache these by filename.
-
-**Consequences:**
-- Broken profile images across site
-- PWA cache serves old brand images
-- Social media previews show wrong person
-- Service worker serves stale assets
-
-**Warning signs:**
-- Files named after original owner in `/public/`
-- Hardcoded asset URLs in PWA manifest
-- Image references in CSS/components using old filenames
-- OG image default points to renamed file
-
-**Prevention:**
-- Rename all identity-specific assets
-- Update PWA manifest asset list
-- Clear service worker cache after deployment
-- Update all component references to new filenames
-- Replace actual image files (not just rename)
-
-**Files to audit:**
-- `/public/peter-avatar.jpg` - Profile image (referenced 5+ places)
-- `/public/peter-office.jpg` and `/public/peter-office-2.jpg` - About page images
-- `/src/consts.ts` - ogImage: "peter-avatar.jpg" (line 39)
-- `/src/components/BaseHead.astro` - Apple touch icon (line 33)
-- `/astro.config.mjs` - PWA includeAssets (line 102), manifest icons (lines 120-130)
-
----
-
-### Pitfall 5: Git History Reveals Original Owner
-
-**What goes wrong:** Git commit history, author metadata, and contributor info still shows original owner. GitHub UI displays fork relationship prominently.
-
-**Why it happens:** Forking preserves entire git history. Even rebasing/squashing leaves traces in commit metadata.
-
-**Consequences:**
-- GitHub shows "forked from steipete/steipete.me" banner
-- Git blame points to original author
-- Contributors page shows wrong maintainer
-- Legal ambiguity about derivative works
-- SEO crawlers may attribute content to original author
-
-**Warning signs:**
-- GitHub repository page shows fork relationship
-- `git log` shows original author in all commits
-- Repository insights show original contributors
-- Remote URLs still point to original repository
-
-**Prevention options:**
-1. **Keep fork relationship** (recommended for attribution)
-   - Acknowledge source in README
-   - Update LICENSE to reflect derivative work
-   - Clear documentation about fork origin
-
-2. **Break fork relationship** (for complete rebrand)
-   - Contact GitHub support to detach fork
-   - Rewrite commit history with new author
-   - Start fresh repo and import files (loses history)
-
-**Files to audit:**
-- `.git/config` - Remote URLs
-- `README.md` - Fork attribution/acknowledgment
-- `LICENSE` - Derivative work clause
-- GitHub repository settings
-
-**Note:** Breaking fork relationship is irreversible. Consider licensing implications before proceeding.
-
----
-
-## Moderate Pitfalls
-
-Mistakes that cause technical debt or user confusion but don't break core functionality.
-
-### Pitfall 6: Package Names and Project Identifiers
-
-**What goes wrong:** Package.json name, npm scripts, and project identifiers use original branding.
-
-**Consequences:**
-- Confusing dev experience for contributors
-- Build artifacts labeled with wrong name
-- Analytics/monitoring tools show wrong project name
-
-**Prevention:**
-- Update package.json name field
-- Rename project in package managers
-- Update CI/CD pipeline labels
-
-**Files to audit:**
-- `/package.json` - "name": "steipete-astro" (line 2)
-
----
-
-### Pitfall 7: Content Schema Default Values
-
-**What goes wrong:** Blog post schema has default author that applies to all posts without explicit author field.
-
-**Consequences:**
-- New posts inherit wrong author
-- Bulk content imports use incorrect attribution
-- Mixed authorship across content
-
-**Prevention:**
-- Update content.config.ts default author
-- Add validation to catch missing author fields
-- Consider removing default to force explicit author
-
-**Files to audit:**
-- `/src/content.config.ts` - Default author: SITE.author (line 11)
-
----
-
-### Pitfall 8: Browser Manifest and PWA Configuration
-
-**What goes wrong:** PWA manifest has app name, short name, and description tied to original brand. Users who install PWA see old branding.
-
-**Consequences:**
-- Home screen shortcut shows wrong name
-- App switcher displays old brand
-- Share targets use incorrect app info
-
-**Prevention:**
-- Update manifest name/short_name/description
-- Update PWA config in astro.config.mjs
-- Test PWA installation after changes
-- Clear browser PWA cache
-
-**Files to audit:**
-- `/public/site.webmanifest` - Name and description (lines 2-4)
-- `/astro.config.mjs` - PWA manifest config (lines 103-131)
-- `/src/components/BaseHead.astro` - PWA meta tags (lines 36-42)
-
----
-
-### Pitfall 9: Edit Links and GitHub Integration
-
-**What goes wrong:** "Edit on GitHub" links point to original repository, not forked repo.
-
-**Consequences:**
-- Users can't suggest edits
-- Edit button links to 404 or wrong repo
-- Broken contributor workflow
-
-**Prevention:**
-- Update editPost.url in consts.ts
-- Update GitHub URLs in documentation
-- Test edit links after deployment
-
-**Files to audit:**
-- `/src/consts.ts` - editPost.url with GitHub link (line 49)
-
----
-
-## Minor Pitfalls
-
-Mistakes that cause annoyance but are easily fixable.
-
-### Pitfall 10: Comments and Documentation
-
-**What goes wrong:** Code comments reference original project/author. Documentation uses old examples.
-
-**Consequences:**
-- Developer confusion
-- Onboarding friction for new contributors
-
-**Prevention:**
-- Search for comment blocks with references
-- Update CHANGELOG.md entries
-- Review all .md files for old project references
-
-**Files to audit:**
-- All files in `/src/content/blog/` (120+ files)
-- `/CHANGELOG.md`
-- `/CLAUDE.MD`
-- `/docs/` directory if exists
-
----
-
-### Pitfall 11: Theme Colors and Design Tokens
-
-**What goes wrong:** Theme colors, CSS variables, and design tokens may reflect original brand identity.
-
-**Consequences:**
-- Visual inconsistency with new brand
-- Stale design system
-
-**Prevention:**
-- Audit CSS custom properties
-- Review theme-color meta tags
-- Update tailwind config if branded
-
-**Files to audit:**
-- `/src/styles/custom.css` - CSS variables and theme tokens
-- `/src/components/BaseHead.astro` - Theme color meta tags (lines 49-59)
-- `/astro.config.mjs` - PWA theme_color (line 107)
-
----
-
-### Pitfall 12: Search Index and Pagefind
-
-**What goes wrong:** Pagefind search index may cache old metadata, author names, or URLs.
-
-**Consequences:**
-- Search results show old author/domain
-- Stale snippets in search preview
-
-**Prevention:**
-- Rebuild pagefind index after content changes
-- Clear dist/ directory before production build
-- Test search functionality post-migration
-
-**Files to audit:**
-- Build output in `/dist/` (regenerated)
-- Search index files generated by pagefind
-
----
-
-## Checklist for Systematic Audit
-
-Use this checklist to ensure complete rebranding:
-
-### Identity References
-- [ ] Update SITE config in `/src/consts.ts`
-- [ ] Update default author in `/src/content.config.ts`
-- [ ] Replace social links (GitHub, Twitter, BlueSky)
-- [ ] Update LICENSE copyright holder
-- [ ] Rewrite README.md About section
-- [ ] Update package.json name
-- [ ] Rename avatar/profile images in `/public/`
-
-### Domain References
-- [ ] Search codebase for "steipete.me" hardcoded strings
-- [ ] Update `/vercel.json` redirects and CSP headers
-- [ ] Update `/src/utils/og-templates/post.js` hardcoded domain
-- [ ] Update `/astro.config.mjs` PWA config
-- [ ] Update `/src/components/BaseHead.astro` meta tags
-- [ ] Test robots.txt generation (uses SITE.website)
-
-### SEO and Redirects
-- [ ] Configure 301 redirects in vercel.json
-- [ ] Map old content URLs to new equivalents
-- [ ] Update domain in CSP headers
-- [ ] Test all redirects before DNS cutover
-- [ ] Monitor 404 errors post-migration
-
-### Assets and Caching
-- [ ] Rename identity-specific image files
-- [ ] Update PWA manifest asset references
-- [ ] Clear service worker cache strategy
-- [ ] Replace actual image files (not just paths)
-- [ ] Update OG image default
-
-### Git and Repository
-- [ ] Decide: keep or break fork relationship
-- [ ] Update README fork attribution
-- [ ] Update LICENSE if derivative work
-- [ ] Update remote URLs if detached
-- [ ] Update "Edit on GitHub" links
-
-### Content and Schema
-- [ ] Update content schema defaults
-- [ ] Search all blog posts for identity references
-- [ ] Regenerate OG images after author change
-- [ ] Clear search index and rebuild
-
-### PWA and Metadata
-- [ ] Update site.webmanifest name/description
-- [ ] Update PWA config in astro.config.mjs
-- [ ] Update meta tags in BaseHead.astro
-- [ ] Test PWA installation
-
-### Build and Deployment
-- [ ] Update package.json scripts if needed
-- [ ] Clear dist/ before production build
-- [ ] Rebuild pagefind search index
-- [ ] Test entire site in staging environment
-- [ ] Verify CSP doesn't block new domain
-
----
-
-## Search Queries for Audit
-
-Run these searches to catch missed references:
-
-```bash
-# Identity references (case-insensitive)
-grep -ri "steipete" --exclude-dir=node_modules --exclude-dir=dist
-grep -ri "steinberger" --exclude-dir=node_modules --exclude-dir=dist
-grep -ri "peter" --exclude-dir=node_modules --exclude-dir=dist
-
-# Domain references
-grep -r "steipete\.me" --exclude-dir=node_modules --exclude-dir=dist
-
-# Social handles
-grep -r "@steipete" --exclude-dir=node_modules --exclude-dir=dist
-
-# Asset files
-find public -name "*peter*"
-find public -name "*steipete*"
-
-# Hardcoded URLs
-grep -r "https://steipete" --exclude-dir=node_modules --exclude-dir=dist
+```just
+# BROKEN - cd doesn't persist
+build:
+  cd src
+  npm run build  # Still runs in original directory!
 ```
 
+**Why it happens:** Just executes each recipe line in a fresh shell instance.
+
+**Prevention:**
+- Chain commands with `&&`: `cd src && npm run build`
+- Use shebang recipes for complex scripts that need state
+
+```just
+# FIXED - shebang recipe keeps shell state
+build:
+  #!/usr/bin/env bash
+  cd src
+  npm run build  # Works - same shell instance
+```
+
+**Warning signs:** Commands appear to work but have no effect; build runs in wrong directory.
+
+**Phase:** 7 (Setup & Safety) - Establish pattern in first justfile recipes
+
+**Source:** [Just Programmer's Manual](https://just.systems/man/en/)
+
 ---
+
+### Critical: Variable Syntax Confusion ({{var}} vs $VAR)
+
+**What goes wrong:** Using shell variable syntax (`$VAR`) when just variable syntax (`{{var}}`) is needed, or vice versa.
+
+```just
+# BROKEN - mixing syntax incorrectly
+vault_path := "/path/to/vault"
+publish:
+  cp $vault_path/posts/* ./src/content/  # Wrong! $vault_path is shell variable
+```
+
+**Why it happens:** Just uses `{{variable}}` for its own variables, `$VARIABLE` for shell/environment variables.
+
+**Prevention:**
+- Just variables: `{{variable_name}}` (defined in justfile)
+- Environment variables: `$VARIABLE_NAME` (from .env or shell)
+- Use `set dotenv-load` to enable .env file loading
+
+```just
+# CORRECT - proper variable syntax
+vault_path := "/path/to/vault"
+publish:
+  cp "{{vault_path}}/posts/"* ./src/content/
+```
+
+**Warning signs:** "undefined variable" errors, empty strings where values expected.
+
+**Phase:** 7 (Setup & Safety) - Document syntax in justfile comments
+
+**Source:** [Just Programmer's Manual - Recipe Parameters](https://just.systems/man/en/recipe-parameters.html)
+
+---
+
+### Moderate: Nested Just Invocations Lose State
+
+**What goes wrong:** Calling `just` from within a recipe recalculates assignments and loses CLI arguments.
+
+```just
+# PROBLEMATIC - nested just loses context
+all:
+  just build
+  just test   # CLI arguments not propagated, assignments recalculated
+```
+
+**Why it happens:** Each `just` invocation is independent with fresh state.
+
+**Prevention:**
+- Use dependencies instead of nested calls
+- Pass required values explicitly as arguments
+
+```just
+# BETTER - use dependencies
+all: build test
+
+# Or pass values explicitly
+build-and-test target:
+  just build {{target}} && just test {{target}}
+```
+
+**Warning signs:** Dependencies run twice; behavior differs when run directly vs nested.
+
+**Phase:** 8 (Core Publishing) - Structure publish pipeline as dependencies
+
+**Source:** [GitHub - casey/just](https://github.com/casey/just)
+
+---
+
+### Moderate: Cross-Platform Shell Compatibility
+
+**What goes wrong:** Recipes use bash-specific features that fail on other shells or platforms.
+
+**Why it happens:** Just defaults to `/bin/sh`, which may not support bash features.
+
+**Prevention:**
+- Explicitly set shell: `set shell := ["bash", "-cu"]`
+- Test on target platforms
+- Avoid bash-only features when possible
+
+```just
+set shell := ["bash", "-cu"]
+
+# Now bash features work reliably
+publish:
+  if [[ -f "./config.json" ]]; then
+    echo "Config found"
+  fi
+```
+
+**Warning signs:** `[[` syntax errors; brace expansion fails.
+
+**Phase:** 7 (Setup & Safety) - Set shell explicitly at top of justfile
+
+**Source:** [Just Settings - Configuring the Shell](https://just.systems/man/en/settings.html)
+
+---
+
+### Minor: Indentation Must Be Consistent Within Recipe
+
+**What goes wrong:** Mixing spaces and tabs in recipe lines causes parse errors.
+
+**Prevention:**
+- Use consistent indentation (tabs recommended by just)
+- Different recipes can use different indentation, but each recipe must be internally consistent
+
+**Warning signs:** Parse errors mentioning indentation; "unexpected character" errors.
+
+**Phase:** 7 (Setup & Safety) - Establish editorconfig pattern
+
+---
+
+## Claude Hooks Pitfalls
+
+### Critical: Exit Code 2 Ignores JSON Output
+
+**What goes wrong:** Hook returns exit code 2 (blocking error) with JSON in stdout, but JSON is ignored. Only stderr is used.
+
+```bash
+# BROKEN - JSON ignored with exit code 2
+echo '{"decision": "block", "reason": "Dangerous operation"}'
+exit 2  # stderr used, stdout JSON ignored!
+```
+
+**Why it happens:** By design, exit code 2 means "blocking error" and uses stderr directly.
+
+**Prevention:**
+- For blocking with JSON control: exit 0 with `"decision": "block"` in JSON
+- For simple blocking: exit 2 with error message in stderr
+
+```bash
+# CORRECT - JSON blocking (exit 0)
+echo '{"decision": "block", "reason": "Dangerous operation"}'
+exit 0
+
+# CORRECT - simple blocking (exit 2)
+echo "Dangerous operation blocked: force push not allowed" >&2
+exit 2
+```
+
+**Warning signs:** Hook blocks operations but custom JSON reasons never appear.
+
+**Phase:** 7 (Setup & Safety) - Use exit 2 + stderr for git safety hooks
+
+**Source:** [Claude Code Hooks Reference](https://code.claude.com/docs/en/hooks)
+
+---
+
+### Critical: PostToolUse JSON Not Processed (Known Bug)
+
+**What goes wrong:** PostToolUse hooks can execute but their JSON output is not captured by Claude.
+
+**Why it happens:** Bug in Claude Code (Issue #3983, July 2025). JSON communication documented but not working.
+
+**Prevention:**
+- For PostToolUse, use exit codes + stderr for critical blocking
+- Write diagnostic data to external log files as workaround
+- Consider PreToolUse hooks instead where possible
+
+**Warning signs:** PostToolUse hooks run but Claude never receives feedback.
+
+**Phase:** 8 (Core Publishing) - Prefer PreToolUse for validation
+
+**Source:** [GitHub Issue #3983](https://github.com/anthropics/claude-code/issues/3983)
+
+---
+
+### Critical: Plugin Hooks vs Inline Hooks Behave Differently
+
+**What goes wrong:** Hooks that work perfectly in `.claude/settings.json` fail when installed via plugins.
+
+**Why it happens:** Plugin hooks' stdout not captured the same way (Issue #10875, November 2025).
+
+**Prevention:**
+- Use inline hooks in settings.json for critical safety hooks
+- Test hooks in both plugin and inline configurations
+- Don't rely on plugins for safety-critical hooks
+
+**Warning signs:** Same hook script works inline but fails via plugin.
+
+**Phase:** 7 (Setup & Safety) - Use inline hooks in settings.json, not plugins
+
+**Source:** [GitHub Issue #10875](https://github.com/anthropics/claude-code/issues/10875)
+
+---
+
+### Moderate: Hook Configuration Changes Require Restart
+
+**What goes wrong:** Edit hooks in settings file, but old behavior persists.
+
+**Why it happens:** Claude Code captures hook snapshot at startup for security.
+
+**Prevention:**
+- After editing hooks, restart Claude Code
+- Use `/hooks` command to verify configuration loaded correctly
+- Changes to running session require explicit review in `/hooks` menu
+
+**Warning signs:** New hook doesn't trigger; old (deleted) hook still runs.
+
+**Phase:** 7 (Setup & Safety) - Document restart requirement
+
+**Source:** [Claude Code Hooks Reference](https://code.claude.com/docs/en/hooks)
+
+---
+
+### Moderate: 60-Second Default Timeout
+
+**What goes wrong:** Long-running hooks (builds, linting) timeout before completion.
+
+**Why it happens:** Default hook timeout is 60 seconds.
+
+**Prevention:**
+- Set explicit timeout per command: `"timeout": 300` (5 minutes for builds)
+- Keep validation hooks fast; offload heavy work to justfile
+
+```json
+{
+  "hooks": {
+    "PreToolUse": [{
+      "matcher": "Bash",
+      "hooks": [{
+        "type": "command",
+        "command": "./validate.sh",
+        "timeout": 120
+      }]
+    }]
+  }
+}
+```
+
+**Warning signs:** Hook exits mid-execution; inconsistent behavior under load.
+
+**Phase:** 8 (Core Publishing) - Set 300s timeout for build hooks
+
+**Source:** [Claude Code Hooks Reference](https://code.claude.com/docs/en/hooks)
+
+---
+
+### Minor: Matcher Patterns Are Case-Sensitive
+
+**What goes wrong:** Hook matches "bash" but tool is "Bash".
+
+**Prevention:**
+- Tool names are case-sensitive: `Bash`, `Write`, `Edit`, `Read`
+- Use regex for flexibility: `"matcher": "[Bb]ash"`
+- Use `*` to match all tools
+
+**Warning signs:** Hook never triggers despite correct event.
+
+**Phase:** 7 (Setup & Safety) - Use exact tool names from documentation
+
+---
+
+### Minor: settings.local.json Must Be Created Carefully
+
+**What goes wrong:** Creating `.claude/settings.local.json` doesn't auto-gitignore; sensitive paths committed.
+
+**Why it happens:** Claude Code auto-configures gitignore only when it creates the file.
+
+**Prevention:**
+- Let Claude Code create the file via hooks/skills
+- Or manually add to `.gitignore`: `.claude/settings.local.json`
+- Never commit vault paths or personal paths
+
+**Warning signs:** Local config appears in git status.
+
+**Phase:** 7 (Setup & Safety) - Verify gitignore entry exists
+
+**Source:** [Claude Code Settings](https://code.claude.com/docs/en/settings)
+
+---
+
+## Publishing Workflow Pitfalls
+
+### Critical: Obsidian Image Syntax Not Standard Markdown
+
+**What goes wrong:** Obsidian's `![[image.png]]` embed syntax doesn't render in Astro.
+
+**Why it happens:** Obsidian uses proprietary wiki-link syntax for embeds.
+
+**Prevention:**
+- Configure Obsidian: Settings > Files & Links > New Link Format = "Relative path to file"
+- Convert `![[image.png]]` to `![alt](./image.png)` during publishing
+- Use Image Converter plugin in Obsidian
+
+```bash
+# Convert Obsidian syntax to standard markdown
+sed -i 's/!\[\[\([^]]*\)\]\]/![\1](.\/\1)/g' "$post_file"
+```
+
+**Warning signs:** Images display in Obsidian but broken in Astro build.
+
+**Phase:** 8 (Core Publishing) - Image syntax conversion in publish pipeline
+
+**Source:** [Write Like a Pro with Astro and Obsidian](https://www.hungrimind.com/articles/obsidian-with-astro)
+
+---
+
+### Critical: Relative Image Paths Break in Astro Content Collections
+
+**What goes wrong:** Image `![](./image.png)` in markdown causes build failure when Astro can't resolve the path.
+
+**Why it happens:** Astro copies/optimizes images to `_astro/` folder, breaking relative references.
+
+**Prevention:**
+- Copy images to `public/assets/blog/` with absolute paths
+- Update image references in markdown to `/assets/blog/image.png`
+- Or use Astro's content collection image helper for type-safe image references
+
+```just
+# Copy images alongside posts
+copy-images post:
+  find "{{vault}}/{{post}}" -name "*.png" -o -name "*.jpg" | \
+    xargs -I{} cp {} public/assets/blog/
+```
+
+**Warning signs:** Build fails with "could not find image" errors; images work in dev but fail in build.
+
+**Phase:** 8 (Core Publishing) - Establish image copy + path update pattern
+
+**Source:** [GitHub Issue #1188 - withastro/astro](https://github.com/withastro/astro/issues/1188)
+
+---
+
+### Critical: Special Characters in Image Filenames
+
+**What goes wrong:** Images with spaces or special characters (`&`, `\`, etc.) break optimization.
+
+**Why it happens:** Astro's image optimization escapes these characters, breaking paths.
+
+**Prevention:**
+- Validate image filenames during publish
+- Reject or auto-rename files with spaces/special characters
+- Use underscores: `my_image.png` not `my image.png`
+
+```bash
+# Check for problematic filenames
+find ./posts -name "* *" -o -name "*&*" -o -name "*\\*" | head -1 && \
+  echo "ERROR: Invalid image filename" && exit 1
+```
+
+**Warning signs:** Some images work, others 404; build completes but images broken.
+
+**Phase:** 8 (Core Publishing) - Add filename validation to image copy
+
+**Source:** [Configuring Obsidian and Astro Assets](https://www.anca.wtf/posts/configuring-obsidian-and-astro-assets-for-markdoc-content-in-an-astro-blog/)
+
+---
+
+### Critical: Partial Commits Leave Broken State
+
+**What goes wrong:** Commit posts without images, or images without posts, leaving site broken.
+
+**Why it happens:** Validation passes on markdown but images not copied; or script fails mid-execution.
+
+**Prevention:**
+- Atomic operations: copy all files, then validate all, then commit all
+- Stage everything before committing
+- Build check before commit catches missing images
+
+```just
+# Atomic publish - all or nothing
+publish:
+  # 1. Copy posts and images together
+  ./scripts/copy-content.sh
+  # 2. Validate everything
+  npm run lint
+  # 3. Build check (catches missing images)
+  npm run build
+  # 4. Only then commit
+  git add src/content/blog/ public/assets/blog/
+  git commit -m "feat(blog): publish new posts"
+```
+
+**Warning signs:** Site breaks after publish; images 404; build fails on Vercel but passed locally.
+
+**Phase:** 8 (Core Publishing) - Atomic copy + build-before-commit
+
+---
+
+### Moderate: Frontmatter Validation Gaps
+
+**What goes wrong:** Posts published with missing `pubDatetime`, empty `description`, or invalid `tags`.
+
+**Why it happens:** Validation only checks required fields exist, not that they're valid.
+
+**Prevention:**
+- Validate field values, not just presence
+- Check pubDatetime is valid ISO date
+- Check description length (SEO: 50-160 chars)
+- Check tags array contains valid strings
+
+```bash
+# Validate frontmatter values
+yq '.pubDatetime' "$post" | grep -qE '^\d{4}-\d{2}-\d{2}' || \
+  echo "ERROR: Invalid pubDatetime format"
+```
+
+**Warning signs:** Posts appear but SEO broken; date sorting wrong; OG images missing text.
+
+**Phase:** 8 (Core Publishing) - Comprehensive frontmatter validation
+
+---
+
+### Moderate: Year Folder Mismatch
+
+**What goes wrong:** Post with `pubDatetime: 2026-01-30` copied to `src/content/blog/2025/` manually.
+
+**Why it happens:** Year extraction from pubDatetime not automated; manual copy to wrong folder.
+
+**Prevention:**
+- Extract year from pubDatetime programmatically
+- Validate post path matches pubDatetime year
+
+```just
+# Extract year and copy to correct folder
+copy-post post:
+  year=$(yq '.pubDatetime' "{{post}}" | cut -d'-' -f1)
+  mkdir -p "src/content/blog/$year"
+  cp "{{post}}" "src/content/blog/$year/"
+```
+
+**Warning signs:** Archive pages show wrong years; RSS feed dates inconsistent.
+
+**Phase:** 8 (Core Publishing) - Auto-extract year from pubDatetime
+
+---
+
+### Minor: Draft Flag Ambiguity
+
+**What goes wrong:** Post with `draft: true` gets published; or `draft: false` post missed.
+
+**Why it happens:** YAML boolean parsing varies (`true`/`True`/`"true"`/`yes`).
+
+**Prevention:**
+- Standardize on lowercase `true`/`false` in templates
+- Parse with YAML-aware tool (yq), not grep
+
+```bash
+# CORRECT - use yq for boolean parsing
+yq '.draft == false' "$post"
+
+# WRONG - grep fails on boolean variations
+grep 'draft: false' "$post"  # Misses "draft: False", "draft: no"
+```
+
+**Warning signs:** Some posts not discovered; unexpected posts published.
+
+**Phase:** 9 (Utilities) - Use yq in list-drafts skill
+
+---
+
+## Git Safety Pitfalls
+
+### Critical: --no-verify Bypasses All Hooks
+
+**What goes wrong:** User runs `git commit --no-verify` or `git push --no-verify`, completely bypassing safety hooks.
+
+**Why it happens:** Git provides escape hatch for legitimate edge cases; users discover and misuse it.
+
+**Prevention:**
+- Claude hooks run before git hooks, so Claude hooks aren't bypassed by --no-verify
+- For additional protection: server-side hooks (branch protection rules)
+- Education: document when --no-verify is acceptable
+
+**Warning signs:** Dangerous operations succeed despite hooks.
+
+**Phase:** 7 (Setup & Safety) - Document that Claude hooks can't be bypassed like git hooks
+
+**Source:** [Git Documentation - githooks](https://git-scm.com/docs/githooks)
+
+---
+
+### Critical: Hooks Don't Block Pre-Existing Local State
+
+**What goes wrong:** User already has destructive command in history; re-runs it outside Claude.
+
+**Why it happens:** Claude hooks only protect operations routed through Claude.
+
+**Prevention:**
+- Server-side branch protection (force-push blocked at GitHub level)
+- Training/documentation for safe git practices
+- Consider global git hooks via `core.hooksPath` for additional protection
+
+**Warning signs:** Destructive operations succeed when run directly in terminal.
+
+**Phase:** 7 (Setup & Safety) - Recommend GitHub branch protection in documentation
+
+---
+
+### Moderate: Force Push Detection Pattern Gaps
+
+**What goes wrong:** Hook blocks `git push --force` but not `git push -f` or `git push --force-with-lease`.
+
+**Why it happens:** Pattern matching doesn't cover all force push variations.
+
+**Prevention:**
+- Match all variations: `--force`, `-f`, `--force-with-lease`, `+refs/`
+- Parse git push arguments properly
+
+```bash
+# Comprehensive force push detection
+if echo "$cmd" | grep -qE '(push.*(--force|-f|--force-with-lease|\+[a-zA-Z]))'; then
+  echo "ERROR: Force push blocked" >&2
+  exit 2
+fi
+```
+
+**Warning signs:** Some force push commands succeed; inconsistent blocking.
+
+**Phase:** 7 (Setup & Safety) - Comprehensive force push pattern
+
+---
+
+### Moderate: Reset Detection Must Include Variations
+
+**What goes wrong:** Hook blocks `git reset --hard` but not `git reset --hard HEAD~1` or `git reset --hard origin/main`.
+
+**Prevention:**
+- Match pattern, not exact command
+- Block: `reset --hard`, `checkout .`, `clean -f`, `restore .`
+
+```bash
+# Block dangerous reset variations
+dangerous_patterns=(
+  'reset --hard'
+  'checkout \.'
+  'clean -f'
+  'restore \.'
+  'branch -D'
+)
+```
+
+**Warning signs:** Some destructive operations succeed.
+
+**Phase:** 7 (Setup & Safety) - Pattern-based blocking
+
+---
+
+### Minor: Pre-Push vs Pre-Commit Hook Timing
+
+**What goes wrong:** Validation runs at commit time, but problematic code already committed before push blocked.
+
+**Prevention:**
+- Run validation at commit time (pre-commit) to prevent bad commits
+- Run safety checks at push time (pre-push) as final gate
+- Claude PreToolUse hooks can intercept before either
+
+**Warning signs:** Local repo has bad commits that can't be pushed.
+
+**Phase:** 8 (Core Publishing) - Validate at commit time, not just push
+
+---
+
+## Prevention Checklist
+
+### justfile Setup
+- [ ] Set shell explicitly: `set shell := ["bash", "-cu"]`
+- [ ] Use `{{variable}}` for just vars, `$VARIABLE` for env vars
+- [ ] Chain dependent commands with `&&` or use shebang recipes
+- [ ] Test recipes on target platform(s)
+- [ ] Consistent indentation per recipe (tabs preferred)
+
+### Claude Hooks Setup
+- [ ] Use exit code 2 + stderr for simple blocking
+- [ ] Use exit code 0 + JSON for structured control
+- [ ] Set explicit timeouts for long-running hooks (builds: 300s)
+- [ ] Use inline hooks in settings.json for critical safety
+- [ ] Test hooks with `/hooks` command after configuration
+- [ ] Restart Claude Code after changing hooks
+- [ ] Verify .claude/settings.local.json is in .gitignore
+
+### Publishing Pipeline
+- [ ] Convert Obsidian `![[]]` syntax to standard markdown
+- [ ] Copy images to public/ with absolute paths
+- [ ] Validate image filenames (no spaces, no special chars)
+- [ ] Validate frontmatter values, not just presence
+- [ ] Extract year from pubDatetime for folder placement
+- [ ] Use yq (not grep) for YAML boolean parsing
+- [ ] Build check before commit (catches missing images)
+- [ ] Atomic operations: copy all, validate all, commit all
+
+### Git Safety
+- [ ] Block all force push variations: `--force`, `-f`, `--force-with-lease`, `+ref`
+- [ ] Block all destructive commands: `reset --hard`, `checkout .`, `clean -f`, `restore .`
+- [ ] Document that Claude hooks work even when git --no-verify used
+- [ ] Recommend GitHub branch protection as additional layer
+- [ ] Validate at commit time, not just push time
 
 ## Sources
 
-Web research on blog rebranding and SEO migration best practices for 2026:
+### Official Documentation (HIGH confidence)
+- [Just Programmer's Manual](https://just.systems/man/en/)
+- [Just Settings](https://just.systems/man/en/settings.html)
+- [Claude Code Hooks Reference](https://code.claude.com/docs/en/hooks)
+- [Claude Code Settings](https://code.claude.com/docs/en/settings)
+- [Git Hooks Documentation](https://git-scm.com/docs/githooks)
+- [Astro Images Guide](https://docs.astro.build/en/guides/images/)
+- [Astro Content Collections](https://docs.astro.build/en/guides/content-collections/)
 
-- [Top Rebranding Mistakes to Avoid in 2026](https://devopus.com/blog/top-rebranding-mistakes-to-avoid-in-2026/)
-- [When Rebrands Go Wrong: Common Mistakes](https://www.threerooms.com/blog/when-rebrands-go-wrong-common-mistakes-and-lessons-to-learn)
-- [SEO Migration 2026: The Complete Guide](https://www.veloxmedia.com/blog/seo-migration-2026-the-complete-guide)
-- [12 Site Migration Mistakes That Damage SEO](https://embryo.com/blog/12-site-migration-mistakes-that-damage-seo/)
-- [Common Website Migration Mistakes](https://www.oncrawl.com/technical-seo/common-website-migration-mistakes-drag-down-seo-performance/)
-- [Site Migration SEO: Common Mistakes](https://marketinglabs.co.uk/site-migration-seo-common-mistakes/)
+### Known Issues (MEDIUM confidence)
+- [PostToolUse JSON Bug - Issue #3983](https://github.com/anthropics/claude-code/issues/3983)
+- [Plugin Hooks JSON Bug - Issue #10875](https://github.com/anthropics/claude-code/issues/10875)
+- [Astro Relative Image Paths - Issue #1188](https://github.com/withastro/astro/issues/1188)
 
-Codebase analysis revealed 123 files containing identity references and multiple hardcoded domain locations requiring updates.
+### Community Guides (MEDIUM confidence)
+- [Write Like a Pro with Astro and Obsidian](https://www.hungrimind.com/articles/obsidian-with-astro)
+- [Configuring Obsidian and Astro Assets](https://www.anca.wtf/posts/configuring-obsidian-and-astro-assets-for-markdoc-content-in-an-astro-blog/)
+- [Claude Code Hooks Guide](https://claude.com/blog/how-to-configure-hooks)
+
+---
+*Research completed: 2026-01-30*
+*Confidence: HIGH - Official documentation verified for all critical pitfalls*

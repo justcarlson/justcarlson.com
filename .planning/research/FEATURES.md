@@ -1,312 +1,369 @@
-# Blog Rebranding Features Analysis
+# Features Research: Publishing Workflow
 
-**Context**: Rebranding steipete.me → justcarlson.com
-**Source**: Peter Steinberger's Astro blog (forked)
-**Target**: Just Carlson's personal blog
-**Date**: 2026-01-28
-
----
-
-## Executive Summary
-
-Rebranding a forked blog requires changing three layers of identity: **technical ownership** (URLs, configs), **visual identity** (colors, images, typography), and **content ownership** (author attribution, bio, posts). This document categorizes these changes by priority and strategic impact.
+**Domain:** justfile + Claude hooks publishing workflow for Obsidian-to-Astro blog
+**Researched:** 2026-01-30
+**Confidence:** HIGH (multiple authoritative sources, verified patterns)
 
 ---
 
 ## Table Stakes
-> *Must change or the blog is still Peter's, not yours*
 
-### Identity Elements (Critical)
+Features users expect. Missing = workflow feels broken or incomplete.
 
-#### Author & Site Metadata
-- **Configuration files**:
-  - `/src/consts.ts` - Update `SITE` object:
-    - `website`: `https://justcarlson.com/`
-    - `author`: `"Just Carlson"`
-    - `profile`: `https://justcarlson.com/about`
-    - `desc`: Personal tagline/description
-    - `title`: `"Just Carlson"` (appears in header, title tags)
-    - `timezone`: Update if different from `America/Los_Angeles`
-  - `/src/constants.ts` - Update `SOCIALS` array (all hrefs, linkTitles)
-  - `/package.json`:
-    - `name`: Change from `"steipete-astro"` to `"justcarlson-com"`
-    - Remove commitizen/husky if not using conventional commits
+### Justfile Commands
 
-#### Social Links & Handles
-- **Components**:
-  - `/src/constants.ts` → `SOCIALS` array (6 instances of steipete URLs)
-  - `/src/consts.ts` → `SOCIAL_LINKS` array
-- **Replace**:
-  - GitHub: `https://github.com/steipete` → `https://github.com/justcarlson`
-  - X/Twitter: `https://x.com/steipete` → your handle
-  - BlueSky: `https://bsky.app/profile/steipete.me` → your profile
-  - LinkedIn: `https://www.linkedin.com/in/steipete/` → your profile
-  - Email: `peter@steipete.me` → your email
+| Feature | Why Expected | Complexity | Notes |
+|---------|--------------|------------|-------|
+| `just publish` | Core workflow trigger | Medium | Single command to validate, copy, lint, build, commit, push |
+| `just preview` | See changes before publishing | Low | Starts Astro dev server |
+| `just list-drafts` | Know what's ready to publish | Low | Show `draft: false` posts from Obsidian vault |
+| `just setup` | First-time configuration | Low | Prompts for Obsidian vault path, writes to config |
 
-#### Visual Assets
-- **Files to replace**:
-  - `/public/favicon.ico` - Browser tab icon
-  - `/public/peter-avatar.jpg` - Used for:
-    - PWA manifest icons (192x192, 512x512)
-    - Apple touch icon
-    - Sidebar/header avatar
-    - OG image fallback
-  - `/public/peter-office.jpg` & `/public/peter-office-2.jpg` - About page photos
-  - `/public/og.png` - Default Open Graph image for link previews
+### Validation Steps
 
-#### Meta Tags & SEO
-- **Components to update**:
-  - `/src/components/BaseHead.astro`:
-    - Line 33: `<link rel="apple-touch-icon" href="/peter-avatar.jpg" />` → your avatar
-    - Line 40: `<meta name="apple-mobile-web-app-title" content="steipete" />`
-    - Line 41: `<meta name="application-name" content="Peter Steinberger" />`
-    - Line 71-72: `<meta name="twitter:site" content="@steipete" />` → your handle
-  - PWA Manifest (`/astro.config.mjs` lines 103-131):
-    - `name`: `"Peter Steinberger"` → `"Just Carlson"`
-    - `short_name`: `"steipete"` → your short name
-    - `description`: Update tagline
-    - `includeAssets`: Change `"peter-avatar.jpg"` to your avatar filename
+| Validation | Why Expected | Complexity | Notes |
+|------------|--------------|------------|-------|
+| Frontmatter presence | Posts without title/date/description fail silently | Low | Required: `title`, `pubDatetime`, `description` |
+| Draft status check | Only publish `draft: false` posts | Low | Prevent accidental publishing |
+| Biome lint | Catch code issues before deploy | Low | Already exists in project |
+| Build check | Astro must compile successfully | Low | Already exists: `npm run build:check` |
 
-#### Domain & URLs
-- **Critical config changes**:
-  - `/vercel.json` - 19 instances of steipete.me/steipete.md references:
-    - Redirects (lines 8-67): Domain canonicalization rules
-    - CSP headers (line 144): Allowed origins for scripts/images
-  - Remove/update Peter-specific redirects:
-    - Markdown domain redirect (`.md` extension feature)
-    - Blog post URL migrations
-  - Update CSP domains to match your deployment
+### File Operations
 
-#### Content Attribution
-- **Footer & Legal**:
-  - `/src/components/Footer.astro`:
-    - Line 19: GitHub repo link `https://github.com/steipete/steipete.me`
-    - Consider: Keep "Steal this post" CTA or make it your own
-  - `/LICENSE`:
-    - Line 27: Copyright `(c) 2025 Peter Steinberger`
-  - `/README.md`:
-    - Lines 1, 7, 56: Remove Peter's name/bio
-    - Line 56: Attribution to original AstroPaper theme (keep this)
+| Operation | Why Expected | Complexity | Notes |
+|-----------|--------------|------------|-------|
+| Copy posts to year folder | Match existing `src/content/blog/YYYY/` structure | Medium | Extract year from `pubDatetime` |
+| Copy referenced images | Posts need their images | Medium | Parse markdown for image refs, copy to `public/assets/blog/` |
+| Preserve frontmatter | Schema must match `content.config.ts` | Low | Existing schema has 14 fields |
+
+### Git Safety
+
+| Feature | Why Expected | Complexity | Notes |
+|---------|--------------|------------|-------|
+| Block `git push --force` | Prevent history destruction | Low | PreToolUse hook with exit code 2 |
+| Block `git reset --hard` | Prevent uncommitted work loss | Low | Same hook, pattern matching |
+| Block `git checkout -- .` | Prevent file reversion | Low | Same hook |
+| Conventional commit messages | Match project style (feat/fix) | Low | Already using commitizen |
 
 ---
 
 ## Differentiators
-> *Makes it feel personal and owned, not just rebranded*
 
-### Content Layer
+Features that make this better than manual publishing.
 
-#### About Page (`/src/pages/about.mdx`)
-- **Replace entirely**:
-  - Hero image & alt text (line 11)
-  - Bio paragraphs (lines 14-20) - your story, not Peter's
-  - GitHub activity chart (line 26): `https://ghchart.rshah.org/steipete` → your username
-  - Location, work status, speaking history
-  - Imprint/legal footer (line 47) - your legal entity/address if required
+### Workflow Intelligence
 
-#### Blog Posts
-- **Delete Peter's 107 posts** from `/src/content/blog/`:
-  - Organized by year folders (2010-2025)
-  - Includes `/public/assets/img/` directories with post images
-- **Start fresh** or migrate selectively if referencing his work
+| Feature | Value Proposition | Complexity | Notes |
+|---------|-------------------|------------|-------|
+| Validation status per post | See which posts are ready vs missing fields | Medium | `/list-drafts` shows "ready" vs "missing: title" |
+| Automatic year folder detection | No manual folder creation | Low | Parse `pubDatetime`, create `YYYY/` if needed |
+| Image reference detection | Never forget to copy images | Medium | Parse markdown for `![](...)` and wikilinks |
+| Dry-run mode | Preview what would happen | Low | `just publish --dry-run` shows actions without executing |
 
-#### Newsletter Form
-- **Component**: `/src/components/NewsletterForm.astro`
-- Update or remove - likely uses Peter's email service integration
+### Claude Integration Modes
 
-### Visual Identity
+| Feature | Value Proposition | Complexity | Notes |
+|---------|-------------------|------------|-------|
+| Deterministic mode | `just publish` runs without AI | Low | Pure bash/script, CI-friendly |
+| Agentic mode | `/publish-blog` skill with Claude oversight | Medium | Uses `disable-model-invocation: true` for manual-only |
+| Interactive mode | Claude asks clarifying questions | High | Useful for first-time users or edge cases |
 
-#### Color Palette
-- **CSS Variables** (`/src/styles/custom.css`):
-  - Lines 3-12: Root colors (sidebar bg, link colors, box shadows)
-  - Line 6: `--link-color: #007bff` (Bootstrap blue - very generic)
-  - Lines 211-217: Dark mode overrides
-- **Theme colors** (`/src/components/BaseHead.astro`):
-  - Line 52: `#006cac` (light mode) - Peter's brand blue
-  - Line 58: `#ff6b01` (dark mode) - Orange accent
-- **PWA manifest** (`/astro.config.mjs`):
-  - Line 107: `theme_color: "#006cac"`
-  - Line 108: `background_color: "#fdfdfd"`
+### Safety Hooks
 
-#### Typography
-- **Font preloading** (`/src/components/BaseHead.astro` lines 92-93):
-  - Uses Atkinson (open-source font)
-  - Consider: Stick with it or change to match your brand
-- **Code syntax themes** (`/astro.config.mjs` line 26):
-  - Light: `min-light`
-  - Dark: `night-owl`
+| Feature | Value Proposition | Complexity | Notes |
+|---------|-------------------|------------|-------|
+| PreToolUse Bash guard | Block dangerous commands before execution | Medium | JSON output with `permissionDecision: deny` |
+| Suggested alternatives | Tell Claude what to do instead | Low | "Use `--force-with-lease` instead of `--force`" |
+| Audit logging | Track blocked commands | Low | Append to `.claude/hooks/blocked.log` |
 
-#### Layout Customization
-- **Sidebar** (`/src/styles/custom.css`):
-  - `--sidebar-width: 260px` (line 4)
-  - `--content-max-width: 800px` (line 6)
-- **Features to configure**:
-  - Archive page visibility: `/src/consts.ts` → `showArchives: false`
-  - Back button: `showBackButton: false`
-  - Posts per page: `postPerPage: 10`
+### Developer Experience
 
-### Technical Elements
-
-#### Analytics & Tracking
-- **Current setup** (`/src/components/Analytics.astro`):
-  - Vercel Analytics (auto-injects in production)
-  - Vercel Speed Insights
-- **Action**: Keep as-is or integrate Google Analytics, Plausible, etc.
-
-#### "Edit on GitHub" Feature
-- **Config** (`/src/consts.ts` lines 46-50):
-  - `enabled: true`
-  - `text: "Edit on GitHub"`
-  - `url: "https://github.com/steipete/steipete.me/edit/main/"`
-- **Update**: Change repo URL to yours
-
-#### Build Scripts
-- **Optional cleanup** (`/package.json`):
-  - Line 13: `add-source-metadata` script (adds Git metadata to posts)
-  - Line 14: `remove-tags` script (bulk tag removal)
-  - Lines 20-21: Husky/commitizen (if not using conventional commits)
-
-#### Domain-Specific Features
-- **Markdown rendering** (`/src/layouts/Layout.astro` lines 135-143):
-  - Peter uses `steipete.md` domain to serve markdown versions of posts
-  - Remove unless you want this feature with your domain
+| Feature | Value Proposition | Complexity | Notes |
+|---------|-------------------|------------|-------|
+| Config storage in `.claude/settings.local.json` | Project-specific, gitignored | Low | Standard Claude Code pattern |
+| Missing config detection | Skills prompt to run `/setup-blog` first | Low | Check file exists before proceeding |
+| Progress reporting | Know what step is running | Low | Echo step names during execution |
 
 ---
 
 ## Anti-Features
-> *Things to deliberately NOT do when rebranding*
 
-### Preservation
+Features to deliberately NOT build. Common mistakes in this domain.
 
-#### Keep Attribution to Original Theme
-- **README acknowledgment** (lines 54-56):
-  - Credit to [Sat Naing](https://github.com/satnaing) for AstroPaper theme
-  - **Rationale**: Open-source etiquette; helps others discover the upstream
+### Over-Engineering
 
-#### Respect Dual Licensing
-- **LICENSE file**:
-  - Keep structure: CC BY 4.0 for content, MIT for code
-  - Update copyright holder name only
-  - **Rationale**: Common pattern for blogs; protects content while sharing code
+| Anti-Feature | Why Avoid | What to Do Instead |
+|--------------|-----------|-------------------|
+| Obsidian plugin | Adds dependency on Obsidian ecosystem | Use file-based detection (read markdown files) |
+| Real-time sync (file watcher) | Complexity for little gain in manual publish workflow | Batch publish on command |
+| Database for post tracking | Overkill for personal blog | Use filesystem as source of truth |
+| Custom frontmatter parser | Reinventing the wheel | Use `gray-matter` (already in project) |
 
-### Content Strategy
+### Premature Automation
 
-#### Don't Copy Peter's Voice
-- **Writing style**:
-  - Peter's bio: "Deep in vibe-coding mode – tinkering with shiny web tech"
-  - His brand: iOS expert → web developer transition narrative
-- **Action**: Write in your own voice, don't mimic his casual-technical style
+| Anti-Feature | Why Avoid | What to Do Instead |
+|--------------|-----------|-------------------|
+| Auto-publish on save | Risk of publishing unfinished work | Require explicit `just publish` |
+| Auto-linting hook on every session | Biome runs in publish pipeline already | Lint only during publish |
+| Social auto-posting | API complexity, rate limits, auth tokens | Defer to v0.3.0+ |
+| Newsletter integration | Separate concern from publishing | Defer to v0.3.0+ |
 
-#### Don't Inherit His Old Posts
-- **107 existing posts** cover:
-  - iOS development (2010-2020)
-  - Swift, UIKit, debugging deep-dives
-  - Remote work/hiring (PSPDFKit context)
-  - Recent web development exploration
-- **Rationale**: They're his expertise/experience, not yours
-- **Exception**: If citing/responding to his work, link to original steipete.me
+### Complexity Traps
 
-### Technical
+| Anti-Feature | Why Avoid | What to Do Instead |
+|--------------|-----------|-------------------|
+| Wikilink conversion | Astro doesn't support wikilinks natively | Write standard markdown links |
+| Backlink generation | Digital garden feature, not blog feature | Skip unless explicitly needed |
+| Multiple vault support | YAGNI for personal blog | Single vault path in config |
+| Template system | Obsidian already has Templater | Use Obsidian's tools |
 
-#### Don't Keep Peter-Specific Redirects
-- **vercel.json has 15+ redirects** for:
-  - Old Jekyll URL patterns → new Astro URLs
-  - Blog post slug migrations
-  - Category → tags renames
-- **Action**: Remove unless you're migrating from a previous blog with same URL structure
+### Security Theater
 
-#### Don't Use His GitHub Contribution Graph
-- **About page** embeds `https://ghchart.rshah.org/steipete`
-- Showing his commit history on your blog makes no sense
-
-#### Don't Keep His CSP Domain Allowlist
-- **Content Security Policy** (vercel.json line 144):
-  - Whitelists `steipete.me`, `*.vercel.app`, `*.sweetistics.com`
-  - Includes Twitter/Vimeo/YouTube embeds
-- **Action**: Audit what YOU need, remove Peter's domains
-
-### Branding
-
-#### Avoid Generic Color Schemes
-- Current `#007bff` link color is Bootstrap default blue
-- Peter's `#006cac` theme color is distinctive but tied to his brand
-- **Opportunity**: Choose colors that reflect YOUR identity
-
-#### Don't Over-Customize the Layout Initially
-- AstroPaper's structure is well-designed
-- Focus on content/identity first, visual tweaks later
-- **Rationale**: Avoid bikeshedding; ship content quickly
+| Anti-Feature | Why Avoid | What to Do Instead |
+|--------------|-----------|-------------------|
+| Block ALL git commands | Overly restrictive, breaks normal workflow | Block only destructive patterns |
+| Require confirmation for every file write | Claude Code already has permission system | Use PreToolUse for specific patterns |
+| Paranoid mode by default | Slows down legitimate work | Offer as opt-in flag |
 
 ---
 
-## Implementation Checklist
+## Workflow Patterns
 
-### Phase 1: Critical Identity (Can't deploy without)
-- [ ] Update all author names in `/src/consts.ts` + `/src/constants.ts`
-- [ ] Replace avatar/favicon images
-- [ ] Update social media links (6 profiles)
-- [ ] Change GitHub repo URL in footer
-- [ ] Update LICENSE copyright holder
-- [ ] Modify PWA manifest (name, description, icons)
-- [ ] Update vercel.json domain references
+### Pattern 1: `just publish` (Deterministic)
 
-### Phase 2: Content Ownership
-- [ ] Delete Peter's 107 blog posts
-- [ ] Write new About page
-- [ ] Remove/update newsletter form
-- [ ] Clear `/public/assets/img/` of Peter's post images
-- [ ] Remove GitHub contribution chart embed
+Step-by-step flow for standalone execution:
 
-### Phase 3: Visual Differentiation
-- [ ] Choose brand colors (update CSS variables + theme-color meta tags)
-- [ ] Decide on typography (keep Atkinson or change)
-- [ ] Set OG image default
-- [ ] Configure syntax highlighting themes
-- [ ] Adjust layout dimensions if desired
+```
+1. Read config
+   - Load Obsidian vault path from .claude/settings.local.json
+   - Error if not configured: "Run `just setup` first"
 
-### Phase 4: Technical Cleanup
-- [ ] Remove Peter-specific redirects from vercel.json
-- [ ] Audit CSP headers for your domains
-- [ ] Update "Edit on GitHub" URL
-- [ ] Configure analytics (keep Vercel or switch)
-- [ ] Remove markdown domain feature if not using
-- [ ] Clean up unused npm scripts
+2. Discover posts
+   - Find all .md files in vault with `draft: false` frontmatter
+   - Parse frontmatter with gray-matter
+
+3. Validate posts
+   - Required fields: title, pubDatetime, description
+   - Fail with clear message: "Post 'my-post.md' missing: description"
+   - Continue only if ALL posts valid
+
+4. Copy posts
+   - For each valid post:
+     - Extract year from pubDatetime
+     - Create src/content/blog/YYYY/ if needed
+     - Copy .md file to destination
+
+5. Copy images
+   - Parse markdown for image references
+   - Copy referenced images to public/assets/blog/
+   - Update image paths in copied markdown (if relative)
+
+6. Lint
+   - Run: biome check src
+   - Fail if lint errors
+
+7. Build
+   - Run: npm run build
+   - Fail if build errors
+
+8. Commit
+   - Stage: src/content/blog/**/* public/assets/blog/*
+   - Commit message: "feat(blog): publish [post-titles]" or "fix(blog): update [post-titles]"
+   - Use feat for new posts, fix for updates
+
+9. Push
+   - Run: git push origin main
+   - Success message: "Published N posts"
+```
+
+### Pattern 2: `/publish-blog` Skill (Agentic)
+
+Claude Code skill with human oversight:
+
+```yaml
+---
+name: publish-blog
+description: Publish blog posts from Obsidian to Astro
+disable-model-invocation: true  # Manual execution only
+allowed-tools:
+  - Read
+  - Write
+  - Bash
+  - Glob
+  - Grep
+---
+
+# Publish Blog Skill
+
+## Prerequisites
+- Obsidian vault path configured (run /setup-blog if not)
+- Posts marked with `draft: false` in frontmatter
+
+## Steps
+1. Find publishable posts in configured Obsidian vault
+2. Validate frontmatter (title, pubDatetime, description required)
+3. Copy posts to src/content/blog/YYYY/
+4. Copy referenced images to public/assets/blog/
+5. Run Biome lint
+6. Run Astro build
+7. Commit with conventional message
+8. Push to origin
+```
+
+### Pattern 3: `/setup-blog` Skill (Interactive)
+
+First-time configuration:
+
+```yaml
+---
+name: setup-blog
+description: Configure Obsidian vault path for publishing
+---
+
+# Setup Blog Skill
+
+## Steps
+1. Ask user for Obsidian vault path containing blog posts
+2. Validate path exists and contains .md files
+3. Write path to .claude/settings.local.json:
+   {
+     "obsidianVaultPath": "/path/to/vault/blog"
+   }
+4. Confirm setup complete
+```
+
+### Pattern 4: Git Safety Hook (PreToolUse)
+
+Hook configuration in `.claude/settings.json`:
+
+```json
+{
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/git-safety.sh"
+          }
+        ]
+      }
+    ]
+  }
+}
+```
+
+Git safety script pattern:
+
+```bash
+#!/bin/bash
+# .claude/hooks/git-safety.sh
+
+# Read input JSON from stdin
+INPUT=$(cat)
+COMMAND=$(echo "$INPUT" | jq -r '.tool_input.command // ""')
+
+# Dangerous patterns
+PATTERNS=(
+  "git push.*--force[^-]"
+  "git push.*-f[^o]"
+  "git reset --hard"
+  "git reset --merge"
+  "git checkout -- ."
+  "git checkout -- \*"
+  "git clean -f"
+  "git branch -D"
+  "git stash drop"
+  "git stash clear"
+)
+
+for PATTERN in "${PATTERNS[@]}"; do
+  if echo "$COMMAND" | grep -qE "$PATTERN"; then
+    echo "Blocked: $PATTERN" >&2
+    echo "Suggestion: Use safer alternatives like --force-with-lease" >&2
+    exit 2
+  fi
+done
+
+exit 0
+```
+
+### Pattern 5: `/unpublish-blog` Skill (Rollback)
+
+Remove published post while keeping Obsidian source:
+
+```yaml
+---
+name: unpublish-blog
+description: Remove a published post from the blog
+disable-model-invocation: true
+allowed-tools:
+  - Read
+  - Bash
+  - Glob
+---
+
+# Unpublish Blog Skill
+
+## Usage
+/unpublish-blog [filename]
+
+## Steps
+1. Find post in src/content/blog/**/ matching filename
+2. Delete post file (keep Obsidian source untouched)
+3. Optionally delete orphaned images
+4. Commit with message: "chore(blog): unpublish [title]"
+5. Push to origin
+```
 
 ---
 
-## Testing Requirements
+## Dependencies on Existing Features
 
-After rebranding, verify:
-
-1. **Link integrity**: No broken social links, GitHub URLs point to your repos
-2. **Image loading**: All avatars/favicons render correctly (check PWA manifest)
-3. **Meta tags**: OG previews on Twitter/LinkedIn show your name/image
-4. **Analytics**: Tracking works on your domain (not Peter's)
-5. **RSS feed**: `/rss.xml` shows your author name
-6. **Search**: Pagefind indexing works (rebuilds on deploy)
-7. **Mobile PWA**: "Add to home screen" shows correct app name
-8. **Legal**: LICENSE file has your copyright, footer links to your GitHub
-
----
-
-## Notes
-
-- **107 blog posts**: Peter's archive is substantial (10+ years). Consider keeping folder structure if you plan similar volume.
-- **Vercel deployment**: Config is tightly coupled to Vercel. If hosting elsewhere, much of `vercel.json` won't apply.
-- **Markdown domain**: Peter's `.md` domain feature is clever but requires second domain. Skip unless you have specific use case.
-- **Build scripts**: `add-source-metadata.mjs` adds Git commit data to posts. Useful if tracking post history.
-- **Theme consistency**: AstroPaper base theme uses Tailwind 4 + Astro 5. Upgrading might break Peter's customizations.
+| Existing Feature | How Publishing Uses It |
+|------------------|------------------------|
+| `src/content/blog/YYYY/` structure | Copy destination for posts |
+| `content.config.ts` schema | Frontmatter validation reference |
+| `public/assets/blog/` (if exists) | Image destination |
+| Biome (`npm run lint`) | Pre-commit validation |
+| Astro build (`npm run build`) | Pre-push validation |
+| Husky + lint-staged | Pre-commit hooks (already configured) |
+| Conventional commits (commitizen) | Commit message format |
 
 ---
 
-## Upstream Reference
+## Sources
 
-- **Original fork**: [steipete/steipete.me](https://github.com/steipete/steipete.me)
-- **Base theme**: [AstroPaper](https://astro-paper.pages.dev/) by [Sat Naing](https://github.com/satnaing)
-- **File count**: ~200 files, ~25k lines (including blog content)
-- **Last updated**: Fork date unknown, research based on current state
+### Install-and-Maintain Pattern
+- [IndyDevDan install-and-maintain](https://github.com/disler/install-and-maintain) - Deterministic/agentic/interactive execution modes
+
+### Claude Code Hooks
+- [Claude Code Hooks Reference](https://code.claude.com/docs/en/hooks) - Official documentation for PreToolUse, matchers, exit codes
+- [claude-code-hooks-mastery](https://github.com/disler/claude-code-hooks-mastery) - 8 hook lifecycle events, safety patterns
+- [destructive_command_guard](https://github.com/Dicklesworthstone/destructive_command_guard) - Git safety patterns, blocked commands list
+- [claude-code-safety-net](https://github.com/kenryu42/claude-code-safety-net) - PreToolUse hook for destructive commands
+
+### Obsidian-to-Astro Workflows
+- [Automating Obsidian to Astro](https://rachsmith.com/automating-obsidian-to-astro/) - Vault scanning, link processing, frontmatter detection
+- [Obsidian/Astro Workflow](https://walterra.dev/blog/2025-03-02-obsidian-astro-workflow) - Real-time preview, mobile capture, sync patterns
+- [Astro Composer Plugin](https://github.com/davidvkimball/obsidian-astro-composer) - CTRL+S standardization, Git plugin integration
+
+### Markdown Validation
+- [markdownlint-cli2](https://github.com/DavidAnson/markdownlint-cli2) - Pre-commit markdown linting with frontmatter support
+- [Pre-commit hooks guide](https://gatlenculp.medium.com/effortless-code-quality-the-ultimate-pre-commit-hooks-guide-for-2025-57ca501d9835) - mdformat-frontmatter, lint-staged patterns
+
+### Justfile
+- [Just Manual](https://just.systems/man/en/) - Command runner documentation
+- [Why Justfile over Makefile](https://suyog942.medium.com/why-justfile-outshines-makefile-in-modern-devops-workflows-a64d99b2e9f0) - Modern workflow benefits
 
 ---
 
-**Research completed**: 2026-01-28
-**Researcher**: GSD Project Researcher
-**Downstream**: Requirements definition for rebrand implementation
+**Research completed:** 2026-01-30
+**Confidence assessment:**
+- Table stakes: HIGH (verified against multiple workflows)
+- Differentiators: HIGH (patterns from authoritative sources)
+- Anti-features: MEDIUM (some based on domain experience)
+- Workflow patterns: HIGH (official Claude Code docs + community examples)
+
+**Downstream:** Requirements definition, roadmap phase structuring
