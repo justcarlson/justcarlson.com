@@ -8,6 +8,18 @@ A personal blog for Justin Carlson, built by forking and rebranding steipete.me 
 
 A clean, personal space to write — free of the previous owner's identity and content.
 
+## Current Milestone: v0.2.0 Publishing Workflow
+
+**Goal:** Frictionless publishing from Obsidian with validation, rollback, and confidence that builds always pass.
+
+**Target features:**
+- `/publish-blog` — validate → copy → lint → build check → commit → push
+- `/unpublish-blog` — remove from public repo (keeps Obsidian source)
+- `/list-drafts` — see what's ready to publish
+- `/preview-blog` — local dev server for review
+- Image handling for embedded images
+- Pre-publish validation (frontmatter, Biome, build)
+
 ## Requirements
 
 ### Validated
@@ -32,9 +44,20 @@ A clean, personal space to write — free of the previous owner's identity and c
 
 ### Active
 
-- [ ] Set up newsletter service (Buttondown or alternative)
-- [ ] Write actual About page bio content
-- [ ] Write first real blog post
+- [ ] `/publish-blog` command — validate, copy from Obsidian, commit, push
+- [ ] `/unpublish-blog` command — remove from repo, commit, push
+- [ ] `/list-drafts` command — show ready-to-publish posts
+- [ ] `/preview-blog` command — start local dev server
+- [ ] Image handling — copy referenced images to public/assets/
+- [ ] Validation — description filled, frontmatter valid, Biome lint, build check
+- [ ] Rollback support — edit/republish, unpublish, git revert
+
+### Deferred
+
+- Set up newsletter service (Buttondown or alternative) — v0.3.0+
+- Write actual About page bio content — content work
+- Write first real blog post — content work
+- Social auto-posting (X, BlueSky, LinkedIn) — API complexity
 
 ### Out of Scope
 
@@ -86,4 +109,4 @@ A clean, personal space to write — free of the previous owner's identity and c
 | Build validation warns only | Don't fail builds for identity leaks | ✓ Good — catches issues without blocking |
 
 ---
-*Last updated: 2026-01-30 after v0.1.0 milestone*
+*Last updated: 2026-01-30 after starting v0.2.0 milestone*

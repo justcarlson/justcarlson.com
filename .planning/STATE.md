@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-01-30)
 
 **Core value:** A clean, personal space to write — free of the previous owner's identity and content.
-**Current focus:** Planning next milestone
+**Current focus:** v0.2.0 Publishing Workflow
 
 ## Current Position
 
-Phase: — (v0.1.0 complete)
+Phase: Not started (defining requirements)
 Plan: —
-Status: Ready to plan next milestone
-Last activity: 2026-01-30 — v0.1.0 milestone complete
+Status: Defining requirements
+Last activity: 2026-01-30 — Milestone v0.2.0 started
 
-Progress: v0.1.0 shipped ✓
+Progress: Defining requirements
 
 ## Performance Metrics
 
@@ -64,7 +64,7 @@ Resume file: None
 
 ## Next Steps
 
-Run `/gsd:new-milestone` to start v1.1 planning:
-- Define new requirements
-- Create new roadmap
-- Begin next phase of development
+Continue milestone initialization:
+- Define requirements (REQUIREMENTS.md)
+- Create roadmap (ROADMAP.md)
+- Plan first phase
