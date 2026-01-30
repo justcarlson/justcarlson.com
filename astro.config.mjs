@@ -102,7 +102,7 @@ export default defineConfig({
       registerType: "autoUpdate",
       includeAssets: ["favicon.ico", "apple-touch-icon.png"],
       manifest: {
-        name: "Just Carlson",
+        name: "Justin Carlson",
         short_name: "JustCarlson",
         description: "Writing about things I find interesting.",
         theme_color: "#006cac",

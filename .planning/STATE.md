@@ -12,7 +12,7 @@ See: .planning/PROJECT.md (updated 2025-01-28)
 Phase: 5 of 5 (Personal Brand Cleanup)
 Plan: 4 of 4 (all gap closures complete)
 Status: Project complete
-Last activity: 2026-01-29 - Fixed blog post page titles to include site name (post-UAT)
+Last activity: 2026-01-29 - Completed quick task 001: tech debt cleanup (webmanifest, PWA name)
 
 Progress: [███████████] 100% (15/15 plans)
 
@@ -87,6 +87,12 @@ None.
 ### Blockers/Concerns
 
 None - all identity work complete and aligned with CONTEXT.md.
+
+### Quick Tasks Completed
+
+| # | Description | Date | Directory |
+|---|-------------|------|-----------|
+| 001 | Delete obsolete webmanifest, fix PWA name | 2026-01-29 | [001-delete-obsolete-webmanifest-fix-pwa-name](./quick/001-delete-obsolete-webmanifest-fix-pwa-name/) |
 
 ## Session Continuity
 
