@@ -47,3 +47,7 @@ publish *args='':
 # List posts from Obsidian (default: unpublished, use --all or --published for more)
 list-posts *args='':
     ./scripts/list-posts.sh {{args}}
+
+# Remove a post from blog repo (keeps Obsidian source)
+unpublish file *args='':
+    ./scripts/unpublish.sh {{file}} {{args}}
