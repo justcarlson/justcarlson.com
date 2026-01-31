@@ -346,12 +346,18 @@ validate_selected_posts() {
     # Handle partial valid scenario
     if [[ ${#invalid_files[@]} -gt 0 && ${#valid_files[@]} -gt 0 ]]; then
         echo -e "${YELLOW}${#valid_files[@]} of ${#SELECTED_FILES[@]} posts are valid.${RESET}"
-        read -rp "Publish the valid ones? [Y/n] " response
 
-        if [[ "$response" =~ ^[Nn] ]]; then
-            echo ""
-            echo -e "${YELLOW}Cancelled. Fix validation errors and try again.${RESET}"
-            exit $EXIT_SUCCESS
+        if [[ "$DRY_RUN" == "true" ]]; then
+            # Auto-continue in dry-run mode
+            echo -e "${CYAN}Dry run: auto-continuing with valid posts${RESET}"
+        else
+            read -rp "Publish the valid ones? [Y/n] " response
+
+            if [[ "$response" =~ ^[Nn] ]]; then
+                echo ""
+                echo -e "${YELLOW}Cancelled. Fix validation errors and try again.${RESET}"
+                exit $EXIT_SUCCESS
+            fi
         fi
 
         # Continue with only valid files
