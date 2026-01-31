@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-01-30)
 ## Current Position
 
 Phase: 8 of 10 (Core Publishing)
-Plan: 1 of 4 in current phase
+Plan: 2 of 4 in current phase
 Status: In progress
-Last activity: 2026-01-31 - Completed 08-01-PLAN.md (Post Discovery)
+Last activity: 2026-01-31 - Completed 08-02-PLAN.md (Validation and Image Handling)
 
-Progress: [███████████░░░░░░░░░] 62% (19/24 plans)
+Progress: [████████████░░░░░░░░] 66% (20/24 plans)
 
 ## Performance Metrics
 
@@ -40,7 +40,7 @@ Progress: [███████████░░░░░░░░░] 62% (19
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 07-setup-safety | 2/2 | 4 min | 2 min |
-| 08-core-publishing | 1/4 | 2 min | 2 min |
+| 08-core-publishing | 2/4 | 5 min | 2.5 min |
 
 ## Accumulated Context
 
@@ -69,6 +69,13 @@ v0.2.0 architecture decision:
 - Slugify from Obsidian filename, not title field
 - Identical posts excluded; changed posts marked with (update)
 
+08-02 decisions:
+- Validate all posts before displaying errors (collect-all-errors pattern)
+- Prompt user to continue with valid posts when some invalid
+- Wiki-links with alt text preserve alt text in markdown output
+- Missing images warn but don't block publishing
+- Search Attachments folder first, then recursive vault search for images
+
 ### Pending Todos
 
 None.
@@ -87,6 +94,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-01-31T17:56:04Z
-Stopped at: Completed 08-01-PLAN.md (Post Discovery)
+Last session: 2026-01-31T18:01:55Z
+Stopped at: Completed 08-02-PLAN.md (Validation and Image Handling)
 Resume file: None
