@@ -1087,7 +1087,7 @@ main() {
         exit $EXIT_SUCCESS
     fi
 
-    echo "Found ${GREEN}${#POST_FILES[@]}${RESET} post(s) ready to publish"
+    echo -e "Found ${GREEN}${#POST_FILES[@]}${RESET} post(s) ready to publish"
     echo ""
 
     # Interactive selection (skip in dry-run for simpler flow)
