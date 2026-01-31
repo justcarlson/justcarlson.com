@@ -35,3 +35,9 @@ format:
 # Sync Astro content collections
 sync:
     npm run sync
+
+# === Publishing ===
+
+# Publish posts from Obsidian vault (interactive)
+publish *args='':
+    ./scripts/publish.sh {{args}}
