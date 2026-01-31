@@ -845,6 +845,9 @@ copy_post() {
     local content
     content=$(cat "$source_path")
 
+    # Normalize frontmatter types (author array -> string, remove empty heroImage)
+    content=$(normalize_frontmatter "$content")
+
     # Convert wiki-links to markdown
     content=$(convert_wiki_links "$content" "$slug")
 
