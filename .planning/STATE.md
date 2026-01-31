@@ -9,12 +9,12 @@ See: .planning/PROJECT.md (updated 2026-01-30)
 
 ## Current Position
 
-Phase: 7 of 10 (Setup & Safety) - COMPLETE
-Plan: 2 of 2 in current phase
-Status: Phase complete
-Last activity: 2026-01-30 — Completed 07-02-PLAN.md (Claude hooks)
+Phase: 8 of 10 (Core Publishing)
+Plan: 1 of 4 in current phase
+Status: In progress
+Last activity: 2026-01-31 - Completed 08-01-PLAN.md (Post Discovery)
 
-Progress: [██████████▓░░░░░░░░░] 58% (18/24 plans)
+Progress: [███████████░░░░░░░░░] 62% (19/24 plans)
 
 ## Performance Metrics
 
@@ -35,11 +35,12 @@ Progress: [██████████▓░░░░░░░░░] 58% (18
 | 05-personal-brand-cleanup | 4 | 4 min | 1 min |
 | 06-about-page-photo | 1 | 1 min | 1 min |
 
-**v0.2.0 Milestone:** In progress (2/8 plans)
+**v0.2.0 Milestone:** In progress (3/8 plans)
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 07-setup-safety | 2/2 | 4 min | 2 min |
+| 08-core-publishing | 1/4 | 2 min | 2 min |
 
 ## Accumulated Context
 
@@ -62,6 +63,12 @@ v0.2.0 architecture decision:
 - Log blocked operations to .claude/blocked-operations.log
 - Exit code 2 blocks operation, exit code 0 allows
 
+08-01 decisions:
+- Use perl for multiline YAML matching (status: followed by newline and - Published)
+- Three-tier selection fallback: gum -> fzf -> numbered list
+- Slugify from Obsidian filename, not title field
+- Identical posts excluded; changed posts marked with (update)
+
 ### Pending Todos
 
 None.
@@ -80,6 +87,6 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-01-30T21:02:32Z
-Stopped at: Completed quick-003 (Unify Obsidian post templates)
+Last session: 2026-01-31T17:56:04Z
+Stopped at: Completed 08-01-PLAN.md (Post Discovery)
 Resume file: None
