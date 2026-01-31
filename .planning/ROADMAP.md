@@ -77,7 +77,7 @@ Plans:
 - [x] 08-01: Publish recipe and post discovery
 - [x] 08-02: Frontmatter validation and image handling
 - [x] 08-03: Lint, build, commit, push pipeline with dry-run
-- [ ] 08-04: UAT gap closure (ANSI output, lint-staged, dry-run prompts)
+- [x] 08-04: UAT gap closure (ANSI output, lint-staged, dry-run prompts)
 
 #### Phase 9: Utilities
 **Goal**: User can preview, list drafts, and unpublish posts
@@ -123,10 +123,10 @@ Plans:
 | 5. Personal Brand Cleanup | v0.1.0 | 4/4 | Complete | 2026-01-29 |
 | 6. About Page Photo | v0.1.0 | 1/1 | Complete | 2026-01-30 |
 | 7. Setup & Safety | v0.2.0 | 2/2 | Complete | 2026-01-30 |
-| 8. Core Publishing | v0.2.0 | 3/4 | In progress | - |
+| 8. Core Publishing | v0.2.0 | 4/4 | Complete | 2026-01-31 |
 | 9. Utilities | v0.2.0 | 0/2 | Not started | - |
 | 10. Skills Layer | v0.2.0 | 0/1 | Not started | - |
 
 ---
 *Roadmap created: 2026-01-30*
-*Last updated: 2026-01-31 (Phase 8 gap closure plan added)*
+*Last updated: 2026-01-31 (Phase 8 complete with gap closure)*
