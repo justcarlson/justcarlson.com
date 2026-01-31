@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-01-30)
 ## Current Position
 
 Phase: 9 of 10 (Utilities)
-Plan: 1 of 3 in current phase
-Status: In progress - list posts utility complete
-Last activity: 2026-01-31 — Completed 09-01-PLAN.md (List Posts Utility)
+Plan: 2 of 3 in current phase
+Status: In progress - unpublish command complete
+Last activity: 2026-01-31 — Completed 09-02-PLAN.md (Unpublish Command)
 
-Progress: [███████████████░░░░░] 83% (24/29 plans)
+Progress: [███████████████░░░░░] 86% (25/29 plans)
 
 ## Performance Metrics
 
@@ -35,13 +35,13 @@ Progress: [███████████████░░░░░] 83% (24
 | 05-personal-brand-cleanup | 4 | 4 min | 1 min |
 | 06-about-page-photo | 1 | 1 min | 1 min |
 
-**v0.2.0 Milestone:** In progress (8/8 plans)
+**v0.2.0 Milestone:** In progress (10/12 plans)
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
 | 07-setup-safety | 2/2 | 4 min | 2 min |
 | 08-core-publishing | 5/5 | 11 min | 2.2 min |
-| 09-utilities | 1/3 | 3 min | 3 min |
+| 09-utilities | 2/3 | 5 min | 2.5 min |
 
 ## Accumulated Context
 
@@ -100,6 +100,11 @@ v0.2.0 architecture decision:
 - CLI utilities follow pattern: script in scripts/, recipe in justfile with arg passthrough
 - Filter modes via flags: default (most common), --all (everything), --specific (targeted)
 
+09-02 decisions:
+- Unpublish commits but does NOT push (creates checkpoint for user review)
+- Images left in repo when unpublishing (safer, avoids orphan complexity)
+- Obsidian source untouched (YAML list manipulation too risky)
+
 ### Pending Todos
 
 None.
@@ -118,8 +123,8 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-01-31T22:18:16Z
-Stopped at: Completed 09-01-PLAN.md — list posts utility complete
+Last session: 2026-01-31T22:22:29Z
+Stopped at: Completed 09-02-PLAN.md — unpublish command complete
 Resume file: None
 
 Config:
