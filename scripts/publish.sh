@@ -14,11 +14,18 @@ CONFIG_FILE=".claude/settings.local.json"
 
 # Project paths
 BLOG_DIR="src/content/blog"
+ASSETS_DIR="public/assets/blog"
 
 # Exit codes
 EXIT_SUCCESS=0
 EXIT_ERROR=1
 EXIT_CANCELLED=130
+
+# Dry-run mode (set by --dry-run argument)
+DRY_RUN=false
+
+# Retry configuration
+MAX_RETRY_ATTEMPTS=3
 
 # Global arrays for post data
 declare -a POST_FILES=()
@@ -27,6 +34,186 @@ declare -a POST_DATES=()
 declare -a POST_DISPLAY=()
 declare -a POST_IS_UPDATE=()
 declare -a SELECTED_FILES=()
+
+# Tracking arrays for rollback
+declare -a CREATED_FILES=()
+declare -a CREATED_DIRS=()
+
+# Post metadata for commits (populated during processing)
+declare -a PROCESSED_SLUGS=()
+declare -a PROCESSED_TITLES=()
+declare -a PROCESSED_YEARS=()
+declare -a PROCESSED_IS_UPDATE=()
+
+# ============================================================================
+# Argument Parsing
+# ============================================================================
+
+parse_args() {
+    while [[ $# -gt 0 ]]; do
+        case "$1" in
+            --dry-run)
+                DRY_RUN=true
+                shift
+                ;;
+            *)
+                shift
+                ;;
+        esac
+    done
+}
+
+# ============================================================================
+# Rollback Functions
+# ============================================================================
+
+track_created_file() {
+    # Track a file created during publishing for potential rollback
+    local file="$1"
+    CREATED_FILES+=("$file")
+}
+
+track_created_dir() {
+    # Track a directory created during publishing for potential rollback
+    local dir="$1"
+    CREATED_DIRS+=("$dir")
+}
+
+rollback_changes() {
+    # Remove all created files and directories in reverse order
+    echo ""
+    echo -e "${YELLOW}Rolling back changes...${RESET}"
+
+    # Remove files first
+    for ((i=${#CREATED_FILES[@]}-1; i>=0; i--)); do
+        local file="${CREATED_FILES[$i]}"
+        if [[ -f "$file" ]]; then
+            rm -f "$file"
+            echo -e "  ${RED}Removed:${RESET} $file"
+        fi
+    done
+
+    # Remove directories (only if empty)
+    for ((i=${#CREATED_DIRS[@]}-1; i>=0; i--)); do
+        local dir="${CREATED_DIRS[$i]}"
+        if [[ -d "$dir" ]]; then
+            # Only remove if directory is empty
+            if [[ -z "$(ls -A "$dir" 2>/dev/null)" ]]; then
+                rmdir "$dir" 2>/dev/null && echo -e "  ${RED}Removed:${RESET} $dir"
+            fi
+        fi
+    done
+
+    echo ""
+    echo -e "${RED}Publishing failed after $MAX_RETRY_ATTEMPTS attempts. All changes rolled back.${RESET}"
+    echo -e "${YELLOW}Your Obsidian files are unchanged. Fix issues and try again.${RESET}"
+}
+
+# ============================================================================
+# Lint and Build Functions
+# ============================================================================
+
+run_lint() {
+    # Run npm lint and return exit code
+    echo ""
+    echo -e "${CYAN}Running lint check...${RESET}"
+
+    if [[ "$DRY_RUN" == "true" ]]; then
+        echo -e "  [DRY-RUN] Would run: npm run lint"
+        return 0
+    fi
+
+    local output
+    local exit_code=0
+
+    if output=$(npm run lint 2>&1); then
+        echo -e "${GREEN}Lint passed.${RESET}"
+        return 0
+    else
+        exit_code=$?
+        echo -e "${RED}Lint failed:${RESET}"
+        echo "$output"
+        return $exit_code
+    fi
+}
+
+run_build() {
+    # Run npm build and return exit code
+    echo ""
+    echo -e "${CYAN}Running build verification...${RESET}"
+
+    if [[ "$DRY_RUN" == "true" ]]; then
+        echo -e "  [DRY-RUN] Would run: npm run build"
+        return 0
+    fi
+
+    local output
+    local exit_code=0
+
+    if output=$(npm run build 2>&1); then
+        echo -e "${GREEN}Build passed. Ready to push.${RESET}"
+        return 0
+    else
+        exit_code=$?
+        echo -e "${RED}Build failed:${RESET}"
+        echo "$output"
+        return $exit_code
+    fi
+}
+
+run_lint_with_retry() {
+    # Run lint with retry logic and rollback on persistent failure
+    local attempt=1
+
+    while [[ $attempt -le $MAX_RETRY_ATTEMPTS ]]; do
+        if run_lint; then
+            return 0
+        fi
+
+        if [[ $attempt -lt $MAX_RETRY_ATTEMPTS ]]; then
+            echo ""
+            echo -e "${YELLOW}Lint attempt $attempt of $MAX_RETRY_ATTEMPTS failed.${RESET}"
+            # Output special marker for Claude hook
+            echo "PUBLISH_LINT_FAILED" >&2
+            # Wait briefly for hook to potentially fix
+            sleep 1
+            echo -e "${CYAN}Retrying lint...${RESET}"
+        fi
+
+        ((attempt++))
+    done
+
+    # All attempts failed - rollback
+    rollback_changes
+    exit $EXIT_ERROR
+}
+
+run_build_with_retry() {
+    # Run build with retry logic and rollback on persistent failure
+    local attempt=1
+
+    while [[ $attempt -le $MAX_RETRY_ATTEMPTS ]]; do
+        if run_build; then
+            return 0
+        fi
+
+        if [[ $attempt -lt $MAX_RETRY_ATTEMPTS ]]; then
+            echo ""
+            echo -e "${YELLOW}Build attempt $attempt of $MAX_RETRY_ATTEMPTS failed.${RESET}"
+            # Output special marker for Claude hook
+            echo "PUBLISH_BUILD_FAILED" >&2
+            # Wait briefly for hook to potentially fix
+            sleep 1
+            echo -e "${CYAN}Retrying build...${RESET}"
+        fi
+
+        ((attempt++))
+    done
+
+    # All attempts failed - rollback
+    rollback_changes
+    exit $EXIT_ERROR
+}
 
 # ============================================================================
 # Validation
@@ -506,9 +693,6 @@ select_posts() {
 # Image Handling
 # ============================================================================
 
-# Asset directory for blog images
-ASSETS_DIR="public/assets/blog"
-
 extract_images() {
     # Extract image references from post content
     # Returns array of image filenames (local images only)
@@ -589,12 +773,26 @@ copy_images() {
     fi
 
     local dest_dir="${ASSETS_DIR}/${slug}"
-    mkdir -p "$dest_dir"
+
+    if [[ "$DRY_RUN" == "true" ]]; then
+        for image in "${images[@]}"; do
+            echo -e "  [DRY-RUN] Would copy: $image -> ${dest_dir}/${image}"
+        done
+        return 0
+    fi
+
+    # Create directory and track it
+    if [[ ! -d "$dest_dir" ]]; then
+        mkdir -p "$dest_dir"
+        track_created_dir "$dest_dir"
+    fi
 
     for image in "${images[@]}"; do
         local source_path
         if source_path=$(find_local_image "$image" "$VAULT_PATH"); then
-            cp "$source_path" "$dest_dir/"
+            local dest_file="${dest_dir}/${image}"
+            cp "$source_path" "$dest_file"
+            track_created_file "$dest_file"
             echo -e "  ${GREEN}Copied:${RESET} $image"
         else
             echo -e "  ${YELLOW}Warning: Image not found: $image${RESET}"
@@ -611,8 +809,16 @@ copy_post() {
     local dest_dir="${BLOG_DIR}/${year}"
     local dest_path="${dest_dir}/${slug}.md"
 
-    # Create year directory if needed
-    mkdir -p "$dest_dir"
+    if [[ "$DRY_RUN" == "true" ]]; then
+        echo -e "  [DRY-RUN] Would copy: $source_path -> $dest_path"
+        return 0
+    fi
+
+    # Create year directory if needed and track it
+    if [[ ! -d "$dest_dir" ]]; then
+        mkdir -p "$dest_dir"
+        track_created_dir "$dest_dir"
+    fi
 
     # Read content
     local content
@@ -621,27 +827,48 @@ copy_post() {
     # Convert wiki-links to markdown
     content=$(convert_wiki_links "$content" "$slug")
 
+    # Check if this is an update (file already exists)
+    local is_new=true
+    if [[ -f "$dest_path" ]]; then
+        is_new=false
+    fi
+
     # Write to destination
     echo "$content" > "$dest_path"
+
+    # Only track as created if it's a new file (not an update)
+    if [[ "$is_new" == "true" ]]; then
+        track_created_file "$dest_path"
+    fi
 }
 
 process_posts() {
     # Process all selected posts: extract images, copy, transform
     echo ""
-    echo -e "${CYAN}Processing posts...${RESET}"
+    echo -e "${CYAN}Copying posts and images...${RESET}"
 
-    for file in "${SELECTED_FILES[@]}"; do
+    for i in "${!SELECTED_FILES[@]}"; do
+        local file="${SELECTED_FILES[$i]}"
         local filename
         local slug
         local title
         local pub_date
         local year
+        local is_update
 
         filename=$(basename "$file")
         slug=$(slugify "$filename")
         title=$(extract_frontmatter_value "$file" "title")
         pub_date=$(extract_frontmatter_value "$file" "pubDatetime")
         year="${pub_date:0:4}"
+
+        # Determine if this is an update
+        local existing_path="${BLOG_DIR}/${year}/${slug}.md"
+        if [[ -f "$existing_path" ]]; then
+            is_update="true"
+        else
+            is_update="false"
+        fi
 
         echo ""
         echo -e "${CYAN}Processing:${RESET} $title"
@@ -663,11 +890,166 @@ process_posts() {
 
         # Copy and transform post
         copy_post "$file" "$slug" "$year"
-        echo -e "  ${GREEN}Published:${RESET} ${BLOG_DIR}/${year}/${slug}.md"
+
+        if [[ "$DRY_RUN" != "true" ]]; then
+            echo -e "  ${GREEN}Published:${RESET} ${BLOG_DIR}/${year}/${slug}.md"
+        fi
+
+        # Store metadata for commits
+        PROCESSED_SLUGS+=("$slug")
+        PROCESSED_TITLES+=("$title")
+        PROCESSED_YEARS+=("$year")
+        PROCESSED_IS_UPDATE+=("$is_update")
     done
 
     echo ""
-    echo -e "${GREEN}Successfully processed ${#SELECTED_FILES[@]} post(s)${RESET}"
+    if [[ "$DRY_RUN" == "true" ]]; then
+        echo -e "${CYAN}Would process ${#SELECTED_FILES[@]} post(s)${RESET}"
+    else
+        echo -e "${GREEN}Successfully copied ${#SELECTED_FILES[@]} post(s)${RESET}"
+    fi
+}
+
+# ============================================================================
+# Git Commit Functions
+# ============================================================================
+
+commit_posts() {
+    # Commit each post individually with conventional commit message
+    echo ""
+    echo -e "${CYAN}Committing posts...${RESET}"
+
+    local commit_count=0
+
+    for i in "${!PROCESSED_SLUGS[@]}"; do
+        local slug="${PROCESSED_SLUGS[$i]}"
+        local title="${PROCESSED_TITLES[$i]}"
+        local year="${PROCESSED_YEARS[$i]}"
+        local is_update="${PROCESSED_IS_UPDATE[$i]}"
+
+        local post_path="${BLOG_DIR}/${year}/${slug}.md"
+        local assets_path="${ASSETS_DIR}/${slug}"
+
+        # Determine commit type
+        local commit_verb
+        if [[ "$is_update" == "true" ]]; then
+            commit_verb="update"
+        else
+            commit_verb="add"
+        fi
+
+        local commit_msg="docs(blog): $commit_verb $title"
+
+        if [[ "$DRY_RUN" == "true" ]]; then
+            echo -e "  [DRY-RUN] Would commit: $commit_msg"
+            continue
+        fi
+
+        # Stage post file
+        git add "$post_path"
+
+        # Stage assets directory if it exists
+        if [[ -d "$assets_path" ]]; then
+            git add "$assets_path"
+        fi
+
+        # Create commit
+        git commit -m "$commit_msg" --quiet
+        echo -e "  ${GREEN}Committed:${RESET} $commit_msg"
+        ((commit_count++))
+    done
+
+    if [[ "$DRY_RUN" != "true" ]]; then
+        echo ""
+        echo -e "${GREEN}Created $commit_count commit(s)${RESET}"
+    fi
+
+    return $commit_count
+}
+
+push_commits() {
+    # Prompt user before pushing to remote
+    local commit_count="$1"
+
+    echo ""
+
+    if [[ "$DRY_RUN" == "true" ]]; then
+        echo -e "[DRY-RUN] Would push $commit_count commit(s) to origin"
+        return 0
+    fi
+
+    read -rp "Push $commit_count commit(s) to remote? [Y/n] " response
+
+    if [[ "$response" =~ ^[Nn] ]]; then
+        echo ""
+        echo -e "${YELLOW}Commits created locally. Run 'git push' when ready.${RESET}"
+        return 0
+    fi
+
+    echo ""
+    echo -e "${CYAN}Pushing to remote...${RESET}"
+    git push
+    echo -e "${GREEN}Successfully pushed to remote.${RESET}"
+}
+
+# ============================================================================
+# Dry Run Summary
+# ============================================================================
+
+print_dry_run_summary() {
+    # Print a complete summary of what would happen
+    echo ""
+    echo "=== Dry Run ==="
+    echo ""
+
+    echo "Posts to publish:"
+    for i in "${!PROCESSED_SLUGS[@]}"; do
+        local slug="${PROCESSED_SLUGS[$i]}"
+        local title="${PROCESSED_TITLES[$i]}"
+        local year="${PROCESSED_YEARS[$i]}"
+        local is_update="${PROCESSED_IS_UPDATE[$i]}"
+
+        local status
+        if [[ "$is_update" == "true" ]]; then
+            status="update"
+        else
+            status="new"
+        fi
+
+        echo "  - \"$title\" -> ${BLOG_DIR}/${year}/${slug}.md ($status)"
+    done
+
+    echo ""
+    echo "Images to copy:"
+    if [[ ${#CREATED_FILES[@]} -eq 0 ]]; then
+        echo "  (shown during processing above)"
+    fi
+
+    echo ""
+    echo "Validation:"
+    echo "  - Would run: npm run lint"
+    echo "  - Would run: npm run build"
+
+    echo ""
+    echo "Commits:"
+    for i in "${!PROCESSED_SLUGS[@]}"; do
+        local title="${PROCESSED_TITLES[$i]}"
+        local is_update="${PROCESSED_IS_UPDATE[$i]}"
+
+        local commit_verb
+        if [[ "$is_update" == "true" ]]; then
+            commit_verb="update"
+        else
+            commit_verb="add"
+        fi
+
+        echo "  - docs(blog): $commit_verb $title"
+    done
+
+    echo ""
+    echo "Push:"
+    echo "  - Would push ${#PROCESSED_SLUGS[@]} commit(s) to origin"
+    echo ""
 }
 
 # ============================================================================
@@ -675,14 +1057,23 @@ process_posts() {
 # ============================================================================
 
 main() {
+    # Parse command line arguments
+    parse_args "$@"
+
     echo ""
-    echo "=== Publish Workflow ==="
+    if [[ "$DRY_RUN" == "true" ]]; then
+        echo "=== Publish Workflow (Dry Run) ==="
+    else
+        echo "=== Publish Workflow ==="
+    fi
     echo ""
 
     # Load configuration
     load_config
 
     # Discover posts
+    echo ""
+    echo -e "${CYAN}Discovering posts...${RESET}"
     discover_posts
 
     # Check if any posts to publish
@@ -699,29 +1090,59 @@ main() {
     echo "Found ${GREEN}${#POST_FILES[@]}${RESET} post(s) ready to publish"
     echo ""
 
-    # Interactive selection
-    if ! select_posts; then
-        echo ""
-        echo -e "${YELLOW}No posts selected. Cancelled.${RESET}"
-        exit $EXIT_CANCELLED
-    fi
+    # Interactive selection (skip in dry-run for simpler flow)
+    if [[ "$DRY_RUN" == "true" ]]; then
+        # In dry-run, select all posts to show full preview
+        SELECTED_FILES=("${POST_FILES[@]}")
+        echo -e "${CYAN}Dry run: selecting all ${#SELECTED_FILES[@]} post(s)${RESET}"
+    else
+        if ! select_posts; then
+            echo ""
+            echo -e "${YELLOW}No posts selected. Cancelled.${RESET}"
+            exit $EXIT_CANCELLED
+        fi
 
-    # Validate selection
-    if [[ ${#SELECTED_FILES[@]} -eq 0 ]]; then
-        echo ""
-        echo -e "${YELLOW}No posts selected. Cancelled.${RESET}"
-        exit $EXIT_CANCELLED
+        # Validate selection
+        if [[ ${#SELECTED_FILES[@]} -eq 0 ]]; then
+            echo ""
+            echo -e "${YELLOW}No posts selected. Cancelled.${RESET}"
+            exit $EXIT_CANCELLED
+        fi
     fi
 
     echo ""
     echo -e "${GREEN}Selected ${#SELECTED_FILES[@]} post(s) for publishing${RESET}"
 
     # Validate selected posts
+    echo ""
+    echo -e "${CYAN}Validating posts...${RESET}"
     validate_selected_posts
 
     # Process posts: extract images, transform wiki-links, copy to blog
     process_posts
 
+    # Run lint verification (after copy, before commits)
+    run_lint_with_retry
+
+    # Commit each post
+    echo ""
+    echo -e "${CYAN}Committing posts...${RESET}"
+    commit_posts
+    local commit_count=${#PROCESSED_SLUGS[@]}
+
+    # Run build verification (after commits, before push)
+    run_build_with_retry
+
+    # Push to remote
+    push_commits "$commit_count"
+
+    # Print dry-run summary if applicable
+    if [[ "$DRY_RUN" == "true" ]]; then
+        print_dry_run_summary
+    fi
+
+    echo ""
+    echo -e "${GREEN}Publishing complete!${RESET}"
     exit $EXIT_SUCCESS
 }
 
