@@ -25,6 +25,13 @@ const blog = defineCollection({
       // Additional fields from existing posts
       source: z.string().optional(),
       AIDescription: z.boolean().optional(),
+      // Kepano vault compatibility fields (pass-through)
+      categories: z.array(z.string()).optional(),
+      url: z.string().optional().nullable(),
+      created: z.coerce.date().optional(),
+      published: z.coerce.date().optional().nullable(),
+      topics: z.array(z.string()).optional(),
+      status: z.array(z.string()).optional(),
     }),
 });
 

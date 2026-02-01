@@ -2,6 +2,7 @@
 title: Hello World
 pubDatetime: 2026-01-31T19:07:56.000-0500
 description: Welcome to my blog
+tags: []
 categories:
   - "[[Posts]]"
 author: "Justin Carlson"
@@ -12,8 +13,6 @@ topics: []
 status:
   - Published
 ---
-
-# Hello World
 
 Welcome to my blog! This is a placeholder post while I get things set up.
 
