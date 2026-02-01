@@ -54,7 +54,7 @@ Plans:
 
 **Goal**: `draft: true/false` becomes the single source of truth for publish state
 **Depends on**: Phase 16 (sync must work before changing source of truth)
-**Requirements**: MIGR-01, MIGR-02, MIGR-03, MIGR-04, MIGR-05, MIGR-06
+**Requirements**: MIGR-01, MIGR-02, MIGR-03, MIGR-04, MIGR-05, MIGR-06, MIGR-07
 **Success Criteria** (what must be TRUE):
 
 *Discovery:*
@@ -75,8 +75,14 @@ Plans:
   9. `types.json` updated: `draft` as boolean type
   10. Base/Category views filter by `draft` field, not `status`
 
+*Obsidian View Validation (per Kepano Meta patterns):*
+  11. Posts Base view correctly shows published posts (`draft: false`)
+  12. Posts Base view correctly shows draft posts (`draft: true`)
+  13. Posts Category view (`[[Posts]]`) displays posts with draft status visible
+  14. Views compatible with Kepano's Ontology structure (categories, type, topics)
+
 *Astro Schema:*
-  11. `content.config.ts` updated: remove `status` and `published` from schema (or mark deprecated)
+  15. `content.config.ts` updated: remove `status` and `published` from schema (or mark deprecated)
 
 **Plans**: TBD
 

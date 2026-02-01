@@ -36,6 +36,7 @@ Requirements for the integration refactor. Each maps to roadmap phases.
 - [ ] **MIGR-04**: Obsidian types.json updated (draft as boolean type)
 - [ ] **MIGR-05**: Obsidian Base/Category views configured to filter by draft field
 - [ ] **MIGR-06**: Astro content.config.ts updated (remove/deprecate status and published fields)
+- [ ] **MIGR-07**: Obsidian views validated against Kepano Meta patterns (Posts Base shows draft status, Category view works with `[[Posts]]`)
 
 ### Configuration
 
@@ -75,10 +76,11 @@ Which phases cover which requirements. Updated during roadmap creation.
 | MIGR-04 | Phase 17 | Pending |
 | MIGR-05 | Phase 17 | Pending |
 | MIGR-06 | Phase 17 | Pending |
+| MIGR-07 | Phase 17 | Pending |
 
 **Coverage:**
-- v0.4.0 requirements: 18 total
-- Mapped to phases: 18
+- v0.4.0 requirements: 19 total
+- Mapped to phases: 19
 - Unmapped: 0
 
 ---
