@@ -1,6 +1,6 @@
 ---
-name: publish
-description: Publish blog posts from Obsidian vault with human oversight
+name: blog:publish
+description: Publish blog posts from Obsidian vault with oversight
 disable-model-invocation: true
 hooks:
   Stop:

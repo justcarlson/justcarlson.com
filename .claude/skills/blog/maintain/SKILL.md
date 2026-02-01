@@ -1,5 +1,5 @@
 ---
-name: maintain
+name: blog:maintain
 description: Check for outdated dependencies, lint issues, and content validation
 disable-model-invocation: true
 ---

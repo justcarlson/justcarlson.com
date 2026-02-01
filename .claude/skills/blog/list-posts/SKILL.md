@@ -1,5 +1,5 @@
 ---
-name: list-posts
+name: blog:list-posts
 description: List blog posts from Obsidian vault with validation status
 disable-model-invocation: true
 ---

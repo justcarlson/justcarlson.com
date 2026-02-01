@@ -1,6 +1,6 @@
 ---
-name: install
-description: Guide setup of Obsidian vault path, dependencies, and build verification
+name: blog:install
+description: Set up Obsidian vault path and verify dependencies
 disable-model-invocation: true
 hooks:
   Stop:

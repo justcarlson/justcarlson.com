@@ -1,5 +1,5 @@
 ---
-name: unpublish
+name: blog:unpublish
 description: Remove a post from blog repo (keeps Obsidian source)
 disable-model-invocation: true
 ---
