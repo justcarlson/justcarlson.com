@@ -108,10 +108,11 @@ Plans:
   2. `/publish` skill wraps `just publish` (no duplicated logic)
   3. Skills use `disable-model-invocation: true` (manual invocation only, no auto-triggering)
 **Research recommended**: false
-**Plans**: 1 plan
+**Plans**: 2 plans
 
 Plans:
 - [x] 10-01: Full skill suite with stop hooks
+- [ ] 10-02: UAT gap closure (install pre-check, unpublish listing, startup hook)
 
 ## Progress
 
@@ -128,8 +129,8 @@ Plans:
 | 7. Setup & Safety | v0.2.0 | 2/2 | Complete | 2026-01-30 |
 | 8. Core Publishing | v0.2.0 | 5/5 | Complete | 2026-01-31 |
 | 9. Utilities | v0.2.0 | 3/3 | Complete | 2026-01-31 |
-| 10. Skills Layer | v0.2.0 | 1/1 | Complete | 2026-01-31 |
+| 10. Skills Layer | v0.2.0 | 1/2 | In Progress | - |
 
 ---
 *Roadmap created: 2026-01-30*
-*Last updated: 2026-01-31 (v0.2.0 complete — all phases shipped)*
+*Last updated: 2026-01-31 (Phase 10 UAT gap closure planned)*
