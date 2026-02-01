@@ -8,20 +8,45 @@ disable-model-invocation: true
 
 Remove a published post from the blog repo.
 
-## Usage
-
-The user provides the file to unpublish via `$ARGUMENTS`:
-
-```bash
-just unpublish "$ARGUMENTS"
-```
-
 ## Process
 
-1. **Confirm intent** - Verify user wants to unpublish the specified post
-2. **Show what will happen** - The post will be removed from the blog repo
-3. **Execute unpublish** - Run `just unpublish` with the file argument
-4. **Remind about Obsidian** - Tell user to update Obsidian status to prevent re-publishing
+### Step 1: List Published Posts
+
+First, show the user what posts are available to unpublish:
+
+```bash
+just list-posts --published
+```
+
+Present this list to the user and let them select which post to unpublish.
+
+### Step 2: Confirm Intent
+
+Once user selects a post, confirm the action:
+
+"You want to unpublish [filename]. This will:
+- Remove the post from src/content/blog/
+- Create a commit (but not push)
+- Leave your Obsidian source unchanged
+
+Proceed? [y/n]"
+
+### Step 3: Execute Unpublish
+
+If user confirms:
+
+```bash
+just unpublish "[selected-file]"
+```
+
+### Step 4: Remind About Obsidian
+
+After unpublishing, remind user:
+
+"Done. The commit is ready for review.
+
+Remember to update the post's status in Obsidian to prevent
+re-publishing on the next `just publish`."
 
 ## Important Notes
 
@@ -32,7 +57,18 @@ just unpublish "$ARGUMENTS"
 ## Example
 
 ```
-User: /unpublish hello-world.md
+User: /unpublish
+
+Claude: [runs just list-posts --published]
+Here are your published posts:
+
+1. hello-world.md (2026-01-15)
+2. my-first-post.md (2026-01-20)
+3. another-post.md (2026-01-25)
+
+Which post would you like to unpublish?
+
+User: 1
 
 Claude: You want to unpublish hello-world.md. This will:
 - Remove the post from src/content/blog/
