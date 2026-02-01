@@ -7,6 +7,10 @@ My personal website and blog, built with [Astro](https://astro.build) and deploy
 - [Node.js 22+](https://nodejs.org/) (or use [nvm](https://github.com/nvm-sh/nvm) / [fnm](https://github.com/Schniz/fnm) to auto-switch)
 - [just](https://just.systems/man/en/) command runner
 - npm (included with Node.js)
+- [yq](https://github.com/mikefarah/yq) v4+ (mikefarah/yq, for YAML processing)
+  - Arch Linux: `pacman -S go-yq`
+  - macOS: `brew install yq`
+  - Ubuntu: Download binary from [releases](https://github.com/mikefarah/yq/releases)
 
 ## Quick Start
 
