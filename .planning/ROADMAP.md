@@ -83,10 +83,11 @@ Plans:
   4. `just setup --vault <path>` configures vault without TTY
   5. No dead code or unused exports in src/
   6. Consistent error handling patterns across all scripts
-**Plans**: TBD (to be planned)
+**Plans**: 2 plans
 
 Plans:
-- [ ] 14-01-PLAN.md - TBD
+- [ ] 14-01-PLAN.md - Install Knip, remove dead components and layouts
+- [ ] 14-02-PLAN.md - Consolidate constants, verify CLI compliance
 
 ## Progress
 
@@ -95,7 +96,7 @@ Plans:
 | 11. Content & Workflow Polish | v0.3.0 | 5/5 | Complete | 2026-02-01 |
 | 12. Bootstrap & Portability | v0.3.0 | 2/2 | Complete | 2026-02-01 |
 | 13. Hook Infrastructure | v0.3.0 | 1/1 | Complete | 2026-02-01 |
-| 14. Refactor Cleanup | v0.3.0 | 0/? | Not Started | - |
+| 14. Refactor Cleanup | v0.3.0 | 0/2 | Planned | - |
 
 ---
 *Roadmap created: 2026-01-31*
