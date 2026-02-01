@@ -98,7 +98,7 @@ None.
 Last session: 2026-02-01
 Stopped at: v0.3.0 milestone complete - Phase 14-02 executed
 Resume file: None
-Next action: v0.3.0 complete - Ready for v0.4.0 planning or content creation
+Next action: /gsd:audit-milestone (verify cross-phase integration before archiving)
 
 Config:
 {

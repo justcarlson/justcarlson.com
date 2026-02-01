@@ -39,6 +39,14 @@ Requirements for Polish & Portability milestone. Focus: fix template bug, enable
 - [x] **HOOK-03**: Hook logs to file (.claude/hooks/session_start.log) for debugging
 - [x] **HOOK-04**: Hook checks vault configuration and posts-ready status
 
+### CLI & Code Quality
+
+- [x] **CLIX-01**: All scripts support `--help` flag for CLI discovery
+- [x] **CLIX-02**: All scripts with prompts support non-interactive mode (no TTY required)
+- [x] **CLIX-03**: `just publish --post <slug> --yes` and `just setup --vault <path>` work without TTY
+- [x] **CLEAN-01**: No dead code or unused exports in src/ (verified via Knip)
+- [x] **CLEAN-02**: Consistent error handling patterns across all scripts
+
 ## Future Requirements
 
 Deferred to later milestones.
@@ -84,12 +92,17 @@ Deferred to later milestones.
 | HOOK-02 | Phase 13 | Complete |
 | HOOK-03 | Phase 13 | Complete |
 | HOOK-04 | Phase 13 | Complete |
+| CLIX-01 | Phase 14 | Complete |
+| CLIX-02 | Phase 14 | Complete |
+| CLIX-03 | Phase 14 | Complete |
+| CLEAN-01 | Phase 14 | Complete |
+| CLEAN-02 | Phase 14 | Complete |
 
 **Coverage:**
-- v0.3.0 requirements: 17 total
+- v0.3.0 requirements: 22 total
 - Mapped to phases: 17
 - Unmapped: 0
 
 ---
 *Requirements defined: 2026-01-31*
-*Last updated: 2026-02-01 after phase 13 completion*
+*Last updated: 2026-02-01 after phase 14 completion*

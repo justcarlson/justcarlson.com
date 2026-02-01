@@ -8,14 +8,14 @@ v0.3.0 delivers polish and portability for the blog repository. First, fix the t
 
 - [x] **v0.1.0 MVP** - Phases 1-6 (shipped 2026-01-29)
 - [x] **v0.2.0 Publishing Workflow** - Phases 7-10 (shipped 2026-01-31)
-- [ ] **v0.3.0 Polish & Portability** - Phases 11-14 (in progress)
+- [x] **v0.3.0 Polish & Portability** - Phases 11-14 (shipped 2026-02-01)
 
 ## Phases
 
 - [x] **Phase 11: Content & Workflow Polish** - Fix template bugs, add tags, rename skills
 - [x] **Phase 12: Bootstrap & Portability** - One-command setup, dev container support
 - [x] **Phase 13: Hook Infrastructure** - Python hooks with logging, env loading, timeout protection
-- [ ] **Phase 14: Refactor Cleanup** - Code cleanup, remove dead code, consolidate patterns
+- [x] **Phase 14: Refactor Cleanup** - Code cleanup, remove dead code, consolidate patterns
 
 ## Phase Details
 
@@ -86,8 +86,8 @@ Plans:
 **Plans**: 2 plans
 
 Plans:
-- [ ] 14-01-PLAN.md - Install Knip, remove dead components and layouts
-- [ ] 14-02-PLAN.md - Consolidate constants, verify CLI compliance
+- [x] 14-01-PLAN.md - Install Knip, remove dead components and layouts
+- [x] 14-02-PLAN.md - Consolidate constants, verify CLI compliance
 
 ## Progress
 
@@ -96,7 +96,7 @@ Plans:
 | 11. Content & Workflow Polish | v0.3.0 | 5/5 | Complete | 2026-02-01 |
 | 12. Bootstrap & Portability | v0.3.0 | 2/2 | Complete | 2026-02-01 |
 | 13. Hook Infrastructure | v0.3.0 | 1/1 | Complete | 2026-02-01 |
-| 14. Refactor Cleanup | v0.3.0 | 0/2 | Planned | - |
+| 14. Refactor Cleanup | v0.3.0 | 2/2 | Complete | 2026-02-01 |
 
 ---
 *Roadmap created: 2026-01-31*
