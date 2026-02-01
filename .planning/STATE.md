@@ -9,12 +9,12 @@ See: .planning/PROJECT.md (updated 2026-01-31)
 
 ## Current Position
 
-Phase: 11 of 12 (Content & Workflow Polish)
-Plan: 2 of 2 in current phase
-Status: Phase complete
-Last activity: 2026-02-01 — Completed 11-02-PLAN.md
+Phase: 12 of 12 (Bootstrap & Portability)
+Plan: 1 of 2 in current phase
+Status: In progress
+Last activity: 2026-02-01 — Completed 12-01-PLAN.md
 
-Progress: [████████████████████] 100%
+Progress: [████████████████████░] 95%
 
 ## Performance Metrics
 
@@ -45,6 +45,7 @@ Progress: [████████████████████] 100%
 | 09-utilities | 3 | 8 min | 2.7 min |
 | 10-skills-layer | 2 | 4 min | 2 min |
 | 11-content-workflow-polish | 2 | 4 min | 2 min |
+| 12-bootstrap-portability | 1 | 3 min | 3 min |
 
 ## Accumulated Context
 
@@ -59,6 +60,8 @@ All decisions documented in PROJECT.md Key Decisions table.
 | 2026-02-01 | 11-01 | tags: [] in template prevents default 'others' tag |
 | 2026-02-01 | 11-02 | Use colon syntax (blog:install) matching GSD convention |
 | 2026-02-01 | 11-02 | Move SessionStart command to external hook script |
+| 2026-02-01 | 12-01 | Node 22 major version only (auto patch updates) |
+| 2026-02-01 | 12-01 | No content.config.ts changes needed - Astro glob loader handles empty dirs |
 
 ### Pending Todos
 
@@ -71,9 +74,9 @@ None.
 ## Session Continuity
 
 Last session: 2026-02-01
-Stopped at: Completed 11-02-PLAN.md (Phase 11 complete)
+Stopped at: Completed 12-01-PLAN.md
 Resume file: None
-Next action: Plan phase 12
+Next action: Execute 12-02-PLAN.md (dev container)
 
 Config:
 {
