@@ -3,7 +3,7 @@ status: diagnosed
 phase: 08-core-publishing
 source: [08-01-SUMMARY.md, 08-02-SUMMARY.md, 08-03-SUMMARY.md]
 started: 2026-01-31T18:30:00Z
-updated: 2026-01-31T19:45:00Z
+updated: 2026-01-31T21:05:00Z
 ---
 
 ## Current Test
@@ -67,11 +67,17 @@ severity: major
 expected: When no posts have `status: - Published`, friendly message explains how to mark posts ready and exits gracefully.
 result: pass
 
+### 13. Frontmatter Type Transformation
+expected: Obsidian-specific frontmatter formats (author as array, empty heroImage) are transformed to Astro schema-compatible types during publish. Build succeeds without schema validation errors.
+result: issue
+reported: "Build fails with InvalidContentEntryDataError: author Expected type string received array, heroImage Expected type string received null"
+severity: blocker
+
 ## Summary
 
-total: 12
+total: 13
 passed: 8
-issues: 3
+issues: 4
 pending: 0
 skipped: 1
 
@@ -117,3 +123,20 @@ skipped: 1
   missing:
     - "Wrap prompt in DRY_RUN conditional; auto-continue when dry-run is true"
   debug_session: ".planning/debug/dryrun-prompts-issue.md"
+
+- truth: "Frontmatter types match Astro content schema after transformation"
+  status: failed
+  reason: "User reported: Build fails with InvalidContentEntryDataError: author Expected type string received array, heroImage Expected type string received null"
+  severity: blocker
+  test: 13
+  root_cause: "copy_post() runs convert_wiki_links() but lacks frontmatter type normalization; Obsidian uses 'author: - [[Me]]' (array) and empty 'heroImage:' (null) which Astro schema rejects"
+  artifacts:
+    - path: "scripts/publish.sh"
+      issue: "copy_post() missing frontmatter transformation for author/heroImage"
+    - path: "src/content.config.ts"
+      issue: "Schema expects author as string (default SITE.author) and heroImage as optional string (not null)"
+  missing:
+    - "Add normalize_frontmatter() to transform author array to string (use site default)"
+    - "Strip empty heroImage: lines or remove field entirely when null"
+    - "Call normalize_frontmatter() in copy_post() before convert_wiki_links()"
+  debug_session: ".planning/debug/frontmatter-type-mismatch.md"
