@@ -1,9 +1,9 @@
 ---
-status: complete
+status: diagnosed
 phase: 10-skills-layer
 source: [10-01-SUMMARY.md]
 started: 2026-01-31T10:00:00Z
-updated: 2026-01-31T10:15:00Z
+updated: 2026-01-31T10:20:00Z
 ---
 
 ## Current Test
@@ -63,9 +63,16 @@ skipped: 0
   reason: "User reported: Skill ran just setup even though vault already configured at /home/jc/obsidian/jc. Should have confirmed existing config instead of re-running setup. Script also failed on interactive selection."
   severity: major
   test: 2
-  root_cause: ""
-  artifacts: []
-  missing: []
+  root_cause: "SKILL.md has no pre-check for existing config; setup.sh has no idempotency check and always runs interactive flow which fails in non-terminal context"
+  artifacts:
+    - path: ".claude/skills/install/SKILL.md"
+      issue: "No conditional logic to check existing config before running setup"
+    - path: "scripts/setup.sh"
+      issue: "No idempotency check; uses read -rp which fails non-interactively"
+  missing:
+    - "Add pre-check to SKILL.md to verify existing config"
+    - "Add idempotency check to setup.sh"
+    - "Handle non-interactive mode in setup.sh"
   debug_session: ""
 
 - truth: "/unpublish presents list of published posts to select from"
@@ -73,9 +80,13 @@ skipped: 0
   reason: "User reported: Skill asks user to type filename instead of presenting a list of published posts to choose from. User wants to see options."
   severity: minor
   test: 5
-  root_cause: ""
-  artifacts: []
-  missing: []
+  root_cause: "SKILL.md assumes user provides filename via $ARGUMENTS; no instruction to first list available posts with just list-posts --published"
+  artifacts:
+    - path: ".claude/skills/unpublish/SKILL.md"
+      issue: "Missing instruction to list published posts before asking for selection"
+  missing:
+    - "Add step to run just list-posts --published first"
+    - "Present list to user as selection options"
   debug_session: ""
 
 - truth: "Startup hook suggests /install when vault not configured"
@@ -83,9 +94,13 @@ skipped: 0
   reason: "User reported: Started fresh session without settings.local.json - no suggestion to run /install appeared. Just showed normal startup prompt."
   severity: major
   test: 6
-  root_cause: ""
-  artifacts: []
-  missing: []
+  root_cause: "Hook event name is wrong - uses 'Setup' but Claude Code has no such event. Correct event is 'SessionStart'. Claude silently ignores unknown hook events."
+  artifacts:
+    - path: ".claude/settings.json"
+      issue: "'Setup' is not a valid hook event; should be 'SessionStart'"
+  missing:
+    - "Change event from 'Setup' to 'SessionStart'"
+    - "Remove matcher - SessionStart fires on every session"
   debug_session: ""
 
 - truth: "Claude does not auto-run publishing commands without explicit /publish invocation"
@@ -93,7 +108,14 @@ skipped: 0
   reason: "User reported: Typed 'publish' (no slash) and Claude started running 'just publish --dry-run' automatically. disable-model-invocation prevents skill invocation but Claude still ran the underlying command directly."
   severity: major
   test: 7
-  root_cause: ""
-  artifacts: []
-  missing: []
+  root_cause: "disable-model-invocation only prevents Skill tool invocation, not Bash tool. Claude reads justfile/SKILL.md and can run underlying commands directly via Bash."
+  artifacts:
+    - path: ".claude/skills/publish/SKILL.md"
+      issue: "Correctly configured but Claude bypasses via Bash tool"
+    - path: ".claude/settings.json"
+      issue: "Missing deny rules for publish commands"
+  missing:
+    - "Add PreToolUse hook to intercept just publish commands"
+    - "Or add deny rule for Bash(just publish:*)"
+    - "Or document as expected behavior"
   debug_session: ""
