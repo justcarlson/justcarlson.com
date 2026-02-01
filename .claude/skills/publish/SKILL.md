@@ -29,6 +29,15 @@ Guide the user through publishing posts from Obsidian to the blog repo with over
 - The stop hook runs `npm run build` and blocks if it fails
 - This wraps `just publish` - do not reimplement the publish logic
 
+## About disable-model-invocation
+
+The `disable-model-invocation: true` setting prevents Claude from invoking this
+skill automatically via the Skill tool. However, Claude can still run the underlying
+`just publish` command via Bash if requested (e.g., if user types "publish" without
+the slash). This is expected behavior - the setting provides oversight for the skill
+workflow, not complete command prevention. For safety, the publish script includes
+its own safeguards (validation, dry-run, user confirmation).
+
 ## Example Workflow
 
 ```
