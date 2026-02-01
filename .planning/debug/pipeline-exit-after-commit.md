@@ -1,5 +1,5 @@
 ---
-status: resolved
+status: fixed
 trigger: "Debug pipeline exit after commit - publish script fails with lint-staged error"
 created: 2026-01-31T00:00:00Z
 updated: 2026-01-31T00:00:00Z
@@ -46,12 +46,28 @@ started: Happens on every commit from publish script
 
 ## Resolution
 
-root_cause: lint-staged pre-commit hook returns non-zero exit code when no staged files match the configured patterns (*.{js,ts,tsx,json}). Blog posts (.md files) don't match this pattern, so the hook reports "could not find any staged files matching configured tasks" and exits with code 1. The commit is actually created and pushed, but the hook's failure causes git commit to fail, which should trigger the shell's error handling.
+root_cause: |
+  The commit_posts() function in scripts/publish.sh had `return $commit_count` on line 991.
+  With `set -euo pipefail`, returning a non-zero value from a function is treated as an error.
+  When committing 1 post, `commit_count=1`, so `return 1` caused the script to exit with code 1.
+  The lint-staged warning was a red herring - the actual error was the function return value.
 
-ACTUAL ROOT CAUSE (refined): The git commit command in publish.sh line 957 is NOT failing even though the pre-commit hook returns non-zero. This suggests git treats the commit as successful because the commit was written to the repository before the hook ran, OR lint-staged is not being invoked as a blocking hook. The error message appears to come from a post-commit diagnostic, not from the commit itself failing.
+  The caller at line 1155 already gets the count from `${#PROCESSED_SLUGS[@]}`, making
+  the return value completely unused.
 
-PRECISE ROOT CAUSE: lint-staged is configured to only lint JavaScript/TypeScript/JSON files. When committing .md files (blog posts) with no matching file types, lint-staged finds no staged files to process and returns a non-zero exit code. However, because the commit itself succeeds (only metadata is committed, not actual code that needs linting), the error is reported but the commit persists. The shell's "set -euo pipefail" doesn't catch this because the git command itself didn't fail - only the pre-commit hook returned a confusing status message after commit completion.
+fix: |
+  1. Removed `return $commit_count` from commit_posts() - non-zero returns are errors with set -e
+  2. Added no-changes handling in commit_posts() - shows "already up to date" instead of failing
+  3. Rewrote posts_are_identical() to compare:
+     - Content body (after frontmatter)
+     - Key frontmatter: title, description, pubDatetime
+     - Ignores author field (gets transformed from [[Me]] to plain name)
+     - Ignores empty field removal
 
-files_changed: []
-fix: []
-verification: []
+files_changed:
+  - scripts/publish.sh
+
+verification: |
+  - `just publish --dry-run` completes successfully
+  - Already-published posts with no changes are correctly skipped during discovery
+  - Frontmatter transformations (author wiki-links) don't cause false updates

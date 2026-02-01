@@ -467,14 +467,61 @@ get_existing_post_path() {
     fi
 }
 
+extract_frontmatter_field() {
+    # Extract a single frontmatter field value from a file
+    local file="$1"
+    local field="$2"
+
+    # Get content between first two --- delimiters, then extract field
+    sed -n '/^---$/,/^---$/p' "$file" | grep -E "^${field}:" | sed "s/^${field}:[[:space:]]*//"
+}
+
+extract_content_body() {
+    # Extract content after frontmatter (everything after second ---)
+    local file="$1"
+
+    # Skip until after second ---, then print rest
+    awk 'BEGIN{count=0} /^---$/{count++; if(count==2){found=1; next}} found{print}' "$file"
+}
+
 posts_are_identical() {
     # Compare Obsidian post content with existing blog post
-    # Returns 0 if identical, 1 if different
+    # Returns 0 if identical (no update needed), 1 if different (needs update)
+    #
+    # Compares:
+    #   - Content body (after frontmatter)
+    #   - Key frontmatter: title, description, pubDatetime
+    #
+    # Ignores:
+    #   - author field (gets transformed from [[Me]] to plain name)
+    #   - Empty fields that get removed
+    #   - Field ordering
+
     local obsidian_file="$1"
     local blog_file="$2"
 
-    # For now, do a simple diff. Future enhancement could normalize frontmatter.
-    diff -q "$obsidian_file" "$blog_file" &>/dev/null
+    # Compare content bodies
+    local obsidian_body blog_body
+    obsidian_body=$(extract_content_body "$obsidian_file")
+    blog_body=$(extract_content_body "$blog_file")
+
+    if [[ "$obsidian_body" != "$blog_body" ]]; then
+        return 1  # Different content
+    fi
+
+    # Compare key frontmatter fields
+    local fields=("title" "description" "pubDatetime" "heroImage")
+    for field in "${fields[@]}"; do
+        local obsidian_val blog_val
+        obsidian_val=$(extract_frontmatter_field "$obsidian_file" "$field")
+        blog_val=$(extract_frontmatter_field "$blog_file" "$field")
+
+        if [[ "$obsidian_val" != "$blog_val" ]]; then
+            return 1  # Different frontmatter
+        fi
+    done
+
+    return 0  # Identical
 }
 
 discover_posts() {
@@ -977,18 +1024,21 @@ commit_posts() {
             git add "$assets_path"
         fi
 
-        # Create commit
-        git commit -m "$commit_msg" --quiet
-        echo -e "  ${GREEN}Committed:${RESET} $commit_msg"
-        ((commit_count++))
+        # Check if there are staged changes before committing
+        if git diff --cached --quiet; then
+            echo -e "  ${YELLOW}No changes:${RESET} $title (already up to date)"
+        else
+            # Create commit
+            git commit -m "$commit_msg" --quiet
+            echo -e "  ${GREEN}Committed:${RESET} $commit_msg"
+            ((commit_count++))
+        fi
     done
 
     if [[ "$DRY_RUN" != "true" ]]; then
         echo ""
         echo -e "${GREEN}Created $commit_count commit(s)${RESET}"
     fi
-
-    return $commit_count
 }
 
 push_commits() {
