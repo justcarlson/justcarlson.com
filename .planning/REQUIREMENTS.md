@@ -51,29 +51,29 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| LIB-01 | TBD | Pending |
-| LIB-02 | TBD | Pending |
-| LIB-03 | TBD | Pending |
-| LIB-04 | TBD | Pending |
-| LIB-05 | TBD | Pending |
-| SYNC-01 | TBD | Pending |
-| SYNC-02 | TBD | Pending |
-| SYNC-03 | TBD | Pending |
-| SYNC-04 | TBD | Pending |
-| SYNC-05 | TBD | Pending |
-| MIGR-01 | TBD | Pending |
-| MIGR-02 | TBD | Pending |
-| MIGR-03 | TBD | Pending |
-| MIGR-04 | TBD | Pending |
-| MIGR-05 | TBD | Pending |
-| CONF-01 | TBD | Pending |
-| CONF-02 | TBD | Pending |
+| LIB-01 | Phase 15 | Pending |
+| LIB-02 | Phase 15 | Pending |
+| LIB-03 | Phase 15 | Pending |
+| LIB-04 | Phase 15 | Pending |
+| LIB-05 | Phase 15 | Pending |
+| CONF-02 | Phase 15 | Pending |
+| SYNC-01 | Phase 16 | Pending |
+| SYNC-02 | Phase 16 | Pending |
+| SYNC-03 | Phase 16 | Pending |
+| SYNC-04 | Phase 16 | Pending |
+| SYNC-05 | Phase 16 | Pending |
+| CONF-01 | Phase 16 | Pending |
+| MIGR-01 | Phase 17 | Pending |
+| MIGR-02 | Phase 17 | Pending |
+| MIGR-03 | Phase 17 | Pending |
+| MIGR-04 | Phase 17 | Pending |
+| MIGR-05 | Phase 17 | Pending |
 
 **Coverage:**
 - v0.4.0 requirements: 17 total
-- Mapped to phases: 0
-- Unmapped: 17 ⚠️
+- Mapped to phases: 17
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-02-01*
-*Last updated: 2026-02-01 after initial definition*
+*Traceability updated: 2026-02-01 after roadmap creation*
