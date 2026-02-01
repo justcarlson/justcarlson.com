@@ -102,13 +102,14 @@ get_frontmatter_field() {
     else
         # Fallback to sed (less reliable but works for simple cases)
         # Extract frontmatter, find field, strip quotes
+        # Use || true to handle missing fields (grep returns 1 when no match)
         sed -n '/^---$/,/^---$/p' "$file" | \
             grep -E "^${field}:" | \
             head -1 | \
             sed "s/^${field}:[[:space:]]*//" | \
             sed 's/^["\x27]//' | \
             sed 's/["\x27]$//' | \
-            tr -d '\r'
+            tr -d '\r' || true
     fi
 }
 
