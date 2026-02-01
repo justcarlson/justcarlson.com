@@ -21,16 +21,16 @@ Requirements for Polish & Portability milestone. Focus: fix template bug, enable
 
 ### Bootstrap & First-Run
 
-- [ ] **BOOT-01**: `just bootstrap` command installs dependencies and checks setup status
-- [ ] **BOOT-02**: `.nvmrc` pins Node.js 22.x LTS version
-- [ ] **BOOT-03**: README includes Quick Start section with justfile commands
-- [ ] **BOOT-04**: `just preview` works without vault configured (code exploration mode)
+- [x] **BOOT-01**: `just bootstrap` command installs dependencies and checks setup status
+- [x] **BOOT-02**: `.nvmrc` pins Node.js 22.x LTS version
+- [x] **BOOT-03**: README includes Quick Start section with justfile commands
+- [x] **BOOT-04**: `just preview` works without vault configured (code exploration mode)
 
 ### Dev Container
 
-- [ ] **DEVC-01**: `.devcontainer/devcontainer.json` uses Node 22 image with just feature
-- [ ] **DEVC-02**: node_modules uses named volume for macOS/Windows performance
-- [ ] **DEVC-03**: postCreateCommand runs `just bootstrap` automatically
+- [x] **DEVC-01**: `.devcontainer/devcontainer.json` uses Node 22 image with just feature
+- [x] **DEVC-02**: node_modules uses named volume for macOS/Windows performance
+- [x] **DEVC-03**: postCreateCommand runs `just bootstrap` automatically
 
 ## Future Requirements
 
@@ -66,13 +66,13 @@ Deferred to later milestones.
 | TMPL-04 | Phase 11 | Complete |
 | SKIL-01 | Phase 11 | Complete |
 | SKIL-02 | Phase 11 | Complete |
-| BOOT-01 | Phase 12 | Pending |
-| BOOT-02 | Phase 12 | Pending |
-| BOOT-03 | Phase 12 | Pending |
-| BOOT-04 | Phase 12 | Pending |
-| DEVC-01 | Phase 12 | Pending |
-| DEVC-02 | Phase 12 | Pending |
-| DEVC-03 | Phase 12 | Pending |
+| BOOT-01 | Phase 12 | Complete |
+| BOOT-02 | Phase 12 | Complete |
+| BOOT-03 | Phase 12 | Complete |
+| BOOT-04 | Phase 12 | Complete |
+| DEVC-01 | Phase 12 | Complete |
+| DEVC-02 | Phase 12 | Complete |
+| DEVC-03 | Phase 12 | Complete |
 
 **Coverage:**
 - v0.3.0 requirements: 13 total
@@ -81,4 +81,4 @@ Deferred to later milestones.
 
 ---
 *Requirements defined: 2026-01-31*
-*Last updated: 2026-01-31 after roadmap creation*
+*Last updated: 2026-02-01 after phase 12 completion*
