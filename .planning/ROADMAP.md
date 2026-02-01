@@ -8,11 +8,11 @@ v0.3.0 delivers polish and portability for the blog repository. First, fix the t
 
 - [x] **v0.1.0 MVP** - Phases 1-6 (shipped 2026-01-29)
 - [x] **v0.2.0 Publishing Workflow** - Phases 7-10 (shipped 2026-01-31)
-- [x] **v0.3.0 Polish & Portability** - Phases 11-12 (shipped 2026-02-01)
+- [ ] **v0.3.0 Polish & Portability** - Phases 11-12 (in progress)
 
 ## Phases
 
-- [x] **Phase 11: Content & Workflow Polish** - Fix template bugs, add tags, rename skills
+- [ ] **Phase 11: Content & Workflow Polish** - Fix template bugs, add tags, rename skills
 - [x] **Phase 12: Bootstrap & Portability** - One-command setup, dev container support
 
 ## Phase Details
@@ -27,12 +27,14 @@ v0.3.0 delivers polish and portability for the blog repository. First, fix the t
   3. Tags added in Obsidian appear on published blog posts with proper formatting
   4. All skills discoverable via `/blog:` prefix in Claude (like GSD's `/gsd:` pattern)
   5. SessionStart hook references correct `/blog:install` skill name
-**Plans**: 3 plans
+  6. SessionStart hook shows user-visible suggestion when vault not configured
+**Plans**: 4 plans
 
 Plans:
 - [x] 11-01-PLAN.md - Fix template and content issues (TMPL-01, TMPL-02, TMPL-03, TMPL-04)
 - [x] 11-02-PLAN.md - Rename skills to blog: prefix and enhance SessionStart (SKIL-01, SKIL-02)
 - [x] 11-03-PLAN.md - Fix command directory structure for discoverability (gap closure)
+- [ ] 11-04-PLAN.md - Fix SessionStart hook JSON output for user visibility (gap closure)
 
 ### Phase 12: Bootstrap & Portability
 **Goal**: Fresh clones work with one command; dev containers enable instant contribution
@@ -55,7 +57,7 @@ Plans:
 
 | Phase | Milestone | Plans Complete | Status | Completed |
 |-------|-----------|----------------|--------|-----------|
-| 11. Content & Workflow Polish | v0.3.0 | 3/3 | Complete | 2026-02-01 |
+| 11. Content & Workflow Polish | v0.3.0 | 3/4 | In Progress | - |
 | 12. Bootstrap & Portability | v0.3.0 | 2/2 | Complete | 2026-02-01 |
 
 ---
