@@ -1,45 +1,49 @@
 ---
-status: testing
+status: complete
 phase: 09-utilities
 source: [09-01-SUMMARY.md, 09-02-SUMMARY.md, 09-03-SUMMARY.md]
-started: 2026-01-31T22:45:00Z
-updated: 2026-02-01T00:15:00Z
+started: 2026-01-31T23:59:00Z
+updated: 2026-02-01T00:10:00Z
 ---
 
 ## Current Test
 
-number: 1
-name: --published flag scans blog directory directly
-expected: |
-  Running `just list-posts --published` shows posts in `src/content/blog/` without requiring Obsidian vault. Should show the 2 posts in src/content/blog/2026/
-awaiting: user response
+[testing complete]
 
 ## Tests
 
-### 1. --published flag scans blog directory directly
-expected: Running `just list-posts --published` shows posts in `src/content/blog/` without requiring Obsidian vault. Should show the 2 posts in src/content/blog/2026/
-result: [pending]
+### 1. List Unpublished Posts (Default)
+expected: Running `just list-posts` shows only unpublished posts (have Published status in Obsidian but not in blog repo). Table format with title, date, status, errors.
+result: pass
 
-### 2. Unpublish cancellation exits cleanly
-expected: Cancelling `just unpublish <slug>` (pressing Enter or 'n') exits with code 0, no error message from justfile
-result: [pending]
+### 2. List All Posts
+expected: Running `just list-posts --all` shows ALL posts with Published status in Obsidian, regardless of whether already in blog repo.
+result: pass
 
-### 3. ANSI colors display in unpublish tip
-expected: After unpublish success, the tip about updating Obsidian status shows colored text (cyan) not literal escape codes
-result: [pending]
+### 3. List Published Posts Only
+expected: Running `just list-posts --published` shows only posts that exist in src/content/blog/ directory. Works even without Obsidian vault configured.
+result: pass
 
-### 4. Documentation uses status terminology
-expected: ROADMAP.md line 67 now says `status: - Published` instead of `draft: false`
-result: [pending]
+### 4. Unpublish a Post
+expected: Running `just unpublish <slug>` shows post info, asks for confirmation (default: No), removes from repo on Y, commits with conventional message, and shows tip to update Obsidian status.
+result: pass
+
+### 5. Unpublish Non-Existent Post
+expected: Running `just unpublish fake-post` shows clear error message and suggests `just list-posts --published` to see available posts.
+result: pass
+
+### 6. Unpublish Cancellation
+expected: When prompted for confirmation and answering anything other than Y/y, script exits cleanly with no error message (exit code 0).
+result: pass
 
 ## Summary
 
-total: 4
-passed: 0
+total: 6
+passed: 6
 issues: 0
-pending: 4
+pending: 0
 skipped: 0
 
 ## Gaps
 
-[none yet]
+[none]
