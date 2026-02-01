@@ -44,6 +44,13 @@ This will:
 - Let you select the correct vault
 - Save the path to `.claude/settings.local.json`
 
+**Non-interactive mode** (for Claude Code or scripting):
+
+```bash
+just setup --vault ~/notes/my-vault           # Set vault directly
+just setup --vault ~/notes/my-vault --force   # Overwrite existing config
+```
+
 ### Step 2: Verify Dependencies
 
 Check that npm packages are installed:
