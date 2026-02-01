@@ -8,11 +8,11 @@
 
 This phase addresses three distinct areas: fixing the title duplication bug in templates, renaming skills to use the `/blog:` prefix for discoverability, and enhancing the SessionStart hook to detect state and provide appropriate suggestions.
 
-Research confirms that Claude Code skills support any name that uses lowercase letters, numbers, and hyphens (max 64 characters). The colon character is NOT valid in skill names, meaning the user's desired `/blog:publish` pattern is not directly achievable. Instead, the standard convention is to use hyphens: `/blog-publish`, `/blog-help`, etc. Alternatively, all blog skills can be grouped under a `blog/` subdirectory with hyphenated names.
+**CORRECTION:** Colons ARE valid in skill names. GSD uses this pattern extensively (`gsd:plan-phase`, `gsd:execute-phase`, etc.). The colon is set in the frontmatter `name:` field. Skills can be organized in subdirectories (e.g., `blog/publish/SKILL.md` with `name: blog:publish`).
 
 For SessionStart hooks, stdout text is added as context that Claude can see and act on. The hook receives source information indicating startup/resume/clear/compact status.
 
-**Primary recommendation:** Use `/blog-publish`, `/blog-install`, etc. (hyphen-based naming) since colons are not valid in skill names. Group all blog skills in a `blog/` skills subdirectory for organization.
+**Recommendation:** Use `/blog:publish`, `/blog:install`, etc. (colon-based naming like GSD). Group all blog skills in a `blog/` skills subdirectory for organization.
 
 ## Standard Stack
 
@@ -37,7 +37,7 @@ This phase uses existing infrastructure - no new libraries needed.
 
 ### Skill Naming Convention
 
-**CRITICAL FINDING:** The name field in SKILL.md must be lowercase letters, numbers, and hyphens only (max 64 characters). Colons are NOT valid.
+**CORRECTED:** Colons ARE valid in skill names (GSD uses `gsd:plan-phase`, `gsd:execute-phase`, etc.). Use `name: blog:publish` in frontmatter.
 
 **Current skills:**
 ```
@@ -49,26 +49,18 @@ This phase uses existing infrastructure - no new libraries needed.
   unpublish/SKILL.md    (name: unpublish)
 ```
 
-**Recommended pattern (hyphen-based):**
-```
-.claude/skills/
-  blog-install/SKILL.md     (name: blog-install)
-  blog-publish/SKILL.md     (name: blog-publish)
-  blog-list-posts/SKILL.md  (name: blog-list-posts)
-  blog-maintain/SKILL.md    (name: blog-maintain)
-  blog-unpublish/SKILL.md   (name: blog-unpublish)
-  blog-help/SKILL.md        (name: blog-help)   [NEW]
-```
-
-**Alternative pattern (directory grouping):**
+**Recommended pattern (colon-based, like GSD):**
 ```
 .claude/skills/blog/
-  install/SKILL.md     (name: blog-install)
-  publish/SKILL.md     (name: blog-publish)
-  ...
+  install/SKILL.md      (name: blog:install)
+  publish/SKILL.md      (name: blog:publish)
+  list-posts/SKILL.md   (name: blog:list-posts)
+  maintain/SKILL.md     (name: blog:maintain)
+  unpublish/SKILL.md    (name: blog:unpublish)
+  help/SKILL.md         (name: blog:help)   [NEW]
 ```
 
-Note: The directory structure doesn't affect the command name. The `name` field in frontmatter determines the `/slash-command`.
+Note: The directory structure doesn't affect the command name. The `name` field in frontmatter determines the `/slash-command`. GSD uses this pattern: `~/.claude/commands/gsd/plan-phase.md` → `name: gsd:plan-phase`.
 
 ### SessionStart Hook State Detection
 
@@ -185,11 +177,8 @@ tags: z.array(z.string()).default(["others"]),
 
 ## Common Pitfalls
 
-### Pitfall 1: Colon in Skill Names
-**What goes wrong:** Skills with colons in names won't be recognized
-**Why it happens:** Claude Code skill names only allow lowercase letters, numbers, and hyphens
-**How to avoid:** Use `blog-publish` not `blog:publish`
-**Warning signs:** Skill doesn't appear in `/` autocomplete
+### ~~Pitfall 1: Colon in Skill Names~~ (CORRECTED)
+**CORRECTION:** Colons ARE valid. GSD uses `gsd:plan-phase`, `gsd:execute-phase`, etc. Use `name: blog:publish` in frontmatter.
 
 ### Pitfall 2: Title Shows Twice on Blog
 **What goes wrong:** Title appears in both rendered frontmatter AND body H1

@@ -9,15 +9,15 @@ Requirements for Polish & Portability milestone. Focus: fix template bug, enable
 
 ### Template & Content
 
-- [ ] **TMPL-01**: Obsidian Post Template removes duplicate `# title` heading from body
-- [ ] **TMPL-02**: Existing published posts have redundant H1 headings stripped
-- [ ] **TMPL-03**: Obsidian Post Template includes `tags` field for blog categorization
-- [ ] **TMPL-04**: Publish script converts Obsidian tags to Astro-compatible format
+- [x] **TMPL-01**: Obsidian Post Template removes duplicate `# title` heading from body
+- [x] **TMPL-02**: Existing published posts have redundant H1 headings stripped
+- [x] **TMPL-03**: Obsidian Post Template includes `tags` field for blog categorization
+- [x] **TMPL-04**: Publish script converts Obsidian tags to Astro-compatible format
 
 ### Skills
 
-- [ ] **SKIL-01**: All skills renamed with `blog:` prefix (blog:publish, blog:install, etc.)
-- [ ] **SKIL-02**: SessionStart hook message updated to reference `/blog:install`
+- [x] **SKIL-01**: All skills renamed with `blog:` prefix (`/blog:publish`, `/blog:install`, etc.)
+- [x] **SKIL-02**: SessionStart hook message updated to reference `/blog:install`
 
 ### Bootstrap & First-Run
 
@@ -60,12 +60,12 @@ Deferred to later milestones.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| TMPL-01 | Phase 11 | Pending |
-| TMPL-02 | Phase 11 | Pending |
-| TMPL-03 | Phase 11 | Pending |
-| TMPL-04 | Phase 11 | Pending |
-| SKIL-01 | Phase 11 | Pending |
-| SKIL-02 | Phase 11 | Pending |
+| TMPL-01 | Phase 11 | Complete |
+| TMPL-02 | Phase 11 | Complete |
+| TMPL-03 | Phase 11 | Complete |
+| TMPL-04 | Phase 11 | Complete |
+| SKIL-01 | Phase 11 | Complete |
+| SKIL-02 | Phase 11 | Complete |
 | BOOT-01 | Phase 12 | Pending |
 | BOOT-02 | Phase 12 | Pending |
 | BOOT-03 | Phase 12 | Pending |
