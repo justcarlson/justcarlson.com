@@ -38,7 +38,12 @@ A clean, personal space to write — with a publishing workflow that just works.
 
 ### Active
 
-(None — planning next milestone)
+**v0.3.0 Polish & Portability:**
+- [ ] Fix title duplication in Obsidian template and strip existing H1s from posts
+- [ ] Add `just bootstrap` for one-command fresh clone setup
+- [ ] Update README with clear first-run instructions
+- [ ] Audit scripts for hardcoded assumptions
+- [ ] Document dev container preparation (foundation for future)
 
 ### Deferred
 
@@ -105,4 +110,4 @@ A clean, personal space to write — with a publishing workflow that just works.
 | Frontmatter normalization | Handle Obsidian→Astro schema differences | ✓ Good — author array→string, empty heroImage removed |
 
 ---
-*Last updated: 2026-01-31 after v0.2.0 milestone*
+*Last updated: 2026-01-31 after v0.3.0 milestone start*

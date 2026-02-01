@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-01-31)
 
 **Core value:** A clean, personal space to write — with a publishing workflow that just works.
-**Current focus:** Planning next milestone
+**Current focus:** v0.3.0 Polish & Portability
 
 ## Current Position
 
-Phase: 10 of 10 (all phases complete)
-Plan: All plans complete
-Status: v0.2.0 shipped — ready for next milestone
-Last activity: 2026-01-31 — v0.2.0 milestone complete
+Phase: Not started (defining requirements)
+Plan: —
+Status: Defining requirements for v0.3.0
+Last activity: 2026-01-31 — v0.3.0 milestone started
 
-Progress: [████████████████████] 100% (28/28 plans across v0.1.0 + v0.2.0)
+Progress: [░░░░░░░░░░░░░░░░░░░░] 0% (awaiting roadmap)
 
 ## Performance Metrics
 
@@ -70,9 +70,9 @@ None.
 ## Session Continuity
 
 Last session: 2026-01-31
-Stopped at: v0.2.0 milestone complete
+Stopped at: v0.3.0 requirements definition
 Resume file: None
-Next action: /gsd:new-milestone
+Next action: Define requirements, create roadmap
 
 Config:
 {
