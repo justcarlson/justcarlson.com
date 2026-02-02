@@ -234,6 +234,15 @@ load_config() {
     echo -e "Vault: ${CYAN}$VAULT_PATH${RESET}"
 }
 
+get_author_from_config() {
+    # Read author from settings.local.json
+    # Returns configured author or empty string if not set
+    if [[ ! -f "$CONFIG_FILE" ]]; then
+        return
+    fi
+    jq -r '.author // empty' "$CONFIG_FILE" 2>/dev/null
+}
+
 extract_frontmatter_value() {
     # Alias for get_frontmatter_field (backward compatibility)
     # Some scripts use this name instead of get_frontmatter_field
