@@ -1,8 +1,8 @@
 ---
 title: Hello World
-pubDatetime: 2026-02-01T20:15:02.000-0500
+pubDatetime: "2026-02-02T01:35:49-05:00"
 description: Welcome to my blog
-Attachments/fresh-coat-on-solid-foundation.jpg
+heroImage: /assets/blog/hello-world/fresh-coat-on-solid-foundation.jpg
 categories:
   - "[[Posts]]"
 author: "Justin Carlson"
