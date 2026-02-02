@@ -1,8 +1,8 @@
 ---
 title: Hello World
-pubDatetime: 2026-02-02T01:52:17-05:00
+pubDatetime: "2026-02-02T02:01:31-05:00"
 description: Welcome to my blog
-heroImage: /assets/blog/hello-world/"[[forrest-gump-quote.png]]"
+heroImage: /assets/blog/hello-world/forrest-gump-quote.png
 categories:
   - "[[Posts]]"
 author: "Justin Carlson"
