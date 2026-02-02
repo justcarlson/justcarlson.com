@@ -9,13 +9,14 @@ source "${SCRIPT_DIR}/lib/common.sh"
 # Script arguments
 FILE_ARG=""
 FORCE_MODE=false
+DRY_RUN=false
 
 # ============================================================================
 # Argument Parsing
 # ============================================================================
 
 print_usage() {
-    echo "Usage: $0 <file-or-slug> [--force|-f]"
+    echo "Usage: $0 <file-or-slug> [--force|-f] [--dry-run]"
     echo ""
     echo "Remove a published post from the blog repository."
     echo ""
@@ -24,12 +25,12 @@ print_usage() {
     echo ""
     echo "Options:"
     echo "  --force, -f   Skip confirmation prompt"
+    echo "  --dry-run     Preview what would be changed without modifying files"
     echo ""
     echo "Notes:"
-    echo "  - Post is removed from blog repo but Obsidian source is untouched"
+    echo "  - Post is removed from blog repo and Obsidian source is updated (draft: true)"
     echo "  - Images are left in repo (not removed)"
     echo "  - Changes are committed but NOT pushed"
-    echo "  - Update post status in Obsidian to prevent re-publishing"
     exit 0
 }
 
@@ -44,6 +45,10 @@ parse_args() {
         case "$1" in
             --force|-f)
                 FORCE_MODE=true
+                shift
+                ;;
+            --dry-run)
+                DRY_RUN=true
                 shift
                 ;;
             --help|-h)
@@ -145,8 +150,8 @@ confirm_removal() {
     echo -e "  ${CYAN}Path:${RESET} $post_path"
     echo ""
 
-    # Skip prompt if --force
-    if [[ "$FORCE_MODE" == "true" ]]; then
+    # Skip prompt if --force or --dry-run
+    if [[ "$FORCE_MODE" == "true" || "$DRY_RUN" == "true" ]]; then
         return 0
     fi
 
@@ -174,18 +179,18 @@ remove_post() {
     fi
 
     echo ""
-    echo -e "${CYAN}Removing post...${RESET}"
-
-    # Remove file using git
-    git rm "$post_path" --quiet
-
-    # Create commit
-    local commit_msg="docs(blog): unpublish $title"
-    git commit -m "$commit_msg" --quiet
-
-    echo -e "${GREEN}Post removed and committed${RESET}"
-    echo ""
-    echo -e "${CYAN}Commit:${RESET} $commit_msg"
+    if [[ "$DRY_RUN" == "true" ]]; then
+        echo -e "  [DRY-RUN] Would remove: $post_path"
+        echo -e "  [DRY-RUN] Would commit: docs(blog): unpublish $title"
+    else
+        echo -e "${CYAN}Removing post...${RESET}"
+        git rm "$post_path" --quiet
+        local commit_msg="docs(blog): unpublish $title"
+        git commit -m "$commit_msg" --quiet
+        echo -e "${GREEN}Post removed and committed${RESET}"
+        echo ""
+        echo -e "${CYAN}Commit:${RESET} $commit_msg"
+    fi
 }
 
 display_next_steps() {
