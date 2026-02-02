@@ -23,6 +23,12 @@
     const img = container?.querySelector('img');
     if (!img || !container) return;
 
+    // If image already loaded (cached), remove loading state and exit
+    if (img.complete && img.naturalHeight > 0) {
+      container.classList.remove('img-loading');
+      return;
+    }
+
     const TIMEOUT_MS = 5000;
     let timeoutId: ReturnType<typeof setTimeout>;
 
