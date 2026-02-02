@@ -417,14 +417,14 @@ discover_posts() {
     echo ""
     echo -e "${CYAN}Searching for posts...${RESET}"
 
-    # Find all markdown files with status: - Published (case-insensitive)
-    # The pattern matches YAML list format: status:\n  - Published
+    # Find all markdown files with draft: false
+    # The pattern matches YAML: draft: false (with optional whitespace)
     local found_files=()
 
     while IFS= read -r -d '' file; do
-        # Check if file contains status with Published value
-        # Using perl for multiline matching: status:\s*\n\s*-\s*[Pp]ublished
-        if perl -0777 -ne 'exit(!/status:\s*\n\s*-\s*[Pp]ublished/i)' "$file" 2>/dev/null; then
+        # Check if file contains draft: false
+        # Using perl for pattern matching: draft:\s*false
+        if perl -0777 -ne 'exit(!/draft:\s*false/i)' "$file" 2>/dev/null; then
             found_files+=("$file")
         fi
     done < <(find "$VAULT_PATH" -name "*.md" -type f -print0 2>/dev/null)
@@ -433,7 +433,7 @@ discover_posts() {
         return
     fi
 
-    echo -e "Found ${GREEN}${#found_files[@]}${RESET} post(s) with Published status"
+    echo -e "Found ${GREEN}${#found_files[@]}${RESET} post(s) with draft: false"
     echo ""
 
     # Process each found file
@@ -1058,9 +1058,8 @@ main() {
     if [[ ${#POST_FILES[@]} -eq 0 ]]; then
         echo -e "${YELLOW}No posts ready to publish.${RESET}"
         echo ""
-        echo "To publish a post, set its status to 'Published' in Obsidian:"
-        echo "  status:"
-        echo "    - Published"
+        echo "To publish a post, set draft: false in the frontmatter:"
+        echo "  draft: false"
         echo ""
         exit $EXIT_SUCCESS
     fi
