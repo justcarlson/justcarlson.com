@@ -30,8 +30,8 @@ test.describe("Image fallback behavior", () => {
     // Wait for page to fully load
     await page.waitForLoadState("networkidle");
 
-    // Verify page renders (basic smoke test)
-    await expect(page.locator("h1")).toBeVisible();
+    // Verify page renders (basic smoke test - target main content h1)
+    await expect(page.locator("main h1").first()).toBeVisible();
 
     // Check for broken image icons by looking for images with naturalWidth of 0
     // BUT we need to account for images that are intentionally hidden or use CSS fallback
@@ -63,16 +63,40 @@ test.describe("Image fallback behavior", () => {
       }
     }
 
-    // Filter out expected blocked resource messages
+    // Filter out expected blocked resource messages and 404s (expected in dev for proxy URLs)
     const unexpectedErrors = consoleErrors.filter(
       (e) =>
         !e.includes("net::ERR_FAILED") &&
         !e.includes("net::ERR_BLOCKED_BY_CLIENT") &&
-        !e.includes("blocked")
+        !e.includes("blocked") &&
+        !e.includes("404")
     );
 
     // There should be no unexpected console errors
     expect(unexpectedErrors).toHaveLength(0);
+  });
+
+  test("avatar falls back to local image when proxy blocked", async ({ page }) => {
+    // Block Vercel image optimization proxy
+    await page.route("**/_vercel/image**", (route) => route.abort("blockedbyclient"));
+
+    // Also block direct Gravatar (belt and suspenders)
+    await page.route("**/gravatar.com/**", (route) => route.abort("blockedbyclient"));
+
+    await page.goto("/");
+    await page.waitForLoadState("networkidle");
+
+    // Find the avatar image (in the hero section, links to /about)
+    const avatar = page.locator('a[href="/about"] img');
+    await expect(avatar).toBeVisible();
+
+    // Avatar should have loaded the fallback (naturalWidth > 0)
+    const naturalWidth = await avatar.evaluate((el: HTMLImageElement) => el.naturalWidth);
+    expect(naturalWidth).toBeGreaterThan(0);
+
+    // Verify it's using the fallback URL
+    const src = await avatar.getAttribute("src");
+    expect(src).toContain("avatar-fallback.webp");
   });
 
   test("page loads without external images", async ({ page }) => {
@@ -89,8 +113,8 @@ test.describe("Image fallback behavior", () => {
     await page.goto("/");
     await page.waitForLoadState("domcontentloaded");
 
-    // Page should still render main content
-    await expect(page.locator("h1")).toBeVisible();
+    // Page should still render main content (target main content h1)
+    await expect(page.locator("main h1").first()).toBeVisible();
     await expect(page.locator("main")).toBeVisible();
   });
 });
