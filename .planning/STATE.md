@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-02-02)
 
 **Core value:** A clean, personal space to write — with a publishing workflow that just works.
-**Current focus:** Phase 20 - Configuration Foundation (v0.5.0 Graceful Fallback)
+**Current focus:** Phase 21 - Avatar Fallback (v0.5.0 Graceful Fallback)
 
 ## Current Position
 
-Phase: 20 of 22 (Configuration Foundation)
-Plan: 2 of 2 in current phase
-Status: Phase complete
-Last activity: 2026-02-02 — Completed 20-02-PLAN.md
+Phase: 21 of 22 (Avatar Fallback)
+Plan: 0 of TBD in current phase
+Status: Ready to plan
+Last activity: 2026-02-02 — Phase 20 verified and complete
 
-Progress: [██████░░░░] 67% v0.5.0
+Progress: [███░░░░░░░] 33% v0.5.0
 
 ## Performance Metrics
 
@@ -55,9 +55,9 @@ None.
 ## Session Continuity
 
 Last session: 2026-02-02
-Stopped at: Completed 20-02-PLAN.md (Phase 20 complete)
+Stopped at: Phase 20 verified and complete
 Resume file: None
-Next action: `/gsd:execute-phase 21`
+Next action: `/gsd:discuss-phase 21`
 
 Config:
 {

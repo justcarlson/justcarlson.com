@@ -19,7 +19,7 @@ This milestone delivers graceful degradation when external services (Gravatar, a
 - Integer phases (20, 21, 22): Planned milestone work
 - Decimal phases (20.1, 20.2): Urgent insertions (marked with INSERTED)
 
-- [ ] **Phase 20: Configuration Foundation** - Vercel Image Optimization and CSP setup
+- [x] **Phase 20: Configuration Foundation** - Vercel Image Optimization and CSP setup
 - [ ] **Phase 21: Avatar Fallback** - Gravatar proxy with local fallback
 - [ ] **Phase 22: External Resilience** - GitHub chart and script hardening
 
@@ -37,7 +37,7 @@ This milestone delivers graceful degradation when external services (Gravatar, a
 
 Plans:
 - [x] 20-01-PLAN.md — Vercel Image Optimization config and CSS loading/fallback styles
-- [ ] 20-02-PLAN.md — Playwright testing infrastructure for image blocking verification
+- [x] 20-02-PLAN.md — Playwright testing infrastructure for image blocking verification
 
 ### Phase 21: Avatar Fallback
 **Goal**: Avatar loads reliably regardless of Gravatar availability
@@ -75,7 +75,7 @@ Phases execute in numeric order: 20 -> 20.1 -> 20.2 -> 21 -> 21.1 -> 22
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 20. Configuration Foundation | 1/2 | In progress | - |
+| 20. Configuration Foundation | 2/2 | ✓ Complete | 2026-02-02 |
 | 21. Avatar Fallback | 0/TBD | Not started | - |
 | 22. External Resilience | 0/TBD | Not started | - |
 

@@ -22,8 +22,8 @@ Requirements for graceful fallback when external services are blocked.
 
 ### Configuration
 
-- [ ] **CONFIG-01**: Vercel Image Optimization configured with gravatar.com remote pattern
-- [ ] **CONFIG-02**: CSP headers updated for Vercel image optimization endpoint
+- [x] **CONFIG-01**: Vercel Image Optimization configured with gravatar.com remote pattern
+- [x] **CONFIG-02**: CSP headers updated for Vercel image optimization endpoint
 
 ## Future Requirements
 
@@ -50,8 +50,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| CONFIG-01 | Phase 20 | Pending |
-| CONFIG-02 | Phase 20 | Pending |
+| CONFIG-01 | Phase 20 | Complete |
+| CONFIG-02 | Phase 20 | Complete |
 | IMG-01 | Phase 21 | Pending |
 | IMG-02 | Phase 21 | Pending |
 | IMG-03 | Phase 22 | Pending |
