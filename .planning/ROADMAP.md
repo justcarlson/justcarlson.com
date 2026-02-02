@@ -36,7 +36,7 @@ This milestone delivers graceful degradation when external services (Gravatar, a
 **Plans**: 2 plans
 
 Plans:
-- [ ] 20-01-PLAN.md — Vercel Image Optimization config and CSS loading/fallback styles
+- [x] 20-01-PLAN.md — Vercel Image Optimization config and CSS loading/fallback styles
 - [ ] 20-02-PLAN.md — Playwright testing infrastructure for image blocking verification
 
 ### Phase 21: Avatar Fallback
@@ -75,7 +75,7 @@ Phases execute in numeric order: 20 -> 20.1 -> 20.2 -> 21 -> 21.1 -> 22
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 20. Configuration Foundation | 0/2 | Planned | - |
+| 20. Configuration Foundation | 1/2 | In progress | - |
 | 21. Avatar Fallback | 0/TBD | Not started | - |
 | 22. External Resilience | 0/TBD | Not started | - |
 
