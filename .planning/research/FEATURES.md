@@ -995,3 +995,415 @@ Defer to post-milestone:
 
 *Two-way sync research added: 2026-02-01*
 *Focus: CLI publishing workflow behaviors for refactoring milestone*
+
+---
+
+# Addendum: Graceful Fallback for Blocked External Services
+
+**Added:** 2026-02-02
+**Focus:** Graceful degradation when external services are blocked
+**Context:** Subsequent milestone - ensuring pages load fully when external services unavailable
+
+## Problem Statement
+
+Personal blog currently relies on external services that may be blocked:
+
+1. **Gravatar** (`gravatar.com`) - Avatar image on homepage
+2. **Vercel Analytics** (`vercel.com`) - Page view tracking
+3. **Potential future additions:**
+   - Twitter/X embeds
+   - External fonts (currently self-hosted)
+   - Social card previews
+
+Users may have these services blocked due to:
+- Corporate firewalls blocking social/tracking domains
+- Privacy-focused browsers (Brave, Firefox with strict settings)
+- Browser extensions (uBlock Origin, Privacy Badger)
+- VPNs with built-in ad/tracker blocking
+- Network-level Pi-hole or AdGuard configurations
+
+**Goal:** Pages should load fully and look complete regardless of blocked services.
+
+---
+
+## Current State Analysis
+
+### What's Currently in Place
+
+| Service | Current Implementation | Fallback? |
+|---------|------------------------|-----------|
+| **Gravatar** | Direct `<img>` tag with `?d=identicon` parameter | Partial - Gravatar's server-side fallback works only if Gravatar is reachable |
+| **Vercel Analytics** | Dynamic import in `Analytics.astro` | Yes - fails silently (script just doesn't load) |
+| **Fonts** | Self-hosted in `/public/fonts/` with `font-display: swap` | Yes - system fonts show while loading, work if blocked |
+| **Social embeds** | YouTube processing in `PostDetails.astro` | None currently implemented for Twitter/X |
+
+### Current Issues
+
+1. **Gravatar avatar shows broken image** when `gravatar.com` is blocked
+   - Current: `src="https://gravatar.com/avatar/...?d=identicon"`
+   - Problem: `?d=identicon` is server-side fallback - requires Gravatar to be reachable
+   - Impact: Broken image icon displayed on homepage
+
+2. **Analytics failure is silent but correct**
+   - Current: `import('@vercel/analytics')` in production only
+   - Works: If blocked, import fails, no analytics, page still works
+   - No action needed
+
+3. **Fonts work correctly**
+   - Self-hosted `.woff` files in `/public/fonts/`
+   - `font-display: swap` ensures text shows immediately
+   - Falls back to system fonts if fonts blocked/slow
+   - No action needed
+
+---
+
+## Graceful Fallback Table Stakes
+
+Features users expect. Missing = page appears broken or unprofessional.
+
+| Feature | Why Expected | Complexity | Current State |
+|---------|--------------|------------|---------------|
+| **No broken image icons** | Broken images signal unmaintained site | Low | Missing - Gravatar shows broken icon |
+| **Page loads without network dependencies** | Core content shouldn't require external services | Low | Mostly working (fonts self-hosted) |
+| **No console errors visible to users** | Errors suggest site is broken | Low | Analytics fails silently (good) |
+| **Consistent visual appearance** | Site should look complete even with degradation | Medium | Missing - avatar hole when blocked |
+| **No layout shift from failed resources** | CLS hurts UX and SEO | Low | Avatar has fixed dimensions (good) |
+
+### Avatar Fallback Requirement
+
+When Gravatar is blocked, users should see:
+1. A visually complete avatar area (not a broken image icon)
+2. Ideally: Initials or a local default image
+3. No layout shift when fallback activates
+
+---
+
+## Graceful Fallback Differentiators
+
+Features that exceed basic expectations. Not required, but create polish.
+
+| Feature | Value Proposition | Complexity | Notes |
+|---------|-------------------|------------|-------|
+| **Initials avatar fallback** | Personal touch, feels intentional not broken | Low | CSS-only or minimal JS |
+| **Local default avatar** | Completely offline-capable | Low | Single image in `/public/` |
+| **Graceful embed degradation** | Twitter/X embeds show link card when blocked | Medium | Future-proofing for social embeds |
+| **Service health indicators** | Debug mode showing what's blocked | High | Developer feature, not user-facing |
+| **Lazy fallback (try external first)** | Prefer external when available, fall back gracefully | Medium | Best of both worlds |
+
+### Differentiator Priority
+
+**Implement now:**
+1. **Local default avatar** - Simplest, always works
+2. **Initials avatar** - More personal, still simple
+
+**Implement later (when adding social embeds):**
+3. **Graceful embed degradation** - Only needed if/when Twitter embeds added
+
+---
+
+## Graceful Fallback Anti-Features
+
+Features to deliberately NOT build.
+
+| Anti-Feature | Why Avoid | What to Do Instead |
+|--------------|-----------|-------------------|
+| **Bypass ad blockers for analytics** | Disrespects user privacy choices | Accept analytics gaps gracefully |
+| **Retry loops for blocked resources** | Wastes bandwidth, battery | Fail once, show fallback |
+| **Complex service health checking** | Over-engineering for personal blog | Simple onerror fallback |
+| **Multiple fallback chains** | Complexity for diminishing returns | One fallback is enough |
+| **Custom error boundary per resource** | React pattern, overkill for Astro static site | HTML/CSS fallbacks |
+| **Server-side proxy for blocked services** | Circumvents user intent, adds complexity | Respect blocks, provide local fallback |
+
+### Why NOT Bypass Ad Blockers
+
+Some tutorials suggest proxying Vercel Analytics through your own domain to bypass blockers. This is an anti-feature because:
+
+1. **Disrespects user choice** - They blocked tracking for a reason
+2. **Cat and mouse game** - Blockers eventually catch proxied analytics
+3. **Unnecessary for personal blog** - Analytics are nice-to-have, not critical
+4. **Adds complexity** - Server configuration, maintenance burden
+
+**Instead:** Accept that some users won't be tracked. Focus on content quality over metrics completeness.
+
+---
+
+## Implementation Patterns
+
+### Pattern 1: Image Fallback with `onerror` (Recommended for Gravatar)
+
+The standard pattern for handling broken images:
+
+```html
+<img
+  src="https://gravatar.com/avatar/hash?s=400"
+  alt="Author Name"
+  onerror="this.onerror=null; this.src='/images/default-avatar.png';"
+  class="avatar"
+/>
+```
+
+**How it works:**
+1. Browser attempts to load Gravatar
+2. If blocked/fails, `onerror` fires
+3. `this.onerror=null` prevents infinite loop if fallback also fails
+4. `this.src` updates to local fallback
+
+**Requirements:**
+- Local fallback image at `/public/images/default-avatar.png`
+- Same dimensions as expected Gravatar (160x160 or similar)
+
+### Pattern 2: CSS-Only Initials Fallback with `<object>` Element
+
+Uses HTML `<object>` element's built-in fallback behavior:
+
+```html
+<object
+  type="image/jpeg"
+  data="https://gravatar.com/avatar/hash?s=400"
+  class="avatar"
+  aria-label="Author Name"
+>
+  <div class="avatar-initials">JC</div>
+</object>
+```
+
+```css
+.avatar {
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.avatar-initials {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--accent), var(--muted));
+  color: var(--background);
+  font-size: 3rem;
+  font-weight: bold;
+}
+```
+
+**How it works:**
+1. `<object>` tries to load external image
+2. If fails, renders inner content (initials div)
+3. Pure HTML/CSS, no JavaScript required
+
+**Benefits:**
+- Works without JavaScript
+- Graceful degradation is built into HTML spec
+- Initials feel more personal than generic avatar
+
+### Pattern 3: JavaScript with Graceful Enhancement
+
+For more control over fallback timing:
+
+```html
+<img
+  src="/images/default-avatar.png"
+  data-src="https://gravatar.com/avatar/hash?s=400"
+  alt="Author Name"
+  class="avatar"
+/>
+```
+
+```javascript
+document.addEventListener('DOMContentLoaded', () => {
+  const avatar = document.querySelector('.avatar[data-src]');
+  if (avatar) {
+    const img = new Image();
+    img.onload = () => {
+      avatar.src = img.src;
+    };
+    img.src = avatar.dataset.src;
+  }
+});
+```
+
+**How it works:**
+1. Show local fallback immediately
+2. Attempt to load Gravatar in background
+3. If successful, swap in Gravatar
+4. If fails, local fallback remains
+
+**Benefits:**
+- No flash of broken image
+- Progressive enhancement
+- Works even if JS fails
+
+### Pattern 4: Social Embed Fallback (Future Use)
+
+For Twitter/X embeds that may be blocked:
+
+```html
+<!-- Progressive enhancement: blockquote is fallback -->
+<blockquote class="twitter-fallback">
+  <p>Tweet content here...</p>
+  <cite>
+    <a href="https://twitter.com/user/status/123">
+      @user - View on Twitter
+    </a>
+  </cite>
+</blockquote>
+
+<!-- Twitter widget attempts to replace with iframe -->
+<script async src="https://platform.twitter.com/widgets.js"></script>
+```
+
+**How it works:**
+1. Blockquote displays immediately with tweet text
+2. If Twitter JS loads, it enhances to full embed
+3. If blocked, blockquote remains as graceful fallback
+
+**Benefits:**
+- Content always visible
+- No broken iframe/spinner
+- Progressive enhancement pattern
+
+---
+
+## Recommended Implementation for This Milestone
+
+### MVP: Simple `onerror` Fallback
+
+**Files to modify:**
+1. `src/pages/index.astro` - Add onerror handler to avatar
+2. `/public/images/` - Add default avatar image
+
+**Implementation:**
+
+```astro
+<!-- src/pages/index.astro -->
+<img
+  src="https://gravatar.com/avatar/ef133a0cc6308305d254916b70332b1a?s=400&d=identicon"
+  alt={SITE.author}
+  onerror="this.onerror=null; this.src='/images/default-avatar.png';"
+  class="w-40 h-40 rounded-full object-cover flex-shrink-0 transition-all duration-300 group-hover:scale-105 group-hover:shadow-xl"
+/>
+```
+
+**Fallback image options:**
+1. **Generic avatar icon** - Simple, professional
+2. **Initials image** - Pre-rendered "JC" in brand colors
+3. **Photo** - Local copy of the Gravatar image (most seamless)
+
+**Recommendation:** Use a local copy of the actual Gravatar image. This provides:
+- Identical appearance when Gravatar blocked
+- No visual difference for users
+- Simple implementation
+
+### Post-MVP: Initials Fallback (Optional Enhancement)
+
+If wanting more dynamic fallback:
+
+```astro
+<object
+  type="image/jpeg"
+  data="https://gravatar.com/avatar/ef133a0cc6308305d254916b70332b1a?s=400"
+  class="w-40 h-40 rounded-full overflow-hidden flex-shrink-0"
+  aria-label={SITE.author}
+>
+  <div class="w-full h-full flex items-center justify-center bg-gradient-to-br from-accent to-muted text-background text-5xl font-bold">
+    JC
+  </div>
+</object>
+```
+
+---
+
+## UX Expectations by Scenario
+
+| Scenario | Expected Behavior | Implementation |
+|----------|-------------------|----------------|
+| **Gravatar blocked** | Local avatar shows, identical or similar appearance | `onerror` or `<object>` fallback |
+| **Gravatar slow** | Avatar area shows immediately (no spinner), loads when ready | Fixed dimensions prevent layout shift |
+| **Analytics blocked** | Page works normally, no console errors | Current implementation sufficient |
+| **All external blocked** | Page fully functional, content readable | Self-hosted fonts + local avatar |
+| **JavaScript disabled** | Page renders with fallback avatar | `<object>` pattern works without JS |
+
+---
+
+## Dependencies on Existing Features
+
+| Existing Feature | How Fallback Uses It |
+|------------------|----------------------|
+| Self-hosted fonts (`/public/fonts/`) | Already provides font fallback |
+| `font-display: swap` in CSS | Ensures text visible while fonts load |
+| PWA/offline support | Could cache fallback avatar |
+| Fixed avatar dimensions | Prevents layout shift during fallback |
+| Vercel Analytics dynamic import | Already fails gracefully |
+
+---
+
+## Testing Checklist
+
+To verify fallback implementation:
+
+1. **Block Gravatar in browser:**
+   - Chrome: DevTools > Network > Block request URL containing "gravatar.com"
+   - Firefox: uBlock Origin > Block gravatar.com
+
+2. **Verify:**
+   - [ ] No broken image icon displayed
+   - [ ] Fallback avatar appears in correct position
+   - [ ] No layout shift when fallback loads
+   - [ ] No console errors related to failed image
+   - [ ] Page remains fully functional
+
+3. **Block all external:**
+   - Use browser offline mode or firewall rules
+   - Verify page content is readable and styled
+
+---
+
+## Sources
+
+### Image Fallback Techniques
+- [HTML fallback images on error - DEV Community](https://dev.to/dailydevtips1/html-fallback-images-on-error-1aka) - `onerror` pattern
+- [HTML only image fallback - DEV Community](https://dev.to/albertodeago88/html-only-image-fallback-19im) - `<object>` element pattern
+- [Fallbacks for HTTP 404 images - Sentry](https://blog.sentry.io/fallbacks-for-http-404-images-in-html-and-javascript/) - Comprehensive fallback strategies
+- [Setting a Fallback Image in HTML - Codu](https://www.codu.co/niall/setting-a-fallback-image-in-html-for-broken-or-missing-images-otom_bhg) - Simple onerror implementation
+
+### CSS Avatar Fallbacks
+- [A CSS-only Avatar Fallback - LaunchScout](https://launchscout.com/blog/updated-avatar-fallback) - Object element with CSS
+- [Avatar images with Initials fallback - CodePen](https://codepen.io/fuggfuggfugg/pen/zNPvma) - CSS initials pattern
+- [Default Avatars With User Initials](https://ianwaldron.com/article/48/default-avatars-with-user-initials/) - Full implementation guide
+
+### Graceful Degradation Best Practices
+- [The Importance Of Graceful Degradation - Smashing Magazine](https://www.smashingmagazine.com/2024/12/importance-graceful-degradation-accessible-interface-design/) - Core principles
+- [A guide to graceful degradation - LogRocket](https://blog.logrocket.com/guide-graceful-degradation-web-development/) - Implementation patterns
+- [Progressive enhancement - MDN](https://developer.mozilla.org/en-US/docs/Glossary/Progressive_Enhancement) - Foundation concept
+
+### Font Loading
+- [Optimize WebFont loading - web.dev](https://web.dev/articles/optimize-webfont-loading) - Font-display and fallbacks
+- [Improved font fallbacks - Chrome Blog](https://developer.chrome.com/blog/font-fallbacks) - Modern fallback techniques
+- [CSS Fallback Fonts - W3Schools](https://www.w3schools.com/cssref/css_fonts_fallbacks.php) - Font stack basics
+
+### Analytics and Blocking
+- [Vercel Analytics Troubleshooting](https://vercel.com/docs/analytics/troubleshooting) - Official docs on blocked analytics
+- [Understanding Corporate Firewall Policies - NameSilo](https://www.namesilo.com/blog/en/privacy-security/understanding-corporate-firewall-policies-why-some-domains-get-blocked) - Why services get blocked
+
+### Social Embed Patterns
+- [Static twitter embed - Ian Muchina](https://ianmuchina.com/blog/12-tweet-embed/) - No-JS Twitter fallback
+- [Embedded Tweet CMS best practices - Twitter Docs](https://developer.twitter.com/en/docs/twitter-for-websites/embedded-tweets/guides/cms-best-practices) - Official fallback guidance
+
+---
+
+## Confidence Assessment
+
+| Area | Level | Reason |
+|------|-------|--------|
+| Avatar fallback patterns | HIGH | Multiple verified implementations, standard HTML/CSS |
+| Analytics handling | HIGH | Current implementation already correct |
+| Font fallback | HIGH | Already implemented with `font-display: swap` |
+| Social embed patterns | MEDIUM | Researched but not yet implemented in codebase |
+| Corporate firewall scenarios | MEDIUM | Based on industry research, not directly tested |
+
+---
+
+*Graceful fallback research added: 2026-02-02*
+*Focus: Graceful degradation for blocked external services*
