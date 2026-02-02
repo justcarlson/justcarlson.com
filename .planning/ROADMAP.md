@@ -21,7 +21,7 @@ This milestone delivers graceful degradation when external services (Gravatar, a
 
 - [x] **Phase 20: Configuration Foundation** - Vercel Image Optimization and CSP setup
 - [x] **Phase 21: Avatar Fallback** - Gravatar proxy with local fallback
-- [x] **Phase 22: External Resilience** - GitHub chart and script hardening
+- [ ] **Phase 22: External Resilience** - GitHub chart and script hardening
 
 ## Phase Details
 
@@ -63,10 +63,11 @@ Plans:
   3. Analytics scripts fail silently without console errors
   4. Page loads completely and renders correctly with all external scripts blocked
   5. No external script blocks page rendering (async/defer pattern verified)
-**Plans**: 1 plan
+**Plans**: 2 plans
 
 Plans:
 - [x] 22-01-PLAN.md — GitHub chart fallback, Analytics error handling, conditional Twitter widget
+- [ ] 22-02-PLAN.md — Fix GitHub chart disappearing when image cached (gap closure)
 
 ## Progress
 
@@ -75,9 +76,9 @@ Phases execute in numeric order: 20 -> 20.1 -> 20.2 -> 21 -> 21.1 -> 22
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 20. Configuration Foundation | 2/2 | ✓ Complete | 2026-02-02 |
-| 21. Avatar Fallback | 1/1 | ✓ Complete | 2026-02-02 |
-| 22. External Resilience | 1/1 | ✓ Complete | 2026-02-02 |
+| 20. Configuration Foundation | 2/2 | Complete | 2026-02-02 |
+| 21. Avatar Fallback | 1/1 | Complete | 2026-02-02 |
+| 22. External Resilience | 1/2 | Gap closure | - |
 
 ---
 *Roadmap created: 2026-02-02*
