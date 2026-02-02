@@ -1,6 +1,6 @@
 ---
 title: Claude Code Helped Me Resurrect a Five Year Old Codebase
-pubDatetime: "2026-02-02T03:01:13-05:00"
+pubDatetime: 2026-02-02T03:01:13-05:00
 description: How AI showed me what is possible in brownfield open source software
 heroImage: /assets/blog/claude-code-helped-me-resurrect-a-five-year-old-codebase/fresh-coat-on-solid-foundation.jpg
 categories:
@@ -13,6 +13,7 @@ draft: false
 tags:
   - claudecode
   - gsd
+  - opensource
 heroImageAlt: Pencil sketch of a worker on a ladder applying a fresh coat of paint to a weathered  wooden house with a solid stone foundation
 heroImageCaption: The foundation was never the problem.
 ---
