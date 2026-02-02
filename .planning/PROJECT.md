@@ -58,7 +58,14 @@ A clean, personal space to write — with a publishing workflow that just works.
 
 ### Active
 
-(No active requirements — next milestone not yet defined)
+**Current Milestone: v0.4.1 Image & Caption Support**
+
+**Goal:** Ensure hero images and inline image captions work correctly in posts.
+
+**Target features:**
+- heroImage frontmatter property renders correctly
+- Hero images support captions
+- Inline figure/figcaption works in post body
 
 ### Deferred
 
@@ -153,4 +160,4 @@ A clean, personal space to write — with a publishing workflow that just works.
 | Config-driven author | Author from settings.local.json with fallback | ✓ Good — portable |
 
 ---
-*Last updated: 2026-02-02 after v0.4.0 milestone*
+*Last updated: 2026-02-02 after v0.4.1 milestone started*

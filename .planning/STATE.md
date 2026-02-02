@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-02-02)
 
 **Core value:** A clean, personal space to write — with a publishing workflow that just works.
-**Current focus:** Planning next milestone
+**Current focus:** v0.4.1 Image & Caption Support
 
 ## Current Position
 
-Phase: 17 of 17 (Schema Migration) — v0.4.0 COMPLETE
-Plan: All plans complete
-Status: Milestone shipped, ready for next milestone
-Last activity: 2026-02-02 — v0.4.0 milestone complete
+Phase: Not started (defining requirements)
+Plan: —
+Status: Defining requirements
+Last activity: 2026-02-02 — Milestone v0.4.1 started
 
-Progress: [████████████████████] 100% (v0.4.0 shipped)
+Progress: [░░░░░░░░░░░░░░░░░░░░] 0%
 
 ## Performance Metrics
 
@@ -47,9 +47,9 @@ None.
 ## Session Continuity
 
 Last session: 2026-02-02
-Stopped at: v0.4.0 milestone complete
+Stopped at: v0.4.1 milestone started, defining requirements
 Resume file: None
-Next action: `/gsd:new-milestone` to start next milestone
+Next action: Define requirements, create roadmap
 
 Config:
 {
