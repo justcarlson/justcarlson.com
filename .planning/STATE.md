@@ -5,14 +5,14 @@
 See: .planning/PROJECT.md (updated 2026-02-02)
 
 **Core value:** A clean, personal space to write — with a publishing workflow that just works.
-**Current focus:** Phase 21 - Avatar Fallback (v0.5.0 Graceful Fallback)
+**Current focus:** Phase 22 - External Resilience (v0.5.0 Graceful Fallback)
 
 ## Current Position
 
-Phase: 21 of 22 (Avatar Fallback)
-Plan: 1 of 1 in current phase (COMPLETE)
-Status: Phase complete
-Last activity: 2026-02-02 — Completed 21-01-PLAN.md
+Phase: 22 of 22 (External Resilience)
+Plan: 0 of TBD in current phase
+Status: Ready to plan
+Last activity: 2026-02-02 — Phase 21 verified and complete
 
 Progress: [██████░░░░] 67% v0.5.0
 

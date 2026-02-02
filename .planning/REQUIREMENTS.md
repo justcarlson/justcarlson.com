@@ -9,8 +9,8 @@ Requirements for graceful fallback when external services are blocked.
 
 ### Avatar & Images
 
-- [ ] **IMG-01**: Gravatar loads through Vercel Image Optimization proxy (served from justcarlson.com domain)
-- [ ] **IMG-02**: Avatar has local fallback image when Vercel proxy also fails
+- [x] **IMG-01**: Gravatar loads through Vercel Image Optimization proxy (served from justcarlson.com domain)
+- [x] **IMG-02**: Avatar has local fallback image when Vercel proxy also fails
 - [ ] **IMG-03**: No broken image icon shown when external images blocked
 - [ ] **IMG-04**: GitHub contribution chart has graceful fallback when blocked
 
@@ -52,8 +52,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 |-------------|-------|--------|
 | CONFIG-01 | Phase 20 | Complete |
 | CONFIG-02 | Phase 20 | Complete |
-| IMG-01 | Phase 21 | Pending |
-| IMG-02 | Phase 21 | Pending |
+| IMG-01 | Phase 21 | Complete |
+| IMG-02 | Phase 21 | Complete |
 | IMG-03 | Phase 22 | Pending |
 | IMG-04 | Phase 22 | Pending |
 | SCRIPT-01 | Phase 22 | Pending |
