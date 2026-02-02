@@ -14,7 +14,7 @@ This milestone eliminates technical debt in the publishing workflow by consolida
 ## Phases
 
 - [x] **Phase 15: Library Extraction + yq Integration** - Consolidate duplicated code and establish reliable YAML tooling
-- [ ] **Phase 16: Two-Way Sync** - Bidirectional metadata sync between Obsidian and blog
+- [x] **Phase 16: Two-Way Sync** - Bidirectional metadata sync between Obsidian and blog
 - [ ] **Phase 17: Schema Migration** - Replace status field with draft as source of truth
 
 ## Phase Details
@@ -49,9 +49,9 @@ Plans:
 **Plans:** 3 plans
 
 Plans:
-- [ ] 16-01-PLAN.md — Add update_obsidian_source and get_author_from_config functions to common.sh
-- [ ] 16-02-PLAN.md — Extend publish.sh with two-way sync and config-driven author
-- [ ] 16-03-PLAN.md — Extend unpublish.sh with --dry-run flag and Obsidian source sync
+- [x] 16-01-PLAN.md — Add update_obsidian_source and get_author_from_config functions to common.sh
+- [x] 16-02-PLAN.md — Extend publish.sh with two-way sync and config-driven author
+- [x] 16-03-PLAN.md — Extend unpublish.sh with --dry-run flag and Obsidian source sync
 
 ### Phase 17: Schema Migration
 
@@ -100,7 +100,7 @@ Phases execute in numeric order: 15 -> 16 -> 17
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 15. Library Extraction | 2/2 | Complete | 2026-02-01 |
-| 16. Two-Way Sync | 0/3 | Not started | - |
+| 16. Two-Way Sync | 3/3 | Complete | 2026-02-02 |
 | 17. Schema Migration | 0/? | Not started | - |
 
 ---

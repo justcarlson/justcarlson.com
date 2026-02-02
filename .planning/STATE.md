@@ -5,16 +5,16 @@
 See: .planning/PROJECT.md (updated 2026-02-01)
 
 **Core value:** A clean, personal space to write — with a publishing workflow that just works.
-**Current focus:** Phase 16 - Two-Way Sync (Complete)
+**Current focus:** Phase 17 - Schema Migration
 
 ## Current Position
 
-Phase: 16 of 17 (Two-Way Sync)
-Plan: 3 of 3 complete
-Status: Phase complete
-Last activity: 2026-02-02 - Completed 16-03-PLAN.md (Unpublish.sh Integration)
+Phase: 17 of 17 (Schema Migration)
+Plan: 0 of ? (not yet planned)
+Status: Ready to plan
+Last activity: 2026-02-02 — Completed Phase 16 (verified)
 
-Progress: [█████░░░░░░░░░░░░░░░] 25% (v0.4.0)
+Progress: [██████████░░░░░░░░░░] 50% (v0.4.0)
 
 ## Performance Metrics
 
@@ -26,7 +26,7 @@ Progress: [█████░░░░░░░░░░░░░░░] 25% (v0
 **Cumulative:**
 - 3 milestones shipped
 - 41 plans executed
-- 15 phases complete
+- 16 phases complete
 - 4 days total development
 
 **v0.4.0:**
@@ -66,9 +66,9 @@ None.
 ## Session Continuity
 
 Last session: 2026-02-02
-Stopped at: Completed 16-03-PLAN.md
+Stopped at: Completed Phase 16 (verified)
 Resume file: None
-Next action: Execute Phase 17 (Final Milestone)
+Next action: `/gsd:discuss-phase 17` or `/gsd:plan-phase 17`
 
 Config:
 {
