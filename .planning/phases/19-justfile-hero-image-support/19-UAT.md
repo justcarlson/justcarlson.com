@@ -1,5 +1,5 @@
 ---
-status: complete
+status: diagnosed
 phase: 19-justfile-hero-image-support
 source: 19-01-SUMMARY.md, 19-02-SUMMARY.md
 started: 2026-02-02T07:00:00Z
@@ -48,12 +48,18 @@ skipped: 0
 
 ## Gaps
 
-- truth: "heroImage field value preserved and transformed correctly in published frontmatter"
+- truth: "heroImage wiki-link format [[image.png]] transformed to /assets/blog/slug/image.png"
   status: failed
-  reason: "User reported: heroImage path not transformed - still shows [[forrest-gump-quote.png]] instead of /assets/blog/hello-world/forrest-gump-quote.png. Warning: Image not found during publish. 404 errors in dev server."
+  reason: "User reported: heroImage path not transformed - still shows [[forrest-gump-quote.png]] instead of /assets/blog/hello-world/forrest-gump-quote.png"
   severity: blocker
-  test: 1
-  root_cause: ""
-  artifacts: []
-  missing: []
+  test: 1, 2, 3
+  root_cause: "transform_hero_image() and extract_hero_image() in publish.sh don't handle Obsidian wiki-link format [[image.png]]. They expect plain paths like 'Attachments/image.jpg' but receive '\"[[forrest-gump-quote.png]]\"' with quotes and brackets intact. The basename() call returns '[[forrest-gump-quote.png]]' instead of 'forrest-gump-quote.png'."
+  artifacts:
+    - path: "scripts/publish.sh"
+      issue: "transform_hero_image() at line 728 doesn't strip wiki-link brackets or quotes"
+    - path: "scripts/publish.sh"
+      issue: "extract_hero_image() at line 767 doesn't strip wiki-link brackets or quotes"
+  missing:
+    - "Strip quotes from heroImage value before processing"
+    - "Strip wiki-link brackets [[...]] from heroImage value before processing"
   debug_session: ""
