@@ -50,21 +50,21 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| IMG-01 | TBD | Pending |
-| IMG-02 | TBD | Pending |
-| IMG-03 | TBD | Pending |
-| IMG-04 | TBD | Pending |
-| SCRIPT-01 | TBD | Pending |
-| SCRIPT-02 | TBD | Pending |
-| SCRIPT-03 | TBD | Pending |
-| CONFIG-01 | TBD | Pending |
-| CONFIG-02 | TBD | Pending |
+| CONFIG-01 | Phase 20 | Pending |
+| CONFIG-02 | Phase 20 | Pending |
+| IMG-01 | Phase 21 | Pending |
+| IMG-02 | Phase 21 | Pending |
+| IMG-03 | Phase 22 | Pending |
+| IMG-04 | Phase 22 | Pending |
+| SCRIPT-01 | Phase 22 | Pending |
+| SCRIPT-02 | Phase 22 | Pending |
+| SCRIPT-03 | Phase 22 | Pending |
 
 **Coverage:**
 - v0.5.0 requirements: 9 total
-- Mapped to phases: 0
-- Unmapped: 9 ⚠️
+- Mapped to phases: 9
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-02-02*
-*Last updated: 2026-02-02 after initial definition*
+*Traceability updated: 2026-02-02 (roadmap created)*
