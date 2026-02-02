@@ -399,7 +399,7 @@ posts_are_identical() {
     fi
 
     # Compare key frontmatter fields
-    local fields=("title" "description" "pubDatetime" "heroImage")
+    local fields=("title" "description" "pubDatetime" "heroImage" "heroImageAlt" "heroImageCaption")
     for field in "${fields[@]}"; do
         local obsidian_val blog_val
         obsidian_val=$(get_frontmatter_field "$obsidian_file" "$field")
