@@ -851,6 +851,9 @@ process_posts() {
         # Copy and transform post
         copy_post "$file" "$slug" "$year"
 
+        # Update Obsidian source file with publication metadata (two-way sync)
+        update_obsidian_source "$file" "publish" "$DRY_RUN"
+
         if [[ "$DRY_RUN" != "true" ]]; then
             echo -e "  ${GREEN}Published:${RESET} ${BLOG_DIR}/${year}/${slug}.md"
         fi
