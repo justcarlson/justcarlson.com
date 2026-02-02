@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-02-01)
 ## Current Position
 
 Phase: 17 of 17 (Schema Migration)
-Plan: 0 of ? (not yet planned)
-Status: Ready to plan
-Last activity: 2026-02-02 — Completed Phase 16 gap closure (verified)
+Plan: 2 of 4 (Obsidian & Astro Schema Updates)
+Status: In progress
+Last activity: 2026-02-02 — Completed 17-02-PLAN.md
 
-Progress: [██████████░░░░░░░░░░] 50% (v0.4.0)
+Progress: [██████████░░░░░░░░░░] 52% (v0.4.0)
 
 ## Performance Metrics
 
@@ -30,10 +30,11 @@ Progress: [██████████░░░░░░░░░░] 50% (v0
 - 4 days total development
 
 **v0.4.0:**
-- Plans completed: 6
+- Plans completed: 8
 - Phases: 15-17 (3 phases, 17 requirements)
 - Phase 15 complete: Library Extraction + yq Integration
 - Phase 16 complete: Two-Way Sync (4/4 plans, including gap closure)
+- Phase 17 in progress: Schema Migration (2/4 plans)
 
 ## Accumulated Context
 
@@ -56,6 +57,12 @@ All decisions documented in PROJECT.md Key Decisions table.
 - Display warning but continue when Obsidian source not found on unpublish (16-03)
 - Discovery uses draft: false pattern (16-04 gap closure)
 
+**Phase 17 Decisions:**
+- Field order: content first (title, description), then metadata (draft, dates)
+- New posts default to draft: true (unpublished)
+- Deprecated fields kept in Astro schema for backward compatibility
+- Posts.base sorts by created date (newest first)
+
 ### Pending Todos
 
 None.
@@ -67,9 +74,9 @@ None.
 ## Session Continuity
 
 Last session: 2026-02-02
-Stopped at: Completed Phase 16 gap closure (verified)
+Stopped at: Completed 17-02-PLAN.md
 Resume file: None
-Next action: `/gsd:discuss-phase 17` or `/gsd:plan-phase 17`
+Next action: `/gsd:execute-phase 17` to run 17-03-PLAN.md
 
 Config:
 {
