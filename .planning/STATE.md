@@ -5,14 +5,14 @@
 See: .planning/PROJECT.md (updated 2026-02-02)
 
 **Core value:** A clean, personal space to write — with a publishing workflow that just works.
-**Current focus:** Phase 22 - External Resilience (v0.5.0 Graceful Fallback)
+**Current focus:** Milestone v0.5.0 complete — ready for audit
 
 ## Current Position
 
 Phase: 22 of 22 (External Resilience)
 Plan: 1 of 1 in current phase
-Status: Phase complete
-Last activity: 2026-02-02 — Completed 22-01-PLAN.md
+Status: Phase verified, milestone ready for audit
+Last activity: 2026-02-02 — Phase 22 verified and complete
 
 Progress: [██████████] 100% v0.5.0
 
@@ -63,10 +63,10 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-02-02 23:25
-Stopped at: Completed 22-01-PLAN.md
+Last session: 2026-02-02 23:30
+Stopped at: Phase 22 verified and complete
 Resume file: None
-Next action: Final UAT for v0.5.0 Graceful Fallback milestone
+Next action: `/gsd:audit-milestone` (milestone complete)
 
 Config:
 {

@@ -21,7 +21,7 @@ This milestone delivers graceful degradation when external services (Gravatar, a
 
 - [x] **Phase 20: Configuration Foundation** - Vercel Image Optimization and CSP setup
 - [x] **Phase 21: Avatar Fallback** - Gravatar proxy with local fallback
-- [ ] **Phase 22: External Resilience** - GitHub chart and script hardening
+- [x] **Phase 22: External Resilience** - GitHub chart and script hardening
 
 ## Phase Details
 
@@ -66,7 +66,7 @@ Plans:
 **Plans**: 1 plan
 
 Plans:
-- [ ] 22-01-PLAN.md — GitHub chart fallback, Analytics error handling, conditional Twitter widget
+- [x] 22-01-PLAN.md — GitHub chart fallback, Analytics error handling, conditional Twitter widget
 
 ## Progress
 
@@ -77,7 +77,7 @@ Phases execute in numeric order: 20 -> 20.1 -> 20.2 -> 21 -> 21.1 -> 22
 |-------|----------------|--------|-----------|
 | 20. Configuration Foundation | 2/2 | ✓ Complete | 2026-02-02 |
 | 21. Avatar Fallback | 1/1 | ✓ Complete | 2026-02-02 |
-| 22. External Resilience | 0/1 | Not started | - |
+| 22. External Resilience | 1/1 | ✓ Complete | 2026-02-02 |
 
 ---
 *Roadmap created: 2026-02-02*

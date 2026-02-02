@@ -11,14 +11,14 @@ Requirements for graceful fallback when external services are blocked.
 
 - [x] **IMG-01**: Gravatar loads through Vercel Image Optimization proxy (served from justcarlson.com domain)
 - [x] **IMG-02**: Avatar has local fallback image when Vercel proxy also fails
-- [ ] **IMG-03**: No broken image icon shown when external images blocked
-- [ ] **IMG-04**: GitHub contribution chart has graceful fallback when blocked
+- [x] **IMG-03**: No broken image icon shown when external images blocked
+- [x] **IMG-04**: GitHub contribution chart has graceful fallback when blocked
 
 ### External Scripts
 
-- [ ] **SCRIPT-01**: Analytics scripts fail silently without console errors
-- [ ] **SCRIPT-02**: No external script blocks page rendering
-- [ ] **SCRIPT-03**: Page loads fully even if all external scripts blocked
+- [x] **SCRIPT-01**: Analytics scripts fail silently without console errors
+- [x] **SCRIPT-02**: No external script blocks page rendering
+- [x] **SCRIPT-03**: Page loads fully even if all external scripts blocked
 
 ### Configuration
 
@@ -54,11 +54,11 @@ Which phases cover which requirements. Updated during roadmap creation.
 | CONFIG-02 | Phase 20 | Complete |
 | IMG-01 | Phase 21 | Complete |
 | IMG-02 | Phase 21 | Complete |
-| IMG-03 | Phase 22 | Pending |
-| IMG-04 | Phase 22 | Pending |
-| SCRIPT-01 | Phase 22 | Pending |
-| SCRIPT-02 | Phase 22 | Pending |
-| SCRIPT-03 | Phase 22 | Pending |
+| IMG-03 | Phase 22 | Complete |
+| IMG-04 | Phase 22 | Complete |
+| SCRIPT-01 | Phase 22 | Complete |
+| SCRIPT-02 | Phase 22 | Complete |
+| SCRIPT-03 | Phase 22 | Complete |
 
 **Coverage:**
 - v0.5.0 requirements: 9 total
