@@ -243,6 +243,66 @@ get_author_from_config() {
     jq -r '.author // empty' "$CONFIG_FILE" 2>/dev/null
 }
 
+update_obsidian_source() {
+    # Update Obsidian source file with publication metadata
+    # Args:
+    #   $1: obsidian_file - Path to source file in vault
+    #   $2: action - "publish" or "unpublish"
+    #   $3: dry_run - "true" or "false" (optional, default false)
+    local obsidian_file="$1"
+    local action="$2"
+    local dry_run="${3:-false}"
+
+    if [[ ! -f "$obsidian_file" ]]; then
+        echo -e "${YELLOW}Warning: Source file not found: $obsidian_file${RESET}" >&2
+        return 1
+    fi
+
+    local yq_cmd
+    yq_cmd=$(_get_yq_cmd)
+
+    if [[ "$action" == "publish" ]]; then
+        local datetime
+        datetime=$(date -Iseconds)
+
+        if [[ "$dry_run" == "true" ]]; then
+            echo -e "  [DRY-RUN] Would update Obsidian source:"
+            echo -e "    File: $obsidian_file"
+            echo -e "    draft: false"
+            echo -e "    pubDatetime: $datetime"
+        else
+            # Create backup (SYNC-04)
+            cp "$obsidian_file" "${obsidian_file}.bak"
+            echo -e "  ${CYAN}Backup:${RESET} ${obsidian_file}.bak"
+
+            # Update frontmatter using yq
+            export DATETIME="$datetime"
+            "$yq_cmd" --front-matter=process -i \
+                '.draft = false | .pubDatetime = strenv(DATETIME)' \
+                "$obsidian_file"
+            unset DATETIME
+
+            echo -e "  ${GREEN}Updated source:${RESET} draft=false, pubDatetime=$datetime"
+        fi
+
+    elif [[ "$action" == "unpublish" ]]; then
+        if [[ "$dry_run" == "true" ]]; then
+            echo -e "  [DRY-RUN] Would update Obsidian source:"
+            echo -e "    File: $obsidian_file"
+            echo -e "    draft: true"
+        else
+            # Create backup (SYNC-04)
+            cp "$obsidian_file" "${obsidian_file}.bak"
+            echo -e "  ${CYAN}Backup:${RESET} ${obsidian_file}.bak"
+
+            # Update frontmatter
+            "$yq_cmd" --front-matter=process -i '.draft = true' "$obsidian_file"
+
+            echo -e "  ${GREEN}Updated source:${RESET} draft=true"
+        fi
+    fi
+}
+
 extract_frontmatter_value() {
     # Alias for get_frontmatter_field (backward compatibility)
     # Some scripts use this name instead of get_frontmatter_field
