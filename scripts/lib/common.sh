@@ -262,27 +262,41 @@ update_obsidian_source() {
     yq_cmd=$(_get_yq_cmd)
 
     if [[ "$action" == "publish" ]]; then
-        local datetime
-        datetime=$(date -Iseconds)
+        # Check if pubDatetime is already set (preserve existing date for updates)
+        local existing_datetime
+        existing_datetime=$(get_frontmatter_field "$obsidian_file" "pubDatetime")
 
         if [[ "$dry_run" == "true" ]]; then
             echo -e "  [DRY-RUN] Would update Obsidian source:"
             echo -e "    File: $obsidian_file"
             echo -e "    draft: false"
-            echo -e "    pubDatetime: $datetime"
+            if [[ -z "$existing_datetime" ]]; then
+                local datetime
+                datetime=$(date -Iseconds)
+                echo -e "    pubDatetime: $datetime (auto-set)"
+            else
+                echo -e "    pubDatetime: $existing_datetime (preserved)"
+            fi
         else
             # Create backup (SYNC-04)
             cp "$obsidian_file" "${obsidian_file}.bak"
             echo -e "  ${CYAN}Backup:${RESET} ${obsidian_file}.bak"
 
-            # Update frontmatter using yq
-            export DATETIME="$datetime"
-            "$yq_cmd" --front-matter=process -i \
-                '.draft = false | .pubDatetime = strenv(DATETIME)' \
-                "$obsidian_file"
-            unset DATETIME
-
-            echo -e "  ${GREEN}Updated source:${RESET} draft=false, pubDatetime=$datetime"
+            if [[ -z "$existing_datetime" ]]; then
+                # Set pubDatetime only if empty
+                local datetime
+                datetime=$(date -Iseconds)
+                export DATETIME="$datetime"
+                "$yq_cmd" --front-matter=process -i \
+                    '.draft = false | .pubDatetime = strenv(DATETIME)' \
+                    "$obsidian_file"
+                unset DATETIME
+                echo -e "  ${GREEN}Updated source:${RESET} draft=false, pubDatetime=$datetime"
+            else
+                # Only update draft status, preserve existing pubDatetime
+                "$yq_cmd" --front-matter=process -i '.draft = false' "$obsidian_file"
+                echo -e "  ${GREEN}Updated source:${RESET} draft=false (pubDatetime preserved)"
+            fi
         fi
 
     elif [[ "$action" == "unpublish" ]]; then

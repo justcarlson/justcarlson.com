@@ -252,6 +252,45 @@ run_build_with_retry() {
 }
 
 # ============================================================================
+# Pre-validation Auto-population
+# ============================================================================
+
+prepopulate_pubDatetime() {
+    # Auto-populate pubDatetime for posts that have it empty
+    # This runs BEFORE validation so posts with blank pubDatetime pass validation
+    # The date is set NOW since we're about to publish
+    echo ""
+    echo -e "${CYAN}Checking pubDatetime fields...${RESET}"
+
+    local yq_cmd
+    yq_cmd=$(_get_yq_cmd)
+
+    for file in "${SELECTED_FILES[@]}"; do
+        local pubDatetime
+        pubDatetime=$(get_frontmatter_field "$file" "pubDatetime")
+
+        if [[ -z "$pubDatetime" ]]; then
+            local datetime
+            datetime=$(date -Iseconds)
+            local filename
+            filename=$(basename "$file")
+
+            if [[ "$DRY_RUN" == "true" ]]; then
+                echo -e "  [DRY-RUN] Would set pubDatetime: $filename -> $datetime"
+            else
+                # Set pubDatetime in the source file
+                export DATETIME="$datetime"
+                "$yq_cmd" --front-matter=process -i \
+                    '.pubDatetime = strenv(DATETIME)' \
+                    "$file"
+                unset DATETIME
+                echo -e "  ${GREEN}Auto-set pubDatetime:${RESET} $filename -> $datetime"
+            fi
+        fi
+    done
+}
+
+# ============================================================================
 # Validation
 # ============================================================================
 
@@ -1221,9 +1260,10 @@ main() {
     echo ""
     echo -e "${GREEN}Selected ${#SELECTED_FILES[@]} post(s) for publishing${RESET}"
 
+    # Auto-populate pubDatetime for posts that have it empty (before validation)
+    prepopulate_pubDatetime
+
     # Validate selected posts
-    echo ""
-    echo -e "${CYAN}Validating posts...${RESET}"
     validate_selected_posts
 
     # Process posts: extract images, transform wiki-links, copy to blog
