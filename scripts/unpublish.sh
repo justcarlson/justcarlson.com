@@ -198,12 +198,42 @@ display_next_steps() {
     echo ""
     echo -e "${GREEN}Post removed from blog${RESET}"
     echo ""
-    echo -e "${YELLOW}Note:${RESET} Update status in Obsidian to prevent re-publishing:"
-    echo "  status:"
-    echo -e "    - Draft  ${CYAN}(or remove - Published)${RESET}"
-    echo ""
     echo -e "${CYAN}Changes committed locally. Run 'git push' when ready.${RESET}"
     echo ""
+}
+
+find_obsidian_source() {
+    # Find the Obsidian source file for a given slug
+    # Searches vault for .md file that slugifies to the given slug
+    local slug="$1"
+
+    if [[ -z "${VAULT_PATH:-}" ]]; then
+        # Config not loaded, try to load it
+        if [[ -f "$CONFIG_FILE" ]]; then
+            VAULT_PATH=$(jq -r '.obsidianVaultPath // empty' "$CONFIG_FILE" 2>/dev/null)
+        fi
+    fi
+
+    if [[ -z "${VAULT_PATH:-}" || ! -d "$VAULT_PATH" ]]; then
+        echo ""  # Return empty if vault not configured
+        return
+    fi
+
+    # Search for matching file in vault
+    local found_file=""
+    while IFS= read -r -d '' file; do
+        local filename
+        local file_slug
+        filename=$(basename "$file")
+        file_slug=$(slugify "$filename")
+
+        if [[ "$file_slug" == "$slug" ]]; then
+            found_file="$file"
+            break
+        fi
+    done < <(find "$VAULT_PATH" -name "*.md" -type f -print0 2>/dev/null)
+
+    echo "$found_file"
 }
 
 # ============================================================================
@@ -226,8 +256,26 @@ main() {
     # Remove post and commit
     remove_post "$post_path"
 
-    # Display next steps
-    display_next_steps
+    # Find and update Obsidian source file
+    local slug
+    slug=$(slugify "$(basename "$post_path")")
+    local obsidian_source
+    obsidian_source=$(find_obsidian_source "$slug")
+
+    if [[ -n "$obsidian_source" ]]; then
+        echo ""
+        echo -e "${CYAN}Updating Obsidian source...${RESET}"
+        update_obsidian_source "$obsidian_source" "unpublish" "$DRY_RUN"
+    else
+        echo ""
+        echo -e "${YELLOW}Note: Could not find Obsidian source file to update${RESET}"
+        echo -e "${YELLOW}Manually set draft: true in your vault to prevent re-publishing${RESET}"
+    fi
+
+    # Display next steps (only if not dry-run)
+    if [[ "$DRY_RUN" != "true" ]]; then
+        display_next_steps
+    fi
 
     exit $EXIT_SUCCESS
 }
