@@ -9,10 +9,10 @@ See: .planning/PROJECT.md (updated 2026-02-01)
 
 ## Current Position
 
-Phase: 17 of 17 (Schema Migration)
+Phase: 17 of 17 (Schema Migration) — VERIFIED
 Plan: 2 of 2 (all plans complete)
-Status: Phase complete
-Last activity: 2026-02-02 — Completed 17-01-PLAN.md (migration script executed)
+Status: Phase verified, milestone ready for audit
+Last activity: 2026-02-02 — Phase 17 verified (15/15 must-haves passed)
 
 Progress: [████████████████████] 100% (v0.4.0)
 
@@ -76,9 +76,9 @@ None.
 ## Session Continuity
 
 Last session: 2026-02-02
-Stopped at: Completed 17-01-PLAN.md (Phase 17 complete)
+Stopped at: Phase 17 verified (15/15 must-haves)
 Resume file: None
-Next action: `/gsd:complete-milestone` to finish v0.4.0
+Next action: `/gsd:audit-milestone` or `/gsd:complete-milestone` to finish v0.4.0
 
 Config:
 {
