@@ -274,14 +274,14 @@ normalize_frontmatter() {
     # Pattern matches: author:\n  - "[[Me]]" or author:\n  - [[Me]] or author:\n  - "Name"
     content=$(echo "$content" | perl -0777 -pe "s/^author:\s*\n\s*-\s*.*\$/author: \"$author\"/m")
 
-    # Remove empty heroImage lines (heroImage: followed by newline or nothing)
-    content=$(echo "$content" | perl -pe 's/^heroImage:\s*$\n?//m')
+    # Remove empty heroImage lines (heroImage: followed by whitespace and newline only)
+    content=$(echo "$content" | perl -pe 's/^heroImage:[ \t]*\n//m')
 
     # Remove empty heroImageAlt lines
-    content=$(echo "$content" | perl -pe 's/^heroImageAlt:\s*$\n?//m')
+    content=$(echo "$content" | perl -pe 's/^heroImageAlt:[ \t]*\n//m')
 
     # Remove empty heroImageCaption lines
-    content=$(echo "$content" | perl -pe 's/^heroImageCaption:\s*$\n?//m')
+    content=$(echo "$content" | perl -pe 's/^heroImageCaption:[ \t]*\n//m')
 
     echo "$content"
 }
