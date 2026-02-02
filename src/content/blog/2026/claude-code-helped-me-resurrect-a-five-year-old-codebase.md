@@ -42,7 +42,7 @@ BEFORE (2020)
 ┗ Manifest V2 (deprecated)
 ```
 
-Google's ever-stricter extension requirements weren't just a technical hurdle. They were the reason the project was abandoned in the first place. Service workers that die after 30 seconds. Synchronous event listener registration. Storage-first architecture patterns. I didn't even know what half of that meant.
+As far as I could tell, Google's extension requirements killed it. Service workers that die after 30 seconds. Synchronous event listener registration. Storage-first architecture patterns.
 
 ## The Spark: Gemini MVP
 
