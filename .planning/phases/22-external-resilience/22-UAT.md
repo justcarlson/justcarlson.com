@@ -1,5 +1,5 @@
 ---
-status: complete
+status: diagnosed
 phase: 22-external-resilience
 source: [22-01-SUMMARY.md]
 started: 2026-02-02T23:45:00Z
@@ -50,7 +50,11 @@ skipped: 0
   reason: "User reported: chart loaded instantly. wait 5 seconds. disappeared. now look at it."
   severity: major
   test: 1
-  root_cause: ""
-  artifacts: []
-  missing: []
-  debug_session: ""
+  root_cause: "Script sets 5s timeout unconditionally. If image is cached/already loaded when script runs, onload never fires (already happened), so timeout triggers fallback even though image loaded successfully."
+  artifacts:
+    - path: "src/components/GitHubChart.astro"
+      issue: "Missing img.complete check before setting timeout"
+  missing:
+    - "Check img.complete && img.naturalHeight > 0 before setting timeout"
+    - "If already loaded, remove loading class and skip timeout"
+  debug_session: "inline diagnosis during UAT"
