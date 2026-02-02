@@ -33,10 +33,11 @@ This milestone delivers graceful degradation when external services (Gravatar, a
   1. vercel.json contains images.remotePatterns for gravatar.com
   2. CSP headers allow img-src from /_vercel/image endpoint
   3. Production build succeeds with new configuration
-**Plans**: TBD
+**Plans**: 2 plans
 
 Plans:
-- [ ] 20-01: [TBD - planned during plan-phase]
+- [ ] 20-01-PLAN.md — Vercel Image Optimization config and CSS loading/fallback styles
+- [ ] 20-02-PLAN.md — Playwright testing infrastructure for image blocking verification
 
 ### Phase 21: Avatar Fallback
 **Goal**: Avatar loads reliably regardless of Gravatar availability
@@ -74,7 +75,7 @@ Phases execute in numeric order: 20 -> 20.1 -> 20.2 -> 21 -> 21.1 -> 22
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 20. Configuration Foundation | 0/TBD | Not started | - |
+| 20. Configuration Foundation | 0/2 | Planned | - |
 | 21. Avatar Fallback | 0/TBD | Not started | - |
 | 22. External Resilience | 0/TBD | Not started | - |
 
