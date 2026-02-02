@@ -12,7 +12,7 @@ See: .planning/PROJECT.md (updated 2026-02-01)
 Phase: 17 of 17 (Schema Migration)
 Plan: 0 of ? (not yet planned)
 Status: Ready to plan
-Last activity: 2026-02-02 — Completed Phase 16 (verified)
+Last activity: 2026-02-02 — Completed 16-04-PLAN.md (gap closure)
 
 Progress: [██████████░░░░░░░░░░] 50% (v0.4.0)
 
@@ -30,10 +30,10 @@ Progress: [██████████░░░░░░░░░░] 50% (v0
 - 4 days total development
 
 **v0.4.0:**
-- Plans completed: 5
+- Plans completed: 6
 - Phases: 15-17 (3 phases, 17 requirements)
 - Phase 15 complete: Library Extraction + yq Integration
-- Phase 16 complete: Two-Way Sync (3/3 plans)
+- Phase 16 complete: Two-Way Sync (3/3 plans + 1 gap closure)
 
 ## Accumulated Context
 
@@ -54,6 +54,7 @@ All decisions documented in PROJECT.md Key Decisions table.
 - update_obsidian_source called after copy_post to ensure publish succeeded (16-02)
 - Use ${VAULT_PATH:-} pattern for safe unbound variable check (16-03)
 - Display warning but continue when Obsidian source not found on unpublish (16-03)
+- Discovery uses draft: false pattern (16-04 gap closure)
 
 ### Pending Todos
 
@@ -66,9 +67,9 @@ None.
 ## Session Continuity
 
 Last session: 2026-02-02
-Stopped at: Completed Phase 16 (verified)
+Stopped at: Completed 16-04-PLAN.md (gap closure)
 Resume file: None
-Next action: `/gsd:discuss-phase 17` or `/gsd:plan-phase 17`
+Next action: Re-run UAT or `/gsd:plan-phase 17`
 
 Config:
 {
