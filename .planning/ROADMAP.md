@@ -63,10 +63,10 @@ Plans:
   3. Analytics scripts fail silently without console errors
   4. Page loads completely and renders correctly with all external scripts blocked
   5. No external script blocks page rendering (async/defer pattern verified)
-**Plans**: TBD
+**Plans**: 1 plan
 
 Plans:
-- [ ] 22-01: [TBD - planned during plan-phase]
+- [ ] 22-01-PLAN.md — GitHub chart fallback, Analytics error handling, conditional Twitter widget
 
 ## Progress
 
@@ -77,7 +77,7 @@ Phases execute in numeric order: 20 -> 20.1 -> 20.2 -> 21 -> 21.1 -> 22
 |-------|----------------|--------|-----------|
 | 20. Configuration Foundation | 2/2 | ✓ Complete | 2026-02-02 |
 | 21. Avatar Fallback | 1/1 | ✓ Complete | 2026-02-02 |
-| 22. External Resilience | 0/TBD | Not started | - |
+| 22. External Resilience | 0/1 | Not started | - |
 
 ---
 *Roadmap created: 2026-02-02*
