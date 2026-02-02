@@ -10,11 +10,11 @@ See: .planning/PROJECT.md (updated 2026-02-02)
 ## Current Position
 
 Phase: 21 of 22 (Avatar Fallback)
-Plan: 0 of TBD in current phase
-Status: Ready to plan
-Last activity: 2026-02-02 — Phase 20 verified and complete
+Plan: 1 of 1 in current phase (COMPLETE)
+Status: Phase complete
+Last activity: 2026-02-02 — Completed 21-01-PLAN.md
 
-Progress: [███░░░░░░░] 33% v0.5.0
+Progress: [██████░░░░] 67% v0.5.0
 
 ## Performance Metrics
 
@@ -25,10 +25,13 @@ Progress: [███░░░░░░░] 33% v0.5.0
 - v0.4.0: 8 plans, 2.0 min avg, 0.27 hours total (2 days)
 - v0.4.1: 5 plans, 2.4 min avg, 0.20 hours total (1 day)
 
+**Current v0.5.0:**
+- Phase 21: 1 plan, 2 min
+
 **Cumulative:**
 - 5 milestones shipped (v0.1.0 - v0.4.1)
-- 51 plans executed
-- 19 phases complete
+- 52 plans executed
+- 20 phases complete
 - 6 days total development
 
 ## Accumulated Context
@@ -37,12 +40,14 @@ Progress: [███░░░░░░░] 33% v0.5.0
 
 See PROJECT.md Key Decisions table for full history.
 
-Recent research decisions for v0.5.0:
+Recent decisions for v0.5.0:
 - Use Vercel Image Optimization to proxy Gravatar (serves from own domain)
 - onerror with this.onerror=null pattern prevents infinite loops
 - Analytics already uses dynamic import (graceful by default)
 - Route interception before navigation prevents race conditions in Playwright tests
 - Chromium-only for image blocking tests (sufficient for this use case)
+- 256x256 WebP at quality 80 for avatar fallback (4KB, good retina support)
+- Explicit width/height attributes on avatar prevent layout shift
 
 ### Pending Todos
 
@@ -54,10 +59,10 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-02-02
-Stopped at: Phase 20 verified and complete
+Last session: 2026-02-02 22:44
+Stopped at: Completed 21-01-PLAN.md
 Resume file: None
-Next action: `/gsd:discuss-phase 21`
+Next action: `/gsd:discuss-phase 22` (Final UAT)
 
 Config:
 {
