@@ -48,10 +48,10 @@ Plans:
   2. When proxy fails, local fallback image displays (no broken image icon)
   3. No layout shift when fallback triggers
   4. Avatar renders correctly in both light and dark themes
-**Plans**: TBD
+**Plans**: 1 plan
 
 Plans:
-- [ ] 21-01: [TBD - planned during plan-phase]
+- [ ] 21-01-PLAN.md — Avatar proxy URL with onerror fallback and Playwright tests
 
 ### Phase 22: External Resilience
 **Goal**: All external images and scripts fail gracefully without breaking page
@@ -76,7 +76,7 @@ Phases execute in numeric order: 20 -> 20.1 -> 20.2 -> 21 -> 21.1 -> 22
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 20. Configuration Foundation | 2/2 | ✓ Complete | 2026-02-02 |
-| 21. Avatar Fallback | 0/TBD | Not started | - |
+| 21. Avatar Fallback | 0/1 | Not started | - |
 | 22. External Resilience | 0/TBD | Not started | - |
 
 ---
