@@ -10,9 +10,9 @@ See: .planning/PROJECT.md (updated 2026-02-02)
 ## Current Position
 
 Phase: 19 of 19 (Justfile Hero Image Support) — complete
-Plan: 2 of 2 in current phase
+Plan: 3 of 3 in current phase
 Status: Phase complete, milestone complete
-Last activity: 2026-02-02 — Completed 19-02-PLAN.md (gap closure)
+Last activity: 2026-02-02 — Completed 19-03-PLAN.md (gap closure)
 
 Progress: [████████████████████] 100%
 
@@ -25,13 +25,13 @@ Progress: [████████████████████] 100%
 - v0.4.0: 8 plans, 2.0 min avg, 0.27 hours total (2 days)
 
 **Current Milestone (v0.4.1):**
-- 4 plans executed (including gap closure)
-- 8 min total duration
-- 0.13 hours total
+- 5 plans executed (including gap closures)
+- 12 min total duration
+- 0.20 hours total
 
 **Cumulative:**
 - 4 milestones shipped (v0.4.1 ready)
-- 54 plans executed
+- 55 plans executed
 - 19 phases complete
 - 6 days total development
 
@@ -47,11 +47,13 @@ Progress: [████████████████████] 100%
 | 18-02 | External template update | Obsidian vault is separate from git repo |
 | 19-02 | Use [ \t]*\n instead of \s*$\n? | Avoid Perl variable interpolation bug |
 | 19-02 | Transform heroImage paths like inline images | Consistent handling, Astro compatibility |
+| 19-03 | Strip quotes and wiki-link brackets early | Sanitize before URL/basename checks for correct processing |
 
 ### Roadmap Evolution
 
 - Phase 19 added: justfile scripts update to support heroImage, heroImageAlt, heroImageCaption
 - Plan 19-02 added: Gap closure for Perl regex bug discovered in UAT
+- Plan 19-03 added: Gap closure for wiki-link bracket handling in heroImage
 
 ### Pending Todos
 
@@ -63,8 +65,8 @@ None.
 
 ## Session Continuity
 
-Last session: 2026-02-02T06:38:33Z
-Stopped at: Completed 19-02-PLAN.md
+Last session: 2026-02-02T07:12:00Z
+Stopped at: Completed 19-03-PLAN.md
 Resume file: None
 Next action: `/gsd:complete-milestone` to complete v0.4.1
 
