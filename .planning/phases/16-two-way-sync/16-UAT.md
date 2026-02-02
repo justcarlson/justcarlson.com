@@ -1,5 +1,5 @@
 ---
-status: complete
+status: diagnosed
 phase: 16-two-way-sync
 source: 16-01-SUMMARY.md, 16-02-SUMMARY.md, 16-03-SUMMARY.md
 started: 2026-02-02T01:30:00Z
@@ -56,7 +56,16 @@ skipped: 3
   reason: "User reported: publish script still looks for status: Published instead of draft: false - shows 'No posts ready to publish' and tells user to set status field"
   severity: major
   test: 1
-  root_cause: ""
-  artifacts: []
-  missing: []
+  root_cause: "publish.sh discover_posts() function uses status: Published pattern (line 420-436) instead of draft: false. Also user instructions (line 1061) reference old field."
+  artifacts:
+    - path: "scripts/publish.sh"
+      issue: "discover_posts() uses status: Published pattern"
+      lines: "420-436, 1061"
+    - path: "scripts/list-posts.sh"
+      issue: "Also uses status: Published pattern (same fix needed)"
+      lines: "159-171"
+  missing:
+    - "Change discover_posts() to look for draft: false instead of status: Published"
+    - "Update user instructions to reference draft field, not status"
+    - "Update list-posts.sh discovery for consistency"
   debug_session: ""
