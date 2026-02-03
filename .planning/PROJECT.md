@@ -2,7 +2,7 @@
 
 ## What This Is
 
-A personal blog for Justin Carlson with a complete publishing workflow. Built by forking and rebranding steipete.me (Peter Steinberger's Astro blog), now featuring frictionless Obsidian-to-blog publishing with validation, git safety, and optional Claude oversight. Deployed on Vercel at justcarlson.com.
+A personal blog for Justin Carlson with a complete publishing workflow. Built by forking and rebranding steipete.me (Peter Steinberger's Astro blog), now featuring frictionless Obsidian-to-blog publishing with validation, git safety, and optional Claude oversight. Deployed on Vercel at justcarlson.com with graceful fallback when external services are blocked.
 
 ## Core Value
 
@@ -61,24 +61,26 @@ A clean, personal space to write — with a publishing workflow that just works.
 - ✓ Inline figure/figcaption renders with prose styling — v0.4.1
 - ✓ Publishing workflow handles hero image fields (change detection, normalization) — v0.4.1
 - ✓ Wiki-link format [[image.png]] supported in heroImage — v0.4.1
+- ✓ Gravatar loads through Vercel Image Optimization proxy — v0.5.0
+- ✓ Avatar has local fallback when proxy fails — v0.5.0
+- ✓ GitHub chart graceful fallback with text link — v0.5.0
+- ✓ Analytics scripts fail gracefully without breaking page — v0.5.0
+- ✓ External scripts load asynchronously without blocking render — v0.5.0
+- ✓ Vercel Image Optimization configured for external image proxying — v0.5.0
+- ✓ CSP headers tightened for proxy-only external images — v0.5.0
 
 ### Active
 
-**Current Milestone: v0.5.0 Graceful Fallback for Blocked Services**
-
-**Goal:** Pages load fully when any external service is blocked by firewall/VPN
-
-- [ ] Self-hosted avatar replacing Gravatar dependency
-- [ ] External scripts (analytics, widgets) fail silently without breaking page
-- [ ] External images degrade gracefully with placeholders
-- [ ] No network-dependent critical rendering
+(No active requirements — run `/gsd:new-milestone` to define next milestone)
 
 ### Deferred
 
-- Set up newsletter service (Buttondown or alternative) — v0.5.0+
+- Set up newsletter service (Buttondown or alternative)
 - Write actual About page bio content — content work
 - Social auto-posting (X, BlueSky, LinkedIn) — API complexity
-- `just doctor` health check command — v0.5.0+
+- `just doctor` health check command
+- Twitter/X embeds graceful fallback — EMBED-01
+- YouTube embeds thumbnail fallback — EMBED-02
 
 ### Out of Scope
 
@@ -86,26 +88,28 @@ A clean, personal space to write — with a publishing workflow that just works.
 - Custom domain DNS setup — handled separately in Vercel
 - Real-time sync (file watcher) — batch publish sufficient for manual workflow
 - Multiple vault support — YAGNI for personal blog
+- Analytics proxy/bypass — disrespects user privacy choices
 
 ## Context
 
-**Shipped:** v0.4.1 Image & Caption Support (2026-02-02)
-- 2 phases (18-19), 5 plans executed
-- 27 files changed (+2,921 / -30 lines)
-- Hero image rendering with accessibility support
-- Publishing workflow extended for hero image fields
+**Shipped:** v0.5.0 Graceful Fallback (2026-02-02)
+- 3 phases (20-22), 5 plans executed
+- 38 files changed (+4,112 / -60 lines)
+- External service resilience (Gravatar, GitHub chart, analytics)
+- Playwright testing infrastructure for image fallback verification
 
 **Tech stack:**
 - Astro 5.x with content collections
 - Tailwind CSS 4
 - TypeScript
-- Vercel deployment with analytics
+- Vercel deployment with analytics + Image Optimization
 - justfile + Bash scripts for publishing workflow
 - scripts/lib/common.sh shared library (311 lines)
 - mikefarah/yq v4 for YAML frontmatter manipulation
 - Python hooks with uv + PEP 723 inline deps
 - Claude Code hooks for safety and setup
 - Dev container for portable development
+- Playwright for E2E testing
 
 **Current state:**
 - All Peter Steinberger content removed (110 posts, 191 images)
@@ -118,8 +122,8 @@ A clean, personal space to write — with a publishing workflow that just works.
 - Obsidian vault integration with automatic post discovery (draft: false)
 - One-command bootstrap (`just bootstrap`) for fresh clones
 - Dev container support for instant contribution
-- Python SessionStart hook with logging and timeout protection
-- Knip-configured for ongoing dead code detection
+- Graceful fallback when external services blocked (Gravatar, GitHub chart, analytics)
+- Playwright tests verify fallback behavior
 
 ## Constraints
 
@@ -169,6 +173,12 @@ A clean, personal space to write — with a publishing workflow that just works.
 | Perl [ \t]*\n pattern | Avoids variable interpolation bug with \s*$\n? | ✓ Good — regex fixed |
 | Hero image path transformation | Consistent with inline image handling | ✓ Good — Astro compatible |
 | Early wiki-link sanitization | Strip brackets before URL/basename checks | ✓ Good — clean processing |
+| Vercel Image Optimization for external images | Proxy Gravatar/GitHub chart through own domain | ✓ Good — privacy + fallback |
+| CSP img-src 'self' only | Force external images through proxy | ✓ Good — security + control |
+| Console.log for analytics failures | Debuggable vs completely silent | ✓ Good — per user preference |
+| GitHubChart.astro component | MDX doesn't support inline scripts with curly braces | ✓ Good — cleaner separation |
+| 5s timeout for external images | Balance between UX and giving images time to load | ✓ Good — reasonable fallback timing |
+| img.complete check before timeout | Prevent timeout for cached images | ✓ Good — fixes disappearing chart bug |
 
 ---
-*Last updated: 2026-02-02 after v0.5.0 milestone started*
+*Last updated: 2026-02-02 after v0.5.0 milestone complete*

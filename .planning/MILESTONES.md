@@ -1,5 +1,29 @@
 # Project Milestones: justcarlson.com
 
+## v0.5.0 Graceful Fallback (Shipped: 2026-02-02)
+
+**Delivered:** Site loads fully when external services (Gravatar, GitHub chart, analytics) are blocked by privacy tools or firewalls
+
+**Phases completed:** 20-22 (5 plans total)
+
+**Key accomplishments:**
+- Vercel Image Optimization configured for external image proxying (Gravatar, GitHub chart)
+- Avatar fallback with local WebP image when proxy fails
+- GitHub chart graceful fallback with shimmer loading and text link
+- Analytics error handling with .catch() for silent degradation
+- Playwright testing infrastructure for image fallback verification
+
+**Stats:**
+- 38 files changed (+4,112 / -60 lines)
+- 3 phases, 5 plans, 9 requirements satisfied
+- 1 day (2026-02-02)
+
+**Git range:** `docs(20)` → `docs(22)` (tagged v0.5.0)
+
+**What's next:** Newsletter setup, About page bio, social embeds fallback
+
+---
+
 ## v0.4.1 Image & Caption Support (Shipped: 2026-02-02)
 
 **Delivered:** Hero images and inline image captions with accessibility support and wiki-link format handling in publishing workflow
