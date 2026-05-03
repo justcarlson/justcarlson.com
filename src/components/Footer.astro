@@ -15,7 +15,9 @@ const { noMarginTop = false } = Astro.props;
     class="flex flex-col items-center justify-between py-6 sm:flex-row-reverse sm:py-4"
   >
     <Socials centered />
-    <div class="my-2 flex flex-col items-center whitespace-nowrap sm:flex-row">
+    <div class="my-2 flex flex-col items-center gap-2 whitespace-nowrap sm:flex-row sm:gap-3">
+      <a href="/terms" class="hover:text-accent">Terms</a>
+      <a href="/privacy" class="hover:text-accent">Privacy</a>
       <a href="https://github.com/justcarlson/justcarlson.com" target="_blank" rel="noopener noreferrer" class="hover:text-accent">
         Steal this post ➜ CC BY 4.0 · Code MIT
       </a>
