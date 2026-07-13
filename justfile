@@ -42,6 +42,10 @@ sync:
 
 # === Publishing ===
 
+# Create an unpublished draft in the configured Obsidian vault
+draft title:
+    ./scripts/new-draft.sh "{{title}}"
+
 # Publish posts from Obsidian vault (use --dry-run to preview)
 publish *args='':
     ./scripts/publish.sh {{args}}

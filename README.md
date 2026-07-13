@@ -25,11 +25,12 @@ Open http://localhost:4321 in your browser.
 
 ## Obsidian Integration
 
-This blog supports publishing directly from an Obsidian vault.
+This blog supports Obsidian, Pages CMS, and agent-assisted draft pull requests. See [the publishing guide](docs/publishing.md) for the complete workflow.
 
 ```bash
 just setup      # Configure your vault path (one-time)
-just publish    # Publish posts marked with status: Published
+just draft "Post title" # Create an unpublished Obsidian draft
+just publish    # Publish posts marked with draft: false
 just list-posts # List available posts in your vault
 ```
 
@@ -80,6 +81,8 @@ Run `npm run sync` to regenerate Astro types, then retry the build.
 ## Deployment
 
 Deployed automatically on Vercel when changes are pushed to main.
+
+Pull requests receive Vercel Preview deployments. Draft posts are included in local development and Vercel Preview builds, but excluded from production.
 
 ## Credits
 

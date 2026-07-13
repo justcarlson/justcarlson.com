@@ -119,6 +119,16 @@ const wordCount = (post.body ?? "").split(/\s+/).length;
     ]}
     data-pagefind-body
   >
+    {
+      post.data.draft && (
+        <div
+          class="mb-6 rounded-md border border-amber-500/50 bg-amber-100 px-4 py-3 font-semibold text-amber-950 dark:bg-amber-950 dark:text-amber-100"
+          role="status"
+        >
+          Draft preview. This post is not published.
+        </div>
+      )
+    }
     <h1
       transition:name={slugifyStr(title)}
       class="inline-block text-2xl font-bold text-accent sm:text-3xl"
