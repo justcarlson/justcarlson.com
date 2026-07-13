@@ -92,15 +92,7 @@ is_blog_note() {
         return 0
     fi
 
-    local result
-    result=$("$yq_cmd" --front-matter=extract -r '
-        has("pubDatetime") or
-        has("published") or
-        ((.status // "") | tostring | test("published"; "i")) or
-        ((.categories // "") | tostring | test("posts"; "i"))
-    ' "$file" 2>/dev/null || true)
-
-    [[ "$result" == "true" ]]
+    return 1
 }
 
 is_canonical() {
