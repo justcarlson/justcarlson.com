@@ -29,6 +29,8 @@ This blog supports Obsidian, Pages CMS, and agent-assisted draft pull requests. 
 
 ```bash
 just setup      # Configure your vault path (one-time)
+just migrate-vault --dry-run # Preview legacy frontmatter and template migration
+just migrate-vault # Normalize existing blog notes with backups
 just draft "Post title" # Create an unpublished Obsidian draft
 just publish    # Publish posts marked with draft: false
 just list-posts # List available posts in your vault

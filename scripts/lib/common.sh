@@ -168,6 +168,8 @@ validate_frontmatter() {
     # Validate description
     if [[ -z "$description" ]]; then
         errors+=("Missing description (required for SEO and previews)")
+    elif [[ "${description^^}" == "TBD" ]]; then
+        errors+=("Description is still TBD (replace it before publishing)")
     fi
 
     # Output errors (one per line)
