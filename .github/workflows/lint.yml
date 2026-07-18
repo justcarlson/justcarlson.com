@@ -28,3 +28,26 @@ jobs:
 
       - name: Run Biome Check (includes linting and formatting)
         run: npm run check
+
+  vault-migration:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Mike Farah yq
+        env:
+          YQ_SHA256: fa52a4e758c63d38299163fbdd1edfb4c4963247918bf9c1c5d31d84789eded4
+          YQ_VERSION: v4.53.3
+        run: |
+          curl --fail --location --silent --show-error \
+            "https://github.com/mikefarah/yq/releases/download/${YQ_VERSION}/yq_linux_amd64" \
+            --output yq
+          echo "${YQ_SHA256}  yq" | sha256sum --check
+          sudo install --mode=0755 yq /usr/local/bin/yq
+
+      - name: Run vault migration regression test
+        run: |
+          bash -n scripts/migrate-vault.sh tests/migrate-vault.test.sh
+          bash tests/migrate-vault.test.sh
