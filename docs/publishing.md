@@ -20,7 +20,7 @@ just migrate-vault
 just migrate-vault --verify
 ```
 
-The migration detects notes in `Blog Posts` and notes with legacy blog metadata. It maps `status: Published` to `draft: false`, moves `published` to `pubDatetime` when necessary, maps `topics` to `tags` when necessary, adds missing canonical fields, and removes the deprecated `status` and `published` keys. Existing files are backed up under `.blog-migration-backups/<timestamp>` before modification. Other vault notes are left alone unless `--all` is supplied.
+By default, the migration processes notes in `Blog Posts` only. It maps `status: Published` to `draft: false`, moves `published` to `pubDatetime` when necessary, maps `topics` to `tags` when necessary, adds missing canonical fields, and removes the deprecated `status` and `published` keys. Existing files are backed up under `.blog-migration-backups/<timestamp>` before modification. Other vault notes are left alone unless `--all` is supplied.
 
 It also writes `Blog Post.md` into the folder configured by Obsidian’s Templates core plugin, defaulting to `Templates` when no folder is configured.
 
